@@ -36,8 +36,7 @@ namespace HearthMirror
 			get
 			{
 				var view = View;
-				var rootDomainFuncPtr = view.GetExport("mono_get_root_domain");
-				var rootDomainFunc = view.ReadUint(rootDomainFuncPtr);
+				var rootDomainFunc = view.GetExport("mono_get_root_domain");
 				var buffer = new byte[6];
 				view.ReadBytes(buffer, 0, 6, rootDomainFunc);
 				if(buffer[0] != 0xa1 || buffer[5] != 0xc3)

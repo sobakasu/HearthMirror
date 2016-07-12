@@ -19,7 +19,9 @@ namespace HearthMirror
 		public ProcessView(Process proc)
 		{
 			_procHandle = proc.Handle;
-			_moduleBase = proc.MainModule.BaseAddress.ToInt64();
+			_moduleBase = proc.Modules.OfType<ProcessModule>().FirstOrDefault(x => x.ModuleName == "mono.dll")?.BaseAddress.ToInt64() ?? 0;
+			if(_moduleBase == 0)
+				return;
 			_module = new byte[proc.MainModule.ModuleMemorySize];
 			Valid = ReadBytes(_module, 0, _module.Length, _moduleBase) && LoadPeHeader();
 		}
