@@ -71,6 +71,25 @@ namespace HearthMirror
 			}
 		}
 
+		public static GameServerInfo GetServerInfo() => TryGetInternal(InternalGetServerInfo);
+		private static GameServerInfo InternalGetServerInfo()
+		{
+			var serverInfo = Mirror.Root["Network"]["s_instance"]["m_lastGameServerInfo"];
+			return new GameServerInfo
+			{
+				Address = serverInfo["<Address>k__BackingField"],
+				AuroraPassword = serverInfo["<AuroraPassword>k__BackingField"],
+				ClientHandle = serverInfo["<ClientHandle>k__BackingField"],
+				GameHandle = serverInfo["<GameHandle>k__BackingField"],
+				Mission = serverInfo["<Mission>k__BackingField"],
+				Port = serverInfo["<Port>k__BackingField"],
+				Resumable = serverInfo["<Resumable>k__BackingField"],
+				SpectatorMode = serverInfo["<SpectatorMode>k__BackingField"],
+				SpectatorPassword = serverInfo["<SpectatorPassword>k__BackingField"],
+				Version = serverInfo["<Version>k__BackingField"],
+			};
+		}
+
 		public static int GetGameType() => TryGetInternal(InternalGetGameType);
 		private static int InternalGetGameType() => (int) Mirror.Root["GameMgr"]["s_instance"]["m_gameType"];
 

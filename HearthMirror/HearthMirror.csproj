@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\Status.cs" />
+    <Compile Include="Objects\GameServerInfo.cs" />
     <Compile Include="Objects\ArenaInfo.cs" />
     <Compile Include="Cache.cs" />
     <Compile Include="Objects\MatchInfo.cs" />
