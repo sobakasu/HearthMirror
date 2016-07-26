@@ -85,13 +85,15 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>if exist $(ProjectDir)hsdata (
-  git -C $(ProjectDir)hsdata fetch
-  git -C $(ProjectDir)hsdata reset --hard origin/master
-) else (
-  git clone --depth=1 https://github.com/HearthSim/hsdata.git $(ProjectDir)hsdata
-)
-powershell -ExecutionPolicy Unrestricted -file $(ProjectDir)verify.ps1 $(ProjectDir)</PreBuildEvent>
+    <PreBuildEvent>if "$(ConfigurationName)" == "Release" (
+  if exist $(ProjectDir)hsdata (
+    git -C $(ProjectDir)hsdata fetch
+    git -C $(ProjectDir)hsdata reset --hard origin/master
+  ) else (
+    git clone --depth=1 https://github.com/HearthSim/hsdata.git $(ProjectDir)hsdata
+  )
+  powershell -ExecutionPolicy Unrestricted -file $(ProjectDir)verify.ps1 $(ProjectDir)
+)</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
