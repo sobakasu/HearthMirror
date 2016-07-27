@@ -237,7 +237,7 @@ namespace HearthMirror
 		}
 
 		public static Deck GetEditedDeck() => TryGetInternal(GetEditedDeckInternal);
-		public static Deck GetEditedDeckInternal()
+		private static Deck GetEditedDeckInternal()
 		{
 			var taggedDecks = Mirror.Root["CollectionManager"]["s_instance"]["m_taggedDecks"];
 			var tags = taggedDecks["keySlots"];
