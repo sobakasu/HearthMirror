@@ -204,37 +204,7 @@ namespace HearthMirror
 			return deck;
 		}
 
-		public static bool IsWildMode() => TryGetInternal(InternalIsWildMode);
-		private static bool InternalIsWildMode()
-		{
-			var netCache = Mirror.Root["NetCache"]["s_instance"]["m_netCache"]["valueSlots"];
-			foreach(var clientOptions in netCache)
-			{
-				if(clientOptions?.Class.Name != "NetCacheClientOptions")
-					continue;
-				var clientState = clientOptions["<ClientState>k__BackingField"];
-				if(clientState == null)
-					return false;
-				var flagInfo = ServerOptions.GetServerOptionFlagInfo(WildModeFlag);
-				var keys = clientState["keySlots"];
-				var values = clientState["valueSlots"];
-				var optionValue = 0uL;
-				for(var i = 0; i < keys.Length; i++)
-				{
-					if(keys[i] == null || values[i] == null)
-						continue;
-					if((ServerOption)keys[i]["value__"] != flagInfo.ServerOption)
-						continue;
-					optionValue = values[i]["<OptionValue>k__BackingField"];
-					break;
-				}
-				if(optionValue == 0)
-					return false;
-				if((optionValue & flagInfo.Exists) != 0)
-					return (optionValue & flagInfo.Flag) != 0;
-			}
-			return false;
-		}
+		public static int GetFormat() => TryGetInternal(() => (int)Mirror.Root["GameMgr"]["s_instance"]["m_formatType"]);
 
 		public static Deck GetEditedDeck() => TryGetInternal(GetEditedDeckInternal);
 		private static Deck GetEditedDeckInternal()

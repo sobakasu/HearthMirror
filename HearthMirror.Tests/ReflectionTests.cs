@@ -67,8 +67,7 @@ namespace HearthMirror.Tests
 			Assert.IsTrue(serverInfo.ClientHandle > 0, "serverInfo has client id");
 			Assert.IsTrue(serverInfo.GameHandle > 0, "serverInfo has game id");
 
-			var wildMode = Reflection.IsWildMode();
-			Assert.IsTrue(wildMode, "is wild mode");
+			Assert.AreEqual(Reflection.GetFormat(), 1, "is wild mode");
 		}
 
 		[TestMethod]
