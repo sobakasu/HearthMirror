@@ -76,5 +76,11 @@ namespace HearthMirror.Tests
 			var spectating = Reflection.IsSpectating();
 			Assert.IsTrue(spectating, "is spectating");
 		}
+
+		[TestMethod]
+		public void UI_FriendsList_IsVisible()
+		{
+			Assert.IsTrue(Reflection.IsFriendsListVisible(), "friendslist is visible");
+		}
 	}
 }

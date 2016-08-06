@@ -8,8 +8,6 @@ namespace HearthMirror
 {
 	public class Reflection
 	{
-		private const int WildModeFlag = 72;
-
 		private static readonly Lazy<Mirror> LazyMirror = new Lazy<Mirror>(() => new Mirror {ImageName = "Hearthstone"});
 		private static Mirror Mirror => LazyMirror.Value;
 
@@ -221,5 +219,7 @@ namespace HearthMirror
 			}
 			return null;
 		}
+
+		public static bool IsFriendsListVisible() => TryGetInternal(() => Mirror.Root["ChatMgr"]["s_instance"]["m_friendListFrame"] != null);
 	}
 }
