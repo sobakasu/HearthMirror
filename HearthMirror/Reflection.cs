@@ -221,5 +221,19 @@ namespace HearthMirror
 		}
 
 		public static bool IsFriendsListVisible() => TryGetInternal(() => Mirror.Root["ChatMgr"]["s_instance"]["m_friendListFrame"] != null);
+
+		public static int GetCurrentManaFilter() => TryGetInternal(() => (int)Mirror.Root["CollectionManagerDisplay"]["s_instance"]["m_manaTabManager"]["m_currentFilterValue"]);
+
+		public static SetFilterItem GetCurrentSetFilter() => TryGetInternal(GetCurrentSetFilterInternal);
+
+		private static SetFilterItem GetCurrentSetFilterInternal()
+		{
+			var item = Mirror.Root["CollectionManagerDisplay"]["s_instance"]["m_setFilterTray"]["m_selected"];
+			return new SetFilterItem()
+			{
+				IsAllStandard =  (bool)item["m_isAllStandard"],
+				IsWild = (bool)item["m_isWild"]
+			};
+		}
 	}
 }

@@ -82,5 +82,25 @@ namespace HearthMirror.Tests
 		{
 			Assert.IsTrue(Reflection.IsFriendsListVisible(), "friendslist is visible");
 		}
+
+		[TestMethod]
+		public void UI_Collection_ManaFilterIsDisabled()
+		{
+			Assert.AreEqual(-1, Reflection.GetCurrentManaFilter());
+		}
+
+		[TestMethod]
+		public void UI_Collection_SetFilterAllStandardSelected()
+		{
+			Assert.IsTrue(Reflection.GetCurrentSetFilter().IsAllStandard);
+			Assert.IsFalse(Reflection.GetCurrentSetFilter().IsWild);
+		}
+
+		[TestMethod]
+		public void UI_Collection_SetFilterWildSelected()
+		{
+			Assert.IsFalse(Reflection.GetCurrentSetFilter().IsAllStandard);
+			Assert.IsTrue(Reflection.GetCurrentSetFilter().IsWild);
+		}
 	}
 }
