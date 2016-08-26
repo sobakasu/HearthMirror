@@ -14,6 +14,7 @@ namespace HearthMirror
 		public Process Proc => _process ?? (_process = Process.GetProcessesByName(ImageName).FirstOrDefault());
 
 		private ProcessView _view;
+		private dynamic _root;
 
 		public ProcessView View
 		{
@@ -29,12 +30,15 @@ namespace HearthMirror
 		{
 			_process = null;
 			_view = null;
+			_root = null;
 		}
 
 		public dynamic Root
 		{
 			get
 			{
+				if(_root != null)
+					return _root;
 				var view = View;
 				var rootDomainFunc = view.GetExport("mono_get_root_domain");
 				var buffer = new byte[6];
@@ -58,7 +62,7 @@ namespace HearthMirror
 						break;
 					}
 				}
-				return new MonoImage(view, pImage);
+				return _root = new MonoImage(view, pImage);
 			}
 		}
 	}
