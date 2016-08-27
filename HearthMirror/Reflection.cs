@@ -235,5 +235,17 @@ namespace HearthMirror
 				IsWild = (bool)item["m_isWild"]
 			};
 		}
+
+		public static BattleTag GetBattleTag() => TryGetInternal(GetBattleTagInternal);
+
+		private static BattleTag GetBattleTagInternal()
+		{
+			var bTag = Mirror.Root["BnetPresenceMgr"]["s_instance"]["m_myPlayer"]["m_account"]["m_battleTag"];
+			return new BattleTag
+			{
+				Name = bTag["m_name"],
+				Number = bTag["m_number"]
+			};
+		}
 	}
 }
