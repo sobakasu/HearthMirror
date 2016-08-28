@@ -247,5 +247,23 @@ namespace HearthMirror
 				Number = bTag["m_number"]
 			};
 		}
+
+		public static List<Card> GetPackCards() => TryGetInternal(() => GetPackCardsInternal().ToList());
+
+		private static IEnumerable<Card> GetPackCardsInternal()
+		{
+			var cards = Mirror.Root["PackOpening"]["s_instance"]["m_director"]?["m_hiddenCards"]?["_items"];
+			if(cards == null)
+				yield break;
+			foreach(var card in cards)
+			{
+				if(card?.Class.Name != "PackOpeningCard")
+					continue;
+				var def = card["m_boosterCard"]?["<Def>k__BackingField"];
+				if(def == null)
+					continue;
+				yield return new Card((string)def["<Name>k__BackingField"], 1, (int)def["<Premium>k__BackingField"] > 0);
+			}
+		}
 	}
 }

@@ -102,5 +102,17 @@ namespace HearthMirror.Tests
 			Assert.IsFalse(Reflection.GetCurrentSetFilter().IsAllStandard);
 			Assert.IsTrue(Reflection.GetCurrentSetFilter().IsWild);
 		}
+
+		[TestMethod]
+		public void UI_PackOpening_OpenedPackContaisnCards()
+		{
+			var pack = Reflection.GetPackCards();
+			Assert.AreEqual(5, pack.Count);
+			Assert.IsFalse(string.IsNullOrEmpty(pack[0].Id));
+			Assert.IsFalse(string.IsNullOrEmpty(pack[1].Id));
+			Assert.IsFalse(string.IsNullOrEmpty(pack[2].Id));
+			Assert.IsFalse(string.IsNullOrEmpty(pack[3].Id));
+			Assert.IsFalse(string.IsNullOrEmpty(pack[4].Id));
+		}
 	}
 }
