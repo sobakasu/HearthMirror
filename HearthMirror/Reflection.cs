@@ -117,7 +117,7 @@ namespace HearthMirror
 				var wLegendRank = wMedalInfo?["legendIndex"] ?? 0;
 				var cardBack = players[i]["m_cardBackId"];
 				var id = playerIds[i];
-				if((bool)players[i]["m_local"])
+				if((Side)players[i]["m_side"] == Side.FRIENDLY)
 				{
 					dynamic netCacheMedalInfo = null;
 					foreach(var netCache in netCacheValues)
