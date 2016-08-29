@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using HearthMirror.Enums;
+using HearthMirror.Objects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace HearthMirror.Tests
@@ -113,6 +116,30 @@ namespace HearthMirror.Tests
 			Assert.IsFalse(string.IsNullOrEmpty(pack[2].Id));
 			Assert.IsFalse(string.IsNullOrEmpty(pack[3].Id));
 			Assert.IsFalse(string.IsNullOrEmpty(pack[4].Id));
+		}
+
+		[TestMethod]
+		public void Output_ArenaRewards()
+		{
+			var rewards = Reflection.GetArenaRewards();
+			foreach(var reward in rewards)
+			{
+				switch(reward.Type)
+				{
+					case RewardType.ARCANE_DUST:
+						Console.WriteLine("Dust: " + ((ArcaneDustRewardData)reward).Amount);
+						break;
+					case RewardType.BOOSTER_PACK:
+						Console.WriteLine("Pack: " + ((BoosterPackRewardData)reward).Id);
+						break;
+					case RewardType.CARD:
+						Console.WriteLine("Card: " + ((CardRewardData)reward).Id);
+						break;
+					case RewardType.GOLD:
+						Console.WriteLine("Dust: " + ((GoldRewardData)reward).Amount);
+						break;
+				}
+			}
 		}
 	}
 }

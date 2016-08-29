@@ -81,6 +81,8 @@
     <Compile Include="Offsets.cs" />
     <Compile Include="ProcessView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Objects\RewardData.cs" />
+    <Compile Include="Enums\RewardType.cs" />
     <Compile Include="Status.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -265,5 +265,32 @@ namespace HearthMirror
 				yield return new Card((string)def["<Name>k__BackingField"], 1, (int)def["<Premium>k__BackingField"] > 0);
 			}
 		}
+
+		public static List<RewardData> GetArenaRewards() => TryGetInternal(() => GetArenaRewardsInternal().ToList());
+
+		private static IEnumerable<RewardData> GetArenaRewardsInternal()
+		{
+			var rewards = Mirror.Root["DraftManager"]["s_instance"]["m_chest"]?["<Rewards>k__BackingField"]?["_items"];
+			if(rewards == null)
+				yield break;
+			foreach(var reward in rewards)
+			{
+				switch((string)reward?.Class.Name)
+				{
+					case "ArcaneDustRewardData":
+						yield return new ArcaneDustRewardData((int)reward["<Amount>k__BackingField"]);
+						break;
+					case "BoosterPackRewardData":
+						yield return new BoosterPackRewardData((int)reward["<Id>k__BackingField"], (int)reward["<Count>k__BackingField"]);
+						break;
+					case "CardRewardData":
+						yield return new CardRewardData((string)reward["<CardID>k__BackingField"], (int)reward["<Count>k__BackingField"], (int)reward["<Premium>k__BackingField"] > 0);
+						break;
+					case "GoldRewardData":
+						yield return new GoldRewardData((int)reward["<Amount>k__BackingField"]);
+						break;
+				}
+			}
+		}
 	}
 }
