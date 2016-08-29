@@ -49,6 +49,15 @@ namespace HearthMirror.Mono
 
 		public int Size => _view.ReadInt(_pClass + Offsets.MonoClass_sizes);
 
+		public MonoClass Parent
+		{
+			get
+			{
+				var pParent = _view.ReadUint(_pClass + Offsets.MonoClass_parent);
+				return pParent == 0 ? null : new MonoClass(_view, pParent);
+			}
+		}
+
 		public MonoClass NestedIn
 		{
 			get
@@ -67,10 +76,13 @@ namespace HearthMirror.Mono
 			get
 			{
 				var nFields = NumFields;
+				var nFieldsParent = Parent?.NumFields ?? 0;
 				var pFields = _view.ReadUint(_pClass + Offsets.MonoClass_fields);
-				var fs = new MonoClassField[nFields];
+				var fs = new MonoClassField[nFields + nFieldsParent];
 				for(var i = 0; i < nFields; i++)
 					fs[i] = new MonoClassField(_view, pFields + (uint) i*Offsets.MonoClassField_sizeof);
+				for(var i = 0; i < nFieldsParent; i++)
+					fs[nFields + i] = Parent?.Fields[i];
 				return fs;
 			}
 		}

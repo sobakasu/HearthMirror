@@ -17,6 +17,7 @@
 		public static uint MonoImage_class_cache = 0x2a0;
 		public static uint MonoInternalHashTable_size = 0xc;
 		public static uint MonoInternalHashTable_table = 0x14;
+		public static uint MonoClass_parent = 0x24;
 		public static uint MonoClass_nested_in = 0x28;
 		public static uint MonoClass_runtime_info = 0xa4;
 		public static uint MonoClass_name = 0x30;
