@@ -5,18 +5,20 @@ namespace HearthMirror.Util
 {
 	internal static class RewardDataParser
 	{
-		public static IEnumerable<RewardData> Parse(dynamic rewards)
+		public static List<RewardData> Parse(dynamic rewards)
 		{
 			if(rewards == null)
-				yield break;
+				return new List<RewardData>();
+			var returnList = new List<RewardData>();
 			foreach(var reward in rewards)
 			{
 				if(reward == null)
 					continue;
 				var data = ParseReward(reward);
 				if(data != null)
-					yield return data;
+					returnList.Add(data);
 			}
+			return returnList;
 		}
 
 		private static RewardData ParseReward(dynamic reward)

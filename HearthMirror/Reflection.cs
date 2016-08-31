@@ -155,7 +155,8 @@ namespace HearthMirror
 			return new ArenaInfo {
 				Wins = draftManager["m_wins"],
 				Losses = draftManager["m_losses"],
-				Deck = GetDeck(draftManager["m_draftDeck"])
+				Deck = GetDeck(draftManager["m_draftDeck"]),
+				Rewards = RewardDataParser.Parse(draftManager["m_chest"]?["<Rewards>k__BackingField"]?["_items"])
 			};
 		}
 
