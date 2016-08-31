@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using HearthMirror.Enums;
 using HearthMirror.Objects;
+using HearthMirror.Util;
 
 namespace HearthMirror
 {
@@ -271,26 +272,27 @@ namespace HearthMirror
 		private static IEnumerable<RewardData> GetArenaRewardsInternal()
 		{
 			var rewards = Mirror.Root["DraftManager"]["s_instance"]["m_chest"]?["<Rewards>k__BackingField"]?["_items"];
-			if(rewards == null)
-				yield break;
-			foreach(var reward in rewards)
-			{
-				switch((string)reward?.Class.Name)
-				{
-					case "ArcaneDustRewardData":
-						yield return new ArcaneDustRewardData((int)reward["<Amount>k__BackingField"]);
-						break;
-					case "BoosterPackRewardData":
-						yield return new BoosterPackRewardData((int)reward["<Id>k__BackingField"], (int)reward["<Count>k__BackingField"]);
-						break;
-					case "CardRewardData":
-						yield return new CardRewardData((string)reward["<CardID>k__BackingField"], (int)reward["<Count>k__BackingField"], (int)reward["<Premium>k__BackingField"] > 0);
-						break;
-					case "GoldRewardData":
-						yield return new GoldRewardData((int)reward["<Amount>k__BackingField"]);
-						break;
-				}
-			}
+			return RewardDataParser.Parse(rewards);
+		}
+
+		public static SeasonEndInfo GetSeasonEndInfo() => TryGetInternal(GetSeasonEndInfoInternal);
+
+		private static SeasonEndInfo GetSeasonEndInfoInternal()
+		{
+			var dialog = Mirror.Root["DialogManager"]["s_instance"]["m_currentDialog"];
+			if(dialog?.Class.Name != "SeasonEndDialog" || !dialog["m_shown"])
+				return null;
+			var info = dialog["m_seasonEndInfo"];
+			var rewards = RewardDataParser.Parse(info["m_rankedRewards"]["_items"]);
+			return new SeasonEndInfo(
+				(int)info["m_bonusStars"],
+				(int)info["m_boostedRank"],
+				(int)info["m_chestRank"],
+				(bool)info["m_isWild"],
+				(int)info["m_legendIndex"],
+				(int)info["m_rank"],
+				(int)info["m_seasonID"],
+				rewards);
 		}
 	}
 }
