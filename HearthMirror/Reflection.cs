@@ -66,7 +66,9 @@ namespace HearthMirror
 			{
 				if(val == null || val.Class.Name != "CollectionDeck")
 					continue;
-				yield return GetDeck(val);
+				var deck = GetDeck(val);
+				if(deck != null)
+					yield return deck;
 			}
 		}
 
@@ -152,10 +154,13 @@ namespace HearthMirror
 		private static ArenaInfo GetArenaDeckInternal()
 		{
 			var draftManager = Mirror.Root["DraftManager"]["s_instance"];
+			var deck = GetDeck(draftManager["m_draftDeck"]);
+			if(deck == null)
+				return null;
 			return new ArenaInfo {
 				Wins = draftManager["m_wins"],
 				Losses = draftManager["m_losses"],
-				Deck = GetDeck(draftManager["m_draftDeck"]),
+				Deck = deck,
 				Rewards = RewardDataParser.Parse(draftManager["m_chest"]?["<Rewards>k__BackingField"]?["_items"])
 			};
 		}
@@ -176,6 +181,8 @@ namespace HearthMirror
 
 		private static Deck GetDeck(dynamic deckObj)
 		{
+			if(deckObj == null)
+				return null;
 			var deck = new Deck
 			{
 				Id = deckObj["ID"],
