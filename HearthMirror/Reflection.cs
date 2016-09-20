@@ -230,7 +230,7 @@ namespace HearthMirror
 			return null;
 		}
 
-		public static bool IsFriendsListVisible() => TryGetInternal(() => Mirror.Root["ChatMgr"]["s_instance"]["m_friendListFrame"] != null);
+		public static bool IsFriendsListVisible() => TryGetInternal(() => (bool)(Mirror.Root["ChatMgr"]["s_instance"]["m_friendListFrame"] != null));
 
 		public static int GetCurrentManaFilter() => TryGetInternal(() => (int)Mirror.Root["CollectionManagerDisplay"]["s_instance"]["m_manaTabManager"]["m_currentFilterValue"]);
 
