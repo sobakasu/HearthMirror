@@ -119,6 +119,14 @@ namespace HearthMirror.Tests
 		}
 
 		[TestMethod]
+		public void UI_PackOpening_GetLastOpenedBoosterId_IsClassic()
+		{
+			Assert.AreEqual(1, Reflection.GetLastOpenedBoosterId());
+		}
+
+
+
+		[TestMethod]
 		public void Output_ArenaRewards()
 		{
 			var rewards = Reflection.GetArenaRewards();

@@ -303,5 +303,7 @@ namespace HearthMirror
 				(int)info["m_seasonID"],
 				rewards);
 		}
+
+		public static int GetLastOpenedBoosterId() => (int)(TryGetInternal(() => Mirror.Root["PackOpening"]?["s_instance"]?["m_lastOpenedBoosterId"]) ?? 0);
 	}
 }
