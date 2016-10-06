@@ -149,5 +149,12 @@ namespace HearthMirror.Tests
 				}
 			}
 		}
+
+		[TestMethod]
+		public void Output_AccountId()
+		{
+			var id = Reflection.GetAccountId();
+			Console.WriteLine(id.Hi + " " + id.Lo);
+		}
 	}
 }

@@ -62,6 +62,7 @@
     <Compile Include="Enums\BoxState.cs" />
     <Compile Include="Enums\Side.cs" />
     <Compile Include="Enums\Status.cs" />
+    <Compile Include="Objects\AccountId.cs" />
     <Compile Include="Objects\BattleTag.cs" />
     <Compile Include="Objects\GameServerInfo.cs" />
     <Compile Include="Objects\ArenaInfo.cs" />

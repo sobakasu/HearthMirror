@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using HearthMirror.Enums;
@@ -354,5 +354,13 @@ namespace HearthMirror
 		}
 
 		public static int GetLastOpenedBoosterId() => (int)(TryGetInternal(() => Mirror.Root["PackOpening"]?["s_instance"]?["m_lastOpenedBoosterId"]) ?? 0);
+
+		public static AccountId GetAccountId() => TryGetInternal(GetAccountIdInternal);
+
+		private static AccountId GetAccountIdInternal()
+		{
+			var accId = Mirror.Root["BnetPresenceMgr"]?["s_instance"]?["m_myGameAccountId"];
+			return accId == null ? null : new AccountId {Hi = accId["m_hi"], Lo = accId["m_lo"]};
+		}
 	}
 }
