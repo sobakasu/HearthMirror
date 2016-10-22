@@ -362,5 +362,47 @@ namespace HearthMirror
 			var accId = Mirror.Root["BnetPresenceMgr"]?["s_instance"]?["m_myGameAccountId"];
 			return accId == null ? null : new AccountId {Hi = accId["m_hi"], Lo = accId["m_lo"]};
 		}
+
+		public static BrawlInfo GetBrawlInfo() => TryGetInternal(GetBrawlInfoInternal);
+
+		private static BrawlInfo GetBrawlInfoInternal()
+		{
+			var brawlManager = Mirror.Root?["TavernBrawlManager"]?["s_instance"];
+			if(brawlManager == null)
+				return null;
+
+			var brawlInfo = new BrawlInfo();
+			var mission = brawlManager["m_currentMission"];
+			brawlInfo.MaxWins = mission?["maxWins"];
+			brawlInfo.MaxLosses = mission?["maxLosses"];
+
+			dynamic record = null;
+			var netCacheValues = Mirror.Root["NetCache"]["s_instance"]["m_netCache"]["valueSlots"];
+			foreach(var netCache in netCacheValues)
+			{
+				if(netCache?.Class.Name != "NetCacheTavernBrawlRecord")
+					continue;
+				record = netCache["<Record>k__BackingField"];
+			}
+			if(record == null)
+				return null;
+
+			brawlInfo.GamesPlayed = record["_GamesPlayed"];
+			brawlInfo.WinStreak = record["_WinStreak"];
+			if(brawlInfo.IsSessionBased)
+			{
+				var session = record["_Session"];
+				if(session == null || !(bool)session["HasSession"])
+					return brawlInfo;
+				brawlInfo.Wins = session["<Wins>k__BackingField"];
+				brawlInfo.Losses = session["<Losses>k__BackingField"];
+			}
+			else
+			{
+				brawlInfo.Wins = record["<GamesWon>k__BackingField"];
+				brawlInfo.Losses = brawlInfo.GamesPlayed - brawlInfo.Wins;
+			}
+			return brawlInfo;
+		}
 	}
 }

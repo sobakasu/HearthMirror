@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Objects\BrawlInfo.cs" />
     <Compile Include="Enums\BoxState.cs" />
     <Compile Include="Enums\Side.cs" />
     <Compile Include="Enums\Status.cs" />
