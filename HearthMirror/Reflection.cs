@@ -391,9 +391,9 @@ namespace HearthMirror
 			brawlInfo.WinStreak = record["_WinStreak"];
 			if(brawlInfo.IsSessionBased)
 			{
-				var session = record["_Session"];
-				if(session == null || !(bool)session["HasSession"])
+				if(!(bool)record["HasSession"])
 					return brawlInfo;
+				var session = record["_Session"];
 				brawlInfo.Wins = session["<Wins>k__BackingField"];
 				brawlInfo.Losses = session["<Losses>k__BackingField"];
 			}
