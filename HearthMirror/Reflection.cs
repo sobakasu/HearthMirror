@@ -61,7 +61,9 @@ namespace HearthMirror
 
 		private static IEnumerable<Deck> InternalGetDecks()
 		{
-			var values = Mirror.Root["CollectionManager"]["s_instance"]["m_decks"]["valueSlots"];
+			var values = Mirror.Root["CollectionManager"]["s_instance"]?["m_decks"]?["valueSlots"];
+			if(values == null)
+				yield break; 
 			foreach(var val in values)
 			{
 				if(val == null || val.Class.Name != "CollectionDeck")
@@ -96,7 +98,7 @@ namespace HearthMirror
 
 		public static bool IsSpectating() => TryGetInternal(() => Mirror.Root["GameMgr"]?["s_instance"]?["m_spectator"]) ?? false;
 
-		public static long GetSelectedDeckInMenu() => TryGetInternal(() => (long)Mirror.Root["DeckPickerTrayDisplay"]["s_instance"]["m_selectedCustomDeckBox"]["m_deckID"]);
+		public static long GetSelectedDeckInMenu() => TryGetInternal(() => (long)(Mirror.Root["DeckPickerTrayDisplay"]["s_instance"]?["m_selectedCustomDeckBox"]?["m_deckID"] ?? 0));
 
 		public static MatchInfo GetMatchInfo() => TryGetInternal(GetMatchInfoInternal);
 		private static MatchInfo GetMatchInfoInternal()
