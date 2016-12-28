@@ -1,0 +1,485 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BCC527311E11760F00F8DE94 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BCC527301E11760F00F8DE94 /* main.m */; };
+		BCC527401E11768500F8DE94 /* HearthMirror.mm in Sources */ = {isa = PBXBuildFile; fileRef = BCC5273F1E11768500F8DE94 /* HearthMirror.mm */; };
+		BCC527441E1176C400F8DE94 /* machhelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC5271F1E11405500F8DE94 /* machhelper.cpp */; };
+		BCC527451E1176C400F8DE94 /* MonoImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC527101E113D2000F8DE94 /* MonoImage.cpp */; };
+		BCC527461E1176C400F8DE94 /* MonoClass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC5270C1E113D0000F8DE94 /* MonoClass.cpp */; };
+		BCC527471E1176C400F8DE94 /* MonoClassField.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC5270E1E113D1500F8DE94 /* MonoClassField.cpp */; };
+		BCC527481E1176C400F8DE94 /* MonoObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC527121E113D2C00F8DE94 /* MonoObject.cpp */; };
+		BCC527491E1176C400F8DE94 /* MonoStruct.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC527141E113D3500F8DE94 /* MonoStruct.cpp */; };
+		BCC5274A1E1176C400F8DE94 /* MonoType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC527161E113D3600F8DE94 /* MonoType.cpp */; };
+		BCC5274B1E1176C400F8DE94 /* Mirror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC527271E11499900F8DE94 /* Mirror.cpp */; };
+		BCC5274E1E11772400F8DE94 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCC5274D1E11772400F8DE94 /* Security.framework */; };
+		BCC5274F1E11774600F8DE94 /* libHearthMirror.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BCC527391E11768400F8DE94 /* libHearthMirror.dylib */; };
+		BCC527501E11782500F8DE94 /* Mirror.hpp in Headers */ = {isa = PBXBuildFile; fileRef = BCC527281E11499900F8DE94 /* Mirror.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
+		BCC527511E11791300F8DE94 /* HearthMirror.h in Headers */ = {isa = PBXBuildFile; fileRef = BCC5273B1E11768500F8DE94 /* HearthMirror.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BCC527581E117DDE00F8DE94 /* security.c in Sources */ = {isa = PBXBuildFile; fileRef = BCC527561E117DDE00F8DE94 /* security.c */; };
+		BCC527591E117DDE00F8DE94 /* security.h in Headers */ = {isa = PBXBuildFile; fileRef = BCC527571E117DDE00F8DE94 /* security.h */; settings = {ATTRIBUTES = (Public, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		BCC5272C1E11760F00F8DE94 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		BCC527081E11347600F8DE94 /* memhelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = memhelper.h; sourceTree = "<group>"; };
+		BCC5270C1E113D0000F8DE94 /* MonoClass.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MonoClass.cpp; path = Mono/MonoClass.cpp; sourceTree = "<group>"; };
+		BCC5270E1E113D1500F8DE94 /* MonoClassField.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MonoClassField.cpp; path = Mono/MonoClassField.cpp; sourceTree = "<group>"; };
+		BCC527101E113D2000F8DE94 /* MonoImage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MonoImage.cpp; path = Mono/MonoImage.cpp; sourceTree = "<group>"; };
+		BCC527121E113D2C00F8DE94 /* MonoObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MonoObject.cpp; path = Mono/MonoObject.cpp; sourceTree = "<group>"; };
+		BCC527141E113D3500F8DE94 /* MonoStruct.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MonoStruct.cpp; path = Mono/MonoStruct.cpp; sourceTree = "<group>"; };
+		BCC527161E113D3600F8DE94 /* MonoType.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MonoType.cpp; path = Mono/MonoType.cpp; sourceTree = "<group>"; };
+		BCC527191E113D6B00F8DE94 /* MonoClass.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MonoClass.hpp; path = Mono/MonoClass.hpp; sourceTree = "<group>"; };
+		BCC5271A1E113D7B00F8DE94 /* MonoClassField.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MonoClassField.hpp; path = Mono/MonoClassField.hpp; sourceTree = "<group>"; };
+		BCC5271B1E113D7B00F8DE94 /* MonoImage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MonoImage.hpp; path = Mono/MonoImage.hpp; sourceTree = "<group>"; };
+		BCC5271C1E113D7B00F8DE94 /* MonoObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MonoObject.hpp; path = Mono/MonoObject.hpp; sourceTree = "<group>"; };
+		BCC5271D1E113D7B00F8DE94 /* MonoStruct.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MonoStruct.hpp; path = Mono/MonoStruct.hpp; sourceTree = "<group>"; };
+		BCC5271E1E113D7B00F8DE94 /* MonoType.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MonoType.hpp; path = Mono/MonoType.hpp; sourceTree = "<group>"; };
+		BCC5271F1E11405500F8DE94 /* machhelper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = machhelper.cpp; path = Helpers/machhelper.cpp; sourceTree = "<group>"; };
+		BCC527221E11406800F8DE94 /* offsets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = offsets.h; path = Helpers/offsets.h; sourceTree = "<group>"; };
+		BCC527241E11406800F8DE94 /* machhelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = machhelper.h; path = Helpers/machhelper.h; sourceTree = "<group>"; };
+		BCC527271E11499900F8DE94 /* Mirror.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mirror.cpp; sourceTree = "<group>"; };
+		BCC527281E11499900F8DE94 /* Mirror.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Mirror.hpp; sourceTree = "<group>"; };
+		BCC5272E1E11760F00F8DE94 /* TestAppMacOS */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestAppMacOS; sourceTree = BUILT_PRODUCTS_DIR; };
+		BCC527301E11760F00F8DE94 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		BCC527391E11768400F8DE94 /* libHearthMirror.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libHearthMirror.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		BCC5273B1E11768500F8DE94 /* HearthMirror.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HearthMirror.h; sourceTree = "<group>"; };
+		BCC5273F1E11768500F8DE94 /* HearthMirror.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = HearthMirror.mm; sourceTree = "<group>"; };
+		BCC5274D1E11772400F8DE94 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		BCC527561E117DDE00F8DE94 /* security.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = security.c; path = Helpers/security.c; sourceTree = "<group>"; };
+		BCC527571E117DDE00F8DE94 /* security.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = security.h; path = Helpers/security.h; sourceTree = "<group>"; };
+		BCCEAB121DF46CE100CC936C /* MonoReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonoReader.h; sourceTree = "<group>"; };
+		BCCEAB131DF46CE100CC936C /* MonoReader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MonoReader.mm; sourceTree = "<group>"; };
+		BCCEAB151DF4922200CC936C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BCCEAB1A1DF4C5C500CC936C /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BCC5272B1E11760F00F8DE94 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BCC5274F1E11774600F8DE94 /* libHearthMirror.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BCC527361E11768400F8DE94 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BCC5274E1E11772400F8DE94 /* Security.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BCC527181E113D4900F8DE94 /* Mono */ = {
+			isa = PBXGroup;
+			children = (
+				BCC5271B1E113D7B00F8DE94 /* MonoImage.hpp */,
+				BCC527101E113D2000F8DE94 /* MonoImage.cpp */,
+				BCC527191E113D6B00F8DE94 /* MonoClass.hpp */,
+				BCC5270C1E113D0000F8DE94 /* MonoClass.cpp */,
+				BCC5271A1E113D7B00F8DE94 /* MonoClassField.hpp */,
+				BCC5270E1E113D1500F8DE94 /* MonoClassField.cpp */,
+				BCC5271C1E113D7B00F8DE94 /* MonoObject.hpp */,
+				BCC527121E113D2C00F8DE94 /* MonoObject.cpp */,
+				BCC5271D1E113D7B00F8DE94 /* MonoStruct.hpp */,
+				BCC527141E113D3500F8DE94 /* MonoStruct.cpp */,
+				BCC5271E1E113D7B00F8DE94 /* MonoType.hpp */,
+				BCC527161E113D3600F8DE94 /* MonoType.cpp */,
+			);
+			name = Mono;
+			sourceTree = "<group>";
+		};
+		BCC527211E11405B00F8DE94 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				BCC5271F1E11405500F8DE94 /* machhelper.cpp */,
+				BCC527221E11406800F8DE94 /* offsets.h */,
+				BCC527241E11406800F8DE94 /* machhelper.h */,
+				BCC527561E117DDE00F8DE94 /* security.c */,
+				BCC527571E117DDE00F8DE94 /* security.h */,
+			);
+			name = Helpers;
+			sourceTree = "<group>";
+		};
+		BCC5272F1E11760F00F8DE94 /* TestAppMacOS */ = {
+			isa = PBXGroup;
+			children = (
+				BCC527301E11760F00F8DE94 /* main.m */,
+			);
+			path = TestAppMacOS;
+			sourceTree = "<group>";
+		};
+		BCC5273A1E11768500F8DE94 /* HearthMirror */ = {
+			isa = PBXGroup;
+			children = (
+				BCC5273B1E11768500F8DE94 /* HearthMirror.h */,
+				BCC5273F1E11768500F8DE94 /* HearthMirror.mm */,
+			);
+			path = HearthMirror;
+			sourceTree = "<group>";
+		};
+		BCCEAAFF1DF46C5200CC936C = {
+			isa = PBXGroup;
+			children = (
+				BCCEAB0A1DF46C5200CC936C /* HearthMirror */,
+				BCC5272F1E11760F00F8DE94 /* TestAppMacOS */,
+				BCC5273A1E11768500F8DE94 /* HearthMirror */,
+				BCCEAB091DF46C5200CC936C /* Products */,
+				BCCEAB191DF4C5C400CC936C /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		BCCEAB091DF46C5200CC936C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BCC5272E1E11760F00F8DE94 /* TestAppMacOS */,
+				BCC527391E11768400F8DE94 /* libHearthMirror.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BCCEAB0A1DF46C5200CC936C /* HearthMirror */ = {
+			isa = PBXGroup;
+			children = (
+				BCC527211E11405B00F8DE94 /* Helpers */,
+				BCC527181E113D4900F8DE94 /* Mono */,
+				BCCEAB121DF46CE100CC936C /* MonoReader.h */,
+				BCCEAB131DF46CE100CC936C /* MonoReader.mm */,
+				BCCEAB151DF4922200CC936C /* Info.plist */,
+				BCC527081E11347600F8DE94 /* memhelper.h */,
+				BCC527271E11499900F8DE94 /* Mirror.cpp */,
+				BCC527281E11499900F8DE94 /* Mirror.hpp */,
+			);
+			path = HearthMirror;
+			sourceTree = "<group>";
+		};
+		BCCEAB191DF4C5C400CC936C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BCC5274D1E11772400F8DE94 /* Security.framework */,
+				BCCEAB1A1DF4C5C500CC936C /* AppKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		BCC527371E11768400F8DE94 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BCC527511E11791300F8DE94 /* HearthMirror.h in Headers */,
+				BCC527591E117DDE00F8DE94 /* security.h in Headers */,
+				BCC527501E11782500F8DE94 /* Mirror.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		BCC5272D1E11760F00F8DE94 /* TestAppMacOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BCC527341E11760F00F8DE94 /* Build configuration list for PBXNativeTarget "TestAppMacOS" */;
+			buildPhases = (
+				BCC5272A1E11760F00F8DE94 /* Sources */,
+				BCC5272B1E11760F00F8DE94 /* Frameworks */,
+				BCC5272C1E11760F00F8DE94 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TestAppMacOS;
+			productName = TestAppMacOS;
+			productReference = BCC5272E1E11760F00F8DE94 /* TestAppMacOS */;
+			productType = "com.apple.product-type.tool";
+		};
+		BCC527381E11768400F8DE94 /* HearthMirror */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BCC527411E11768500F8DE94 /* Build configuration list for PBXNativeTarget "HearthMirror" */;
+			buildPhases = (
+				BCC527351E11768400F8DE94 /* Sources */,
+				BCC527361E11768400F8DE94 /* Frameworks */,
+				BCC527371E11768400F8DE94 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HearthMirror;
+			productName = HearthMirror;
+			productReference = BCC527391E11768400F8DE94 /* libHearthMirror.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BCCEAB001DF46C5200CC936C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = com.ifehervari;
+				TargetAttributes = {
+					BCC5272D1E11760F00F8DE94 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = LCPPMESTJX;
+						ProvisioningStyle = Automatic;
+					};
+					BCC527381E11768400F8DE94 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = LCPPMESTJX;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = BCCEAB031DF46C5200CC936C /* Build configuration list for PBXProject "HearthMirror" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = BCCEAAFF1DF46C5200CC936C;
+			productRefGroup = BCCEAB091DF46C5200CC936C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BCC5272D1E11760F00F8DE94 /* TestAppMacOS */,
+				BCC527381E11768400F8DE94 /* HearthMirror */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BCC5272A1E11760F00F8DE94 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BCC527311E11760F00F8DE94 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BCC527351E11768400F8DE94 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BCC527441E1176C400F8DE94 /* machhelper.cpp in Sources */,
+				BCC527451E1176C400F8DE94 /* MonoImage.cpp in Sources */,
+				BCC527461E1176C400F8DE94 /* MonoClass.cpp in Sources */,
+				BCC527471E1176C400F8DE94 /* MonoClassField.cpp in Sources */,
+				BCC527481E1176C400F8DE94 /* MonoObject.cpp in Sources */,
+				BCC527491E1176C400F8DE94 /* MonoStruct.cpp in Sources */,
+				BCC5274A1E1176C400F8DE94 /* MonoType.cpp in Sources */,
+				BCC5274B1E1176C400F8DE94 /* Mirror.cpp in Sources */,
+				BCC527401E11768500F8DE94 /* HearthMirror.mm in Sources */,
+				BCC527581E117DDE00F8DE94 /* security.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		BCC527321E11760F00F8DE94 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
+				DEVELOPMENT_TEAM = LCPPMESTJX;
+				INFOPLIST_FILE = "$(SRCROOT)/HearthMirror/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ifehervari.hearthmirrortestapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		BCC527331E11760F00F8DE94 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
+				DEVELOPMENT_TEAM = LCPPMESTJX;
+				INFOPLIST_FILE = "$(SRCROOT)/HearthMirror/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ifehervari.hearthmirrortestapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		BCC527421E11768500F8DE94 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				DEVELOPMENT_TEAM = LCPPMESTJX;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/HearthMirror/Info.plist";
+				OTHER_CFLAGS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ifehervari.hearthmirror;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		BCC527431E11768500F8DE94 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				DEVELOPMENT_TEAM = LCPPMESTJX;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/HearthMirror/Info.plist";
+				OTHER_CFLAGS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ifehervari.hearthmirror;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		BCCEAB0D1DF46C5200CC936C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		BCCEAB0E1DF46C5200CC936C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BCC527341E11760F00F8DE94 /* Build configuration list for PBXNativeTarget "TestAppMacOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BCC527321E11760F00F8DE94 /* Debug */,
+				BCC527331E11760F00F8DE94 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BCC527411E11768500F8DE94 /* Build configuration list for PBXNativeTarget "HearthMirror" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BCC527421E11768500F8DE94 /* Debug */,
+				BCC527431E11768500F8DE94 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BCCEAB031DF46C5200CC936C /* Build configuration list for PBXProject "HearthMirror" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BCCEAB0D1DF46C5200CC936C /* Debug */,
+				BCCEAB0E1DF46C5200CC936C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BCCEAB001DF46C5200CC936C /* Project object */;
+}
