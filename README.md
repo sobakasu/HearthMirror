@@ -16,5 +16,6 @@ The library can be built as a dynamic lib or as an OSX Framework. If you intend 
 - Embed plist to the binary
 - Sign your code
 - Get task attach rights by calling the *acquireTaskportRight()* function
+
 ### Windows:
 The library is planned to be built on windows as well, though it is currently under development
