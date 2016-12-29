@@ -59,8 +59,84 @@ using namespace hearthmirror;
     return result;
 }
 
+-(MirrorGameServerInfo*) getGameServerInfo {
+    MirrorGameServerInfo *result = [MirrorGameServerInfo new];
+    if (_mirror == NULL) return result;
+
+    InternalGameServerInfo _serverInfo = _mirror->getGameServerInfo();
+    result.address = [NSString stringWithu16string:_serverInfo.address];
+    result.auroraPassword = [NSString stringWithu16string:_serverInfo.auroraPassword];
+    result.clientHandle = @(_serverInfo.clientHandle);
+    result.gameHandle = @(_serverInfo.gameHandle);
+    result.mission = @(_serverInfo.mission);
+    result.port = @(_serverInfo.port);
+    result.resumable = _serverInfo.resumable;
+    result.spectatorMode = _serverInfo.spectatorMode;
+    result.spectatorPassword = [NSString stringWithu16string:_serverInfo.spectatorPassword];
+    result.version = [NSString stringWithu16string:_serverInfo.version];
+
+    return result;
+}
+
+-(NSNumber *) getGameType {
+    if (_mirror == NULL) return nil;
+
+    return @(_mirror->getGameType());
+}
+
+-(NSNumber *) getFormat {
+    if (_mirror == NULL) return nil;
+
+    return @(_mirror->getFormat());
+}
+
+-(MirrorMatchInfo *) getMatchInfo {
+    MirrorMatchInfo *result = [MirrorMatchInfo new];
+    if (_mirror == NULL) return result;
+
+    InternalMatchInfo _matchInfo = _mirror->getMatchInfo();
+    MirrorPlayer *localPlayer = [MirrorPlayer new];
+    localPlayer.name = [NSString stringWithu16string:_matchInfo.localPlayer.name];
+    localPlayer.playerId = @(_matchInfo.localPlayer.id);
+    localPlayer.standardRank = @(_matchInfo.localPlayer.standardRank);
+    localPlayer.standardLegendRank = @(_matchInfo.localPlayer.standardLegendRank);
+    localPlayer.standardStars = @(_matchInfo.localPlayer.standardStars);
+    localPlayer.wildRank = @(_matchInfo.localPlayer.wildRank);
+    localPlayer.wildLegendRank = @(_matchInfo.localPlayer.wildLegendRank);
+    localPlayer.wildStars = @(_matchInfo.localPlayer.wildStars);
+    localPlayer.cardBackId = @(_matchInfo.localPlayer.cardBackId);
+    result.localPlayer = localPlayer;
+
+    MirrorPlayer *opposingPlayer = [MirrorPlayer new];
+    opposingPlayer.name = [NSString stringWithu16string:_matchInfo.opposingPlayer.name];
+    opposingPlayer.playerId = @(_matchInfo.opposingPlayer.id);
+    opposingPlayer.standardRank = @(_matchInfo.opposingPlayer.standardRank);
+    opposingPlayer.standardLegendRank = @(_matchInfo.opposingPlayer.standardLegendRank);
+    opposingPlayer.standardStars = @(_matchInfo.opposingPlayer.standardStars);
+    opposingPlayer.wildRank = @(_matchInfo.opposingPlayer.wildRank);
+    opposingPlayer.wildLegendRank = @(_matchInfo.opposingPlayer.wildLegendRank);
+    opposingPlayer.wildStars = @(_matchInfo.opposingPlayer.wildStars);
+    opposingPlayer.cardBackId = @(_matchInfo.opposingPlayer.cardBackId);
+    result.opposingPlayer = opposingPlayer;
+
+    result.brawlSeasonId = @(_matchInfo.brawlSeasonId);
+    result.missionId = @(_matchInfo.missionId);
+    result.rankedSeasonId = @(_matchInfo.rankedSeasonId);
+
+    return result;
+}
+
 -(void)dealloc {
     delete _mirror;
 }
 
+@end
+
+@implementation MirrorGameServerInfo
+@end
+
+@implementation MirrorPlayer
+@end
+
+@implementation MirrorMatchInfo
 @end
