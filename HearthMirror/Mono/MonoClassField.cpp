@@ -7,18 +7,16 @@
 //
 
 #include "MonoClassField.hpp"
-#include "offsets.h"
+#include "../Helpers/offsets.h"
 #include "MonoClass.hpp"
 #include "MonoObject.hpp"
 #include "MonoStruct.hpp"
-
-#include <mach/mach_vm.h>
 
 namespace hearthmirror {
     
     MonoClassField::MonoClassField() {}
     
-    MonoClassField::MonoClassField(mach_port_t task, uint32_t pField) : _task(task), _pField(pField) {}
+    MonoClassField::MonoClassField(HANDLE task, uint32_t pField) : _task(task), _pField(pField) {}
     
     MonoClassField::~MonoClassField() {}
 
@@ -174,7 +172,7 @@ namespace hearthmirror {
         }
     }
     
-    MonoValue MonoClassField::ReadValue(MonoTypeEnum type, mach_vm_address_t addr) {
+    MonoValue MonoClassField::ReadValue(MonoTypeEnum type, proc_address addr) {
         MonoValue result;
         result.type = type;
         switch(type)
@@ -285,12 +283,11 @@ namespace hearthmirror {
                     return result;
                 }
                 
-                vm_size_t size = strlen*2;
-                vm_offset_t buf;
-                mach_msg_type_number_t data_read;
-                mach_vm_read(_task,pArr + 12,size,&buf,&data_read);
+                size_t size = strlen*2;
+                uint8_t buf[size];
                 
-                result.str = std::u16string((char16_t*)buf, strlen*2);
+                ReadBytes(_task, (proc_address)buf, size, pArr + 12);
+                result.str = std::u16string((char16_t*)buf, strlen);
 
                 return result;
             }

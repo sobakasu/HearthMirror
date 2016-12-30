@@ -7,13 +7,14 @@
 //
 
 #include "MonoType.hpp"
-#include "offsets.h"
+#include "MonoObject.hpp"
+#include "../Helpers/offsets.h"
 
 namespace hearthmirror {
     
     MonoType::MonoType() {}
     
-    MonoType::MonoType(mach_port_t task, uint32_t pType) : _task(task), _pType(pType) {}
+    MonoType::MonoType(HANDLE task, uint32_t pType) : _task(task), _pType(pType) {}
     
     MonoType::~MonoType() {}
     
@@ -50,7 +51,13 @@ namespace hearthmirror {
     }
     
     MonoTypeEnum MonoType::getType() {
-        return (MonoTypeEnum) ReadByte(_task, _pType + kMonoTypeType);
+#ifdef __APPLE__
+		return (MonoTypeEnum)ReadByte(_task, _pType + kMonoTypeType);
+#else
+		return (MonoTypeEnum)(0xff & (getAttrs() >> 16));
+#endif // __APPLE__
+
+        
     }
 
     void DeleteMonoValue(MonoValue& mv) {
@@ -64,7 +71,7 @@ namespace hearthmirror {
                 delete mv.value.obj.s;
                 break;
             case Szarray:
-                for (int i =0; i< mv.arrsize; i++) {
+                for (unsigned int i =0; i< mv.arrsize; i++) {
                     DeleteMonoValue(mv[i]);
                 }
                 delete[] mv.value.arr;

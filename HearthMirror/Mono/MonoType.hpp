@@ -9,7 +9,7 @@
 #ifndef MonoType_hpp
 #define MonoType_hpp
 
-#include "memhelper.h"
+#include "../memhelper.h"
 #include <locale>
 
 namespace hearthmirror {
@@ -98,7 +98,7 @@ namespace hearthmirror {
     class MonoType {
     public:
         MonoType();
-        MonoType(mach_port_t task, uint32_t pType);
+        MonoType(HANDLE task, uint32_t pType);
         ~MonoType();
         
         uint32_t getAttrs();
@@ -114,7 +114,7 @@ namespace hearthmirror {
         MonoTypeEnum getType();
         
     private:
-        mach_port_t _task;
+		HANDLE _task;
         uint32_t _pType;
     };
     

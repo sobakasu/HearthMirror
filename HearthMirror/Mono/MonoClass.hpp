@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 
-#include "memhelper.h"
+#include "../memhelper.h"
 #include "MonoType.hpp"
 #include "MonoClassField.hpp"
 
@@ -21,7 +21,7 @@ namespace hearthmirror {
     class MonoClass {
     public:
         MonoClass();
-        MonoClass(mach_port_t task, uint32_t pClass);
+        MonoClass(HANDLE task, uint32_t pClass);
         ~MonoClass();
         
         std::string getName();
@@ -44,7 +44,7 @@ namespace hearthmirror {
         MonoValue operator[](const std::string& key);
         
     private:
-        mach_port_t _task;
+		HANDLE _task;
         uint32_t _pClass;
     };
 

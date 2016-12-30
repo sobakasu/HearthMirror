@@ -32,6 +32,38 @@ typedef struct _Card {
     _Card(std::u16string id, int count, bool premium) : id(id), count(count), premium(premium) { }
 } Card;
 
+typedef struct _InternalGameServerInfo {
+    std::u16string address;
+    std::u16string auroraPassword;
+    long clientHandle;
+    int gameHandle;
+    int mission;
+    int port;
+    bool resumable;
+    bool spectatorMode;
+    std::u16string spectatorPassword;
+    std::u16string version;
+} InternalGameServerInfo;
+
+typedef struct _InternalPlayer {
+    std::u16string name;
+    int id;
+    int standardRank;
+    int standardLegendRank;
+    int standardStars;
+    int wildRank;
+    int wildLegendRank;
+    int wildStars;
+    int cardBackId;
+} InternalPlayer;
+
+typedef struct _InternalMatchInfo {
+    InternalPlayer localPlayer;
+    InternalPlayer opposingPlayer;
+    int brawlSeasonId;
+    int missionId;
+    int rankedSeasonId;
+} InternalMatchInfo;
 
 namespace hearthmirror {
     
@@ -51,9 +83,21 @@ namespace hearthmirror {
         
         /** Returns the collection of the user. */
         std::vector<Card> getCardCollection();
+
+        /* Returns the information about server */
+        InternalGameServerInfo getGameServerInfo();
+
+        /* Returns the game type */
+        int getGameType();
+
+        /* Returns the match informations */
+        InternalMatchInfo getMatchInfo();
+
+        /* Returns the game format */
+        int getFormat();
         
     private:
-        mach_port_t _task;
+		HANDLE _task;
         MonoImage* _monoImage = NULL;
         
         MonoValue getObject(const HMObjectPath& path);

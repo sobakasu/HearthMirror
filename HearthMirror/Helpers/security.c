@@ -26,7 +26,7 @@ int acquireTaskportRight()
         return 0;
     }
     
-    stat = AuthorizationCopyRights( author, &rights, kAuthorizationEmptyEnvironment, auth_flags,&out_rights);
+    stat = AuthorizationCopyRights( author, &rights, kAuthorizationEmptyEnvironment, auth_flags, &out_rights);
     if (stat != errAuthorizationSuccess)
     {
         printf("fail");

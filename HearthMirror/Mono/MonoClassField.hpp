@@ -10,7 +10,7 @@
 #define MonoClassField_hpp
 
 #include <string>
-#include "memhelper.h"
+#include "../memhelper.h"
 #include "MonoType.hpp"
 
 namespace hearthmirror {
@@ -21,7 +21,7 @@ namespace hearthmirror {
     class MonoClassField {
     public:
         MonoClassField();
-        MonoClassField(mach_port_t task, uint32_t pField);
+        MonoClassField(HANDLE task, uint32_t pField);
         ~MonoClassField();
         
         std::string getName();
@@ -33,10 +33,10 @@ namespace hearthmirror {
         MonoValue getValue(MonoObject* o);
         
     private:
-        mach_port_t _task;
+		HANDLE _task;
         uint32_t _pField;
         
-        MonoValue ReadValue(MonoTypeEnum type, mach_vm_address_t addr);
+        MonoValue ReadValue(MonoTypeEnum type, proc_address);
     };
     
 } // end namespace

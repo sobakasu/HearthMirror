@@ -7,13 +7,13 @@
 //
 
 #include "MonoClass.hpp"
-#include "offsets.h"
+#include "../Helpers/offsets.h"
 
 namespace hearthmirror {
     
     MonoClass::MonoClass() {}
 
-    MonoClass::MonoClass(mach_port_t task, uint32_t pClass) : _task(task), _pClass(pClass) {}
+    MonoClass::MonoClass(HANDLE task, uint32_t pClass) : _task(task), _pClass(pClass) {}
 
     MonoClass::~MonoClass() {}
     

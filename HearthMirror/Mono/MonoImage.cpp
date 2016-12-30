@@ -7,11 +7,11 @@
 //
 
 #include "MonoImage.hpp"
-#include "offsets.h"
+#include "../Helpers/offsets.h"
 
 namespace hearthmirror {
     
-    MonoImage::MonoImage(mach_port_t task, uint32_t pImage) : _task(task), _pImage(pImage) {
+    MonoImage::MonoImage(HANDLE task, uint32_t pImage) : _task(task), _pImage(pImage) {
     
         this->LoadClasses();
     }

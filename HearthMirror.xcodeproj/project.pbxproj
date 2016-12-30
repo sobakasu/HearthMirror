@@ -64,8 +64,6 @@
 		BCC5274D1E11772400F8DE94 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		BCC527561E117DDE00F8DE94 /* security.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = security.c; path = Helpers/security.c; sourceTree = "<group>"; };
 		BCC527571E117DDE00F8DE94 /* security.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = security.h; path = Helpers/security.h; sourceTree = "<group>"; };
-		BCCEAB121DF46CE100CC936C /* MonoReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonoReader.h; sourceTree = "<group>"; };
-		BCCEAB131DF46CE100CC936C /* MonoReader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MonoReader.mm; sourceTree = "<group>"; };
 		BCCEAB151DF4922200CC936C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BCCEAB1A1DF4C5C500CC936C /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -163,8 +161,6 @@
 			children = (
 				BCC527211E11405B00F8DE94 /* Helpers */,
 				BCC527181E113D4900F8DE94 /* Mono */,
-				BCCEAB121DF46CE100CC936C /* MonoReader.h */,
-				BCCEAB131DF46CE100CC936C /* MonoReader.mm */,
 				BCCEAB151DF4922200CC936C /* Info.plist */,
 				BCC527081E11347600F8DE94 /* memhelper.h */,
 				BCC527271E11499900F8DE94 /* Mirror.cpp */,

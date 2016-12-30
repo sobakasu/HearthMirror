@@ -12,19 +12,19 @@
 #include <map>
 #include <string>
 
-#include "memhelper.h"
+#include "../memhelper.h"
 #include "MonoClass.hpp"
 
 namespace hearthmirror {
     class MonoImage {
     public:
-        MonoImage(mach_port_t task, uint32_t pImage);
+        MonoImage(HANDLE task, uint32_t pImage);
         ~MonoImage();
         
         MonoClass* operator[](const std::string& key);
         
     private:
-        mach_port_t _task;
+		HANDLE _task;
         uint32_t _pImage;
         std::map<std::string,MonoClass*> _classes;
         void LoadClasses();

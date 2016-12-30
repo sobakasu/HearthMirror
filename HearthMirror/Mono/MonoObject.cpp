@@ -13,7 +13,7 @@ namespace hearthmirror {
     
     MonoObject::MonoObject() {}
 
-    MonoObject::MonoObject(mach_port_t task, uint32_t pObject) : _task(task), pObject(pObject) {
+    MonoObject::MonoObject(HANDLE task, uint32_t pObject) : _task(task), pObject(pObject) {
         _vtable = ReadUInt32(_task, pObject);
     }
 
@@ -33,9 +33,7 @@ namespace hearthmirror {
         for (MonoClassField* f : fields) {
             MonoType* type = f->getType();
             if (!type->isStatic()) {
-                std::string n = f->getName();
-                //printf("%s : 0x%x\n",n.c_str(),type->getType());
-                res[n] = f->getValue(this);
+                res[f->getName()] = f->getValue(this);
             }
             delete type;
             delete f;

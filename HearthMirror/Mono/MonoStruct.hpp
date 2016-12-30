@@ -9,7 +9,7 @@
 #ifndef MonoStruct_hpp
 #define MonoStruct_hpp
 
-#include "machhelper.h"
+#include "../memhelper.h"
 #include <map>
 #include <string>
 #include "MonoType.hpp"
@@ -21,7 +21,7 @@ namespace hearthmirror {
     class MonoStruct {
     public:
         MonoStruct();
-        MonoStruct(mach_port_t task, MonoClass* mClass, uint32_t pStruct);
+        MonoStruct(HANDLE task, MonoClass* mClass, uint32_t pStruct);
         ~MonoStruct();
         
         uint32_t pStruct;
@@ -31,7 +31,7 @@ namespace hearthmirror {
         MonoValue operator[](const std::string& key);
         
     private:
-        mach_port_t _task;
+		HANDLE _task;
         
     };
     

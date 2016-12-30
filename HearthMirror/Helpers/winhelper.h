@@ -1,20 +1,19 @@
 //
-//  machhelper.h
-//  MonoReader
+//  winhelper.h
+//  HearthMirror
 //
-//  Created by Istvan Fehervari on 22/12/2016.
-//  Copyright Â© 2016 com.ifehervari. All rights reserved.
+//  Created by Istvan Fehervari on 29/12/2016.
+//  Copyright © 2016 com.ifehervari. All rights reserved.
 //
 
-#ifndef machhelper_h
-#define machhelper_h
+#ifndef winhelper_h
+#define winhelper_h
 
-#include <mach-o/dyld_images.h>
+#include "windows.h"
+#include <cstdint>
 
-typedef mach_port_t HANDLE;
-typedef mach_vm_address_t proc_address;
-
-bool ReadBytes(HANDLE task, proc_address buf, uint32_t size, proc_address address);
+typedef intptr_t proc_address;
+bool ReadBytes(HANDLE task, uint8_t* buf, uint32_t size, proc_address address);
 
 uint64_t ReadUInt64(HANDLE task, proc_address address);
 int64_t ReadInt64(HANDLE task, proc_address address);
@@ -34,4 +33,4 @@ proc_address getLibLoadAddress(HANDLE task, const char* libname);
 proc_address getMonoLoadAddress(HANDLE task);
 proc_address getMonoRootDomainAddr(HANDLE task, proc_address baseAddress);
 
-#endif /* machhelper_h */
+#endif /* winhelper_h */

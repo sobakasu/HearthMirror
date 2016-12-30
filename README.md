@@ -20,3 +20,8 @@ The library can be built as a dynamic lib or as an OSX Framework. If you intend 
 
 ### Windows:
 The library is planned to be built on windows as well, though it is currently under development
+
+## FAQ
+
+#### Is it injecting or modifying the memory of the game? No.
+#### Is 64bit supported? On MacOS yes, on Windows not.

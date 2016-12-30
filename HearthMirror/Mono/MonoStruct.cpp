@@ -14,7 +14,7 @@ namespace hearthmirror {
     
     MonoStruct::MonoStruct() {}
     
-    MonoStruct::MonoStruct(mach_port_t task, MonoClass* mClass, uint32_t pStruct) : _task(task), pStruct(pStruct) {
+    MonoStruct::MonoStruct(HANDLE task, MonoClass* mClass, uint32_t pStruct) : _task(task), pStruct(pStruct) {
         monoClass = mClass;
     }
     

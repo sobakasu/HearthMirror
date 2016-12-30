@@ -1,6 +1,6 @@
 //
-//  machhelper.c
-//  MonoReader
+//  machhelper.cpp
+//  MacOS memory reading functions
 //
 //  Created by Istvan Fehervari on 22/12/2016.
 //  Copyright © 2016 com.ifehervari. All rights reserved.
@@ -142,7 +142,7 @@ uint64_t findLibBaseAddress64(mach_port_t task, const char* libname, task_dyld_i
     return NULL;
 }
 
-vm_address getLibLoadAddress(mach_port_t task, const char* libname) {
+proc_address getLibLoadAddress(mach_port_t task, const char* libname) {
 
     task_dyld_info_data_t dyld_info;
     mach_msg_type_number_t count = TASK_DYLD_INFO_COUNT;
@@ -157,21 +157,12 @@ vm_address getLibLoadAddress(mach_port_t task, const char* libname) {
     
     return NULL;
 }
-/*
-static
-mach_vm_address_t _scan_remote_image_for_symbol(task_t task,
-                                                mach_vm_address_t remote_header,
-                                                const char *symbol_name,
-                                                bool *imageFromSharedCache)
-{
-    
-}*/
 
-vm_address getMonoLoadAddress(mach_port_t task) {
+proc_address getMonoLoadAddress(HANDLE task) {
     return getLibLoadAddress(task, "libmono.0.dylib");
 }
 
-vm_address getMonoRootDomainAddr(mach_port_t task, vm_address baseAddress) {
+proc_address getMonoRootDomainAddr(HANDLE task, proc_address baseAddress) {
     // lookup "mono_root_domain"
     const char *symbol_name = "mono_root_domain";
     
@@ -245,9 +236,6 @@ vm_address getMonoRootDomainAddr(mach_port_t task, vm_address baseAddress) {
     err = mach_vm_read_overwrite(task, symtab_addr, size, (mach_vm_address_t)&symtab, &size);
     if (err != KERN_SUCCESS) return 0;
     
-    // FIXME: find a way to remove the copypasted code below
-    // These two snippets share all the logic, but differs in structs and integers
-    // they use for reading the data from a target process (32- or 64-bit layout).
     if (sixtyfourbit) {
         struct segment_command_64 linkedit = {0};
         size = sizeof(struct segment_command_64);
@@ -273,7 +261,7 @@ vm_address getMonoRootDomainAddr(mach_port_t task, vm_address baseAddress) {
             
             uint64_t symname_addr = strings + sym.n_un.n_strx;
             char *symname = ReadCString(task, symname_addr);
-            /* Ignore the leading "_" character in a symbol name */
+            // Ignore the leading "_" character in a symbol name
             if (0 == strcmp(symbol_name, symname+1)) {
                 free(symname);
                 return (mach_vm_address_t)sym.n_value;
@@ -334,7 +322,7 @@ double ToDouble(Byte* buffer, int start=0) {
     return f;
 }
 
-uint64_t ReadUInt64(mach_port_t task, mach_vm_address_t address) {
+uint64_t ReadUInt64(HANDLE task, mach_vm_address_t address) {
     vm_offset_t readMem;
     vm_size_t size = 8;
     mach_msg_type_number_t data_read;
@@ -346,7 +334,7 @@ uint64_t ReadUInt64(mach_port_t task, mach_vm_address_t address) {
     return v;
 }
 
-int64_t ReadInt64(mach_port_t task, mach_vm_address_t address) {
+int64_t ReadInt64(HANDLE task, mach_vm_address_t address) {
     vm_offset_t readMem;
     vm_size_t size = 8;
     mach_msg_type_number_t data_read;
@@ -358,7 +346,7 @@ int64_t ReadInt64(mach_port_t task, mach_vm_address_t address) {
     return v;
 }
 
-uint32_t ReadUInt32(mach_port_t task, mach_vm_address_t address) {
+uint32_t ReadUInt32(HANDLE task, mach_vm_address_t address) {
     vm_offset_t readMem;
     vm_size_t size = 4;
     mach_msg_type_number_t data_read;
@@ -370,7 +358,7 @@ uint32_t ReadUInt32(mach_port_t task, mach_vm_address_t address) {
     return v;
 }
 
-int32_t ReadInt32(mach_port_t task, mach_vm_address_t address) {
+int32_t ReadInt32(HANDLE task, mach_vm_address_t address) {
     vm_offset_t readMem;
     vm_size_t size = 4;
     mach_msg_type_number_t data_read;
@@ -382,7 +370,7 @@ int32_t ReadInt32(mach_port_t task, mach_vm_address_t address) {
     return v;
 }
 
-bool ReadBool(task_t task, mach_vm_address_t address) {
+bool ReadBool(HANDLE task, mach_vm_address_t address) {
     vm_offset_t readMem;
     vm_size_t size = 1;
     mach_msg_type_number_t data_read;
@@ -393,7 +381,7 @@ bool ReadBool(task_t task, mach_vm_address_t address) {
     return (bool)buffer[0];
 }
 
-uint8_t ReadByte(task_t task, mach_vm_address_t address) {
+uint8_t ReadByte(HANDLE task, mach_vm_address_t address) {
     vm_offset_t readMem;
     vm_size_t size = 1;
     mach_msg_type_number_t data_read;
@@ -404,7 +392,7 @@ uint8_t ReadByte(task_t task, mach_vm_address_t address) {
     return (Byte)buffer[0];
 }
 
-int8_t ReadSByte(task_t task, mach_vm_address_t address) {
+int8_t ReadSByte(HANDLE task, mach_vm_address_t address) {
     vm_offset_t readMem;
     vm_size_t size = 1;
     mach_msg_type_number_t data_read;
@@ -415,7 +403,7 @@ int8_t ReadSByte(task_t task, mach_vm_address_t address) {
     return (SignedByte)buffer[0];
 }
 
-int16_t ReadShort(task_t task, mach_vm_address_t address) {
+int16_t ReadShort(HANDLE task, mach_vm_address_t address) {
     vm_offset_t readMem;
     vm_size_t size = 2;
     mach_msg_type_number_t data_read;
@@ -427,7 +415,7 @@ int16_t ReadShort(task_t task, mach_vm_address_t address) {
     return v;
 }
 
-uint16_t ReadUShort(task_t task, mach_vm_address_t address) {
+uint16_t ReadUShort(HANDLE task, mach_vm_address_t address) {
     vm_offset_t readMem;
     vm_size_t size = 2;
     mach_msg_type_number_t data_read;
@@ -439,7 +427,7 @@ uint16_t ReadUShort(task_t task, mach_vm_address_t address) {
     return v;
 }
 
-float ReadFloat(task_t task, mach_vm_address_t address) {
+float ReadFloat(HANDLE task, mach_vm_address_t address) {
     vm_offset_t readMem;
     vm_size_t size = 4;
     mach_msg_type_number_t data_read;
@@ -450,7 +438,7 @@ float ReadFloat(task_t task, mach_vm_address_t address) {
     return ToFloat((Byte*)buffer);
 }
 
-double ReadDouble(task_t task, mach_vm_address_t address) {
+double ReadDouble(HANDLE task, mach_vm_address_t address) {
     vm_offset_t readMem;
     vm_size_t size = 8;
     mach_msg_type_number_t data_read;
@@ -461,14 +449,17 @@ double ReadDouble(task_t task, mach_vm_address_t address) {
     return ToDouble((Byte*)buffer);
 }
 //TODO: this is buggy
-bool ReadBytes(task_t task, uint8_t* buf, uint32_t size, mach_vm_address_t address) {
-    kern_return_t err = mach_vm_read(task,address,size,(vm_offset_t *)buf,&size);
+bool ReadBytes(HANDLE task, proc_address buf, uint32_t size, mach_vm_address_t address) {
+    vm_offset_t readMem;
+    kern_return_t err = mach_vm_read(task,address,size,&readMem,&size);
     assert(err == KERN_SUCCESS);
+    
+    memcpy((void*)buf, (void*)readMem, size);
     
     return true;
 }
 
-char *ReadCString(task_t task, mach_vm_address_t pointer)
+char *ReadCString(HANDLE task, mach_vm_address_t pointer)
 {
     assert(pointer > 0);
     int err = KERN_FAILURE;

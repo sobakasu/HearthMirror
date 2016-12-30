@@ -12,7 +12,7 @@
 #include <map>
 #include <string>
 
-#include "machhelper.h"
+#include "../memhelper.h"
 #include "MonoType.hpp"
 
 namespace hearthmirror {
@@ -22,7 +22,7 @@ namespace hearthmirror {
     class MonoObject {
     public:
         MonoObject();
-        MonoObject(mach_port_t task, uint32_t pObject);
+        MonoObject(HANDLE task, uint32_t pObject);
         ~MonoObject();
         
         uint32_t pObject;
@@ -33,7 +33,7 @@ namespace hearthmirror {
         MonoValue operator[](const std::string& key);
         
     private:
-        mach_port_t _task;
+		HANDLE _task;
         uint32_t _vtable;
         
     };
