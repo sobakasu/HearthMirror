@@ -42,6 +42,11 @@
     @property NSNumber *rankedSeasonId;
 @end
 
+@interface MirrorAccountId: NSObject
+    @property NSNumber *lo;
+    @property NSNumber *hi;
+@end
+
 @interface HearthMirror : NSObject
 
 -(id) initWithPID:(pid_t)pid;
@@ -58,5 +63,9 @@
 -(MirrorMatchInfo *) getMatchInfo;
 
 -(NSNumber *) getFormat;
+
+-(BOOL) isSpectating;
+
+-(MirrorAccountId *) getAccountId;
 
 @end

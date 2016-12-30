@@ -42,6 +42,10 @@ int main(int argc, const char * argv[]) {
         // Get BattleTag
         NSString* battletag = [mirror getBattleTag];
         NSLog(@"BattleTag: %@",battletag);
+
+        // Get Account id
+        MirrorAccountId *accountId = [mirror getAccountId];
+        NSLog(@"AccountId: %@,%@", accountId.hi, accountId.lo);
         
         // Get card collection
         NSArray* collection = [mirror getCardCollection];

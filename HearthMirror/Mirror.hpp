@@ -65,6 +65,11 @@ typedef struct _InternalMatchInfo {
     int rankedSeasonId;
 } InternalMatchInfo;
 
+typedef struct _AccountId {
+    long hi;
+    long lo;
+} AccountId;
+
 namespace hearthmirror {
     
     class Mirror {
@@ -84,23 +89,31 @@ namespace hearthmirror {
         /** Returns the collection of the user. */
         std::vector<Card> getCardCollection();
 
-        /* Returns the information about server */
+        /** Returns the information about server */
         InternalGameServerInfo getGameServerInfo();
 
-        /* Returns the game type */
+        /** Returns the game type */
         int getGameType();
 
-        /* Returns the match informations */
+        /** Returns the match informations */
         InternalMatchInfo getMatchInfo();
 
-        /* Returns the game format */
+        /** Returns the game format */
         int getFormat();
+
+        /** Check if spectating */
+        bool isSpectating();
+
+        /** Returns the account id */
+        AccountId getAccountId();
         
     private:
 		HANDLE _task;
         MonoImage* _monoImage = NULL;
         
         MonoValue getObject(const HMObjectPath& path);
+        int getInt(const HMObjectPath& path);
+        bool getBool(const HMObjectPath& path);
     };
     
 }

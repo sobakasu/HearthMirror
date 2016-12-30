@@ -88,6 +88,26 @@ namespace hearthmirror {
         }
         return mv;
     }
+
+    /** Helper to get an int */
+    int Mirror::getInt(const HMObjectPath& path) {
+        MonoValue mv = getObject(path);
+        if (IsMonoValueEmpty(mv)) return NULL;
+        int value = mv.value.i32;
+
+        DeleteMonoValue(mv);
+        return value;
+    }
+
+    /** Helper to get a bool */
+    bool Mirror::getBool(const HMObjectPath& path) {
+        MonoValue mv = getObject(path);
+        if (IsMonoValueEmpty(mv)) return NULL;
+        bool value = mv.value.b;
+
+        DeleteMonoValue(mv);
+        return value;
+    }
     
     BattleTag Mirror::getBattleTag() {
         BattleTag result;
@@ -104,6 +124,19 @@ namespace hearthmirror {
         DeleteMonoValue(mv);
 
         return result;
+    }
+
+    AccountId Mirror::getAccountId() {
+        AccountId account;
+        MonoValue mv = getObject({"BnetPresenceMgr","s_instance","m_myGameAccountId"});
+        if (IsMonoValueEmpty(mv)) return account;
+
+        MonoObject* m_accountId = mv.value.obj.o;
+        account.lo = ((*m_accountId)["m_lo"]).value.i64;
+        account.hi = ((*m_accountId)["m_hi"]).value.i64;
+
+        DeleteMonoValue(mv);
+        return account;
     }
 
     InternalGameServerInfo Mirror::getGameServerInfo() {
@@ -130,24 +163,15 @@ namespace hearthmirror {
     }
 
     int Mirror::getGameType() {
-        int gameType = -1;
-        MonoValue mv = getObject({"GameMgr","s_instance","m_gameType"});
-        if (IsMonoValueEmpty(mv)) return gameType;
-        gameType = mv.value.i32;
-
-        DeleteMonoValue(mv);
-        return gameType;
+        return getInt({"GameMgr","s_instance","m_gameType"});
     }
 
     int Mirror::getFormat() {
-        int format = -1;
+        return getInt({"GameMgr","s_instance","m_formatType"});
+    }
 
-        MonoValue mv = getObject({"GameMgr","s_instance","m_formatType"});
-        if (IsMonoValueEmpty(mv)) return format;
-        format = mv.value.i32;
-
-        DeleteMonoValue(mv);
-        return format;
+    bool Mirror::isSpectating() {
+        return getBool({"GameMgr","s_instance","m_spectator"});
     }
 
     InternalMatchInfo Mirror::getMatchInfo() {

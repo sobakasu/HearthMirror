@@ -126,6 +126,23 @@ using namespace hearthmirror;
     return result;
 }
 
+-(MirrorAccountId *) getAccountId {
+    MirrorAccountId *result = [MirrorAccountId new];
+    if (_mirror == NULL) return result;
+
+    AccountId _account = _mirror->getAccountId();
+    result.lo = @(_account.lo);
+    result.hi = @(_account.hi);
+
+    return result;
+}
+
+-(BOOL) isSpectating {
+    if (_mirror == NULL) return NO;
+
+    return _mirror->isSpectating();
+}
+
 -(void)dealloc {
     delete _mirror;
 }
@@ -139,4 +156,7 @@ using namespace hearthmirror;
 @end
 
 @implementation MirrorMatchInfo
+@end
+
+@implementation MirrorAccountId
 @end
