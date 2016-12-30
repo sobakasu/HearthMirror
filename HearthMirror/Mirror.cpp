@@ -102,9 +102,6 @@ namespace hearthmirror {
         result.number = ((*m_battleTag)["m_number"]).value.i32;
 
         DeleteMonoValue(mv);
-        
-        std::wstring_convert<std::codecvt_utf8_utf16<char16_t>,char16_t> convert;
-        std::string namestr = convert.to_bytes(result.name);
 
         return result;
     }
@@ -318,7 +315,7 @@ namespace hearthmirror {
 
         return result;
     }
-
+    
     std::vector<Card> Mirror::getCardCollection() {
  
         std::vector<Card> result;
