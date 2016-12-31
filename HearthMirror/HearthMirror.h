@@ -8,6 +8,7 @@
  */
 
 #import <Foundation/Foundation.h>
+#define EXPORT __attribute__((visibility("default")))
 
 @interface MirrorGameServerInfo: NSObject
     @property NSString *_Nonnull address;
@@ -65,7 +66,7 @@
     @property NSArray *_Nonnull cards;
 @end
 
-@interface HearthMirror : NSObject
+EXPORT @interface HearthMirror : NSObject
 
 -(nonnull instancetype) initWithPID:(pid_t)pid;
 

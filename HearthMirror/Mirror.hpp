@@ -14,7 +14,7 @@
 #include "Mono/MonoImage.hpp"
 
 #ifdef __APPLE__
-#define HEARTHMIRROR_API
+#define HEARTHMIRROR_API __attribute__((visibility("default")))
 #else
 #define HEARTHMIRROR_API __declspec(dllexport)
 #endif

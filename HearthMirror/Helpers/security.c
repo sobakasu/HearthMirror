@@ -9,9 +9,12 @@
 #include "security.h"
 
 #ifdef __APPLE__
+
+#define EXPORT __attribute__((visibility("default")))
+
 #include <Security/Authorization.h>
 
-int acquireTaskportRight()
+EXPORT int acquireTaskportRight()
 {
     OSStatus stat;
     AuthorizationItem taskport_item[] = {{"system.privilege.taskport:"}};
