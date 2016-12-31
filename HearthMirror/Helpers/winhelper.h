@@ -13,7 +13,7 @@
 #include <cstdint>
 
 typedef intptr_t proc_address;
-bool ReadBytes(HANDLE task, uint8_t* buf, uint32_t size, proc_address address);
+bool ReadBytes(HANDLE task, proc_address buf, uint32_t size, proc_address address);
 
 uint64_t ReadUInt64(HANDLE task, proc_address address);
 int64_t ReadInt64(HANDLE task, proc_address address);

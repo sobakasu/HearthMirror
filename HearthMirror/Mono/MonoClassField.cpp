@@ -283,12 +283,12 @@ namespace hearthmirror {
                     return result;
                 }
                 
-                size_t size = strlen*2;
-                uint8_t buf[size];
+                uint32_t size = strlen*2;
+                uint8_t* buf = new uint8_t[size];
                 
                 ReadBytes(_task, (proc_address)buf, size, pArr + 12);
                 result.str = std::u16string((char16_t*)buf, strlen);
-
+				delete[]  buf;
                 return result;
             }
             default:

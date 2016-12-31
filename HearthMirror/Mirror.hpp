@@ -13,6 +13,12 @@
 #include <vector>
 #include "Mono/MonoImage.hpp"
 
+#ifdef __APPLE__
+#define HEARTHMIRROR_API
+#else
+#define HEARTHMIRROR_API __declspec(dllexport)
+#endif
+
 typedef std::vector<std::string> HMObjectPath;
 
 // Return types
@@ -66,13 +72,13 @@ typedef struct _InternalMatchInfo {
 } InternalMatchInfo;
 
 typedef struct _AccountId {
-    long hi;
-    long lo;
+    long hi = 0;
+    long lo = 0;
 } AccountId;
 
 namespace hearthmirror {
     
-    class Mirror {
+	class HEARTHMIRROR_API Mirror {
         
     public:
         

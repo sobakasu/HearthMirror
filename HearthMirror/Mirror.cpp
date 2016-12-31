@@ -395,8 +395,8 @@ namespace hearthmirror {
                     bool premium = premiummv.value.b;
                     result.push_back(Card(name,count,premium));
                     
-                    std::wstring_convert<std::codecvt_utf8_utf16<char16_t>,char16_t> convert;
-                    std::string namestr = convert.to_bytes(name);
+                    //std::wstring_convert<std::codecvt_utf8_utf16<char16_t>,char16_t> convert;
+                    //std::string namestr = convert.to_bytes(name);
                     //printf("%s : %d | %d\n",namestr.c_str(),count,premium);
                     
                     DeleteMonoValue(stackmv);
