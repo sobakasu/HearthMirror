@@ -32,6 +32,18 @@ typedef struct _Card {
     _Card(std::u16string id, int count, bool premium) : id(id), count(count), premium(premium) { }
 } Card;
 
+typedef struct _Deck {
+    long id;
+    std::u16string name;
+    std::u16string hero;
+    bool isWild;
+    int type;
+    int seasonId;
+    int cardBackId;
+    int heroPremium;
+    std::vector<Card> cards;
+} Deck;
+
 typedef struct _InternalGameServerInfo {
     std::u16string address;
     std::u16string auroraPassword;
@@ -106,6 +118,12 @@ namespace hearthmirror {
 
         /** Returns the account id */
         AccountId getAccountId();
+
+        /** Returns the decks */
+        std::vector<Deck> getDecks();
+
+        /** Returns the selected deck */
+        long getSelectedDeckInMenu();
         
     private:
 		HANDLE _task;
@@ -114,6 +132,9 @@ namespace hearthmirror {
         MonoValue getObject(const HMObjectPath& path);
         int getInt(const HMObjectPath& path);
         bool getBool(const HMObjectPath& path);
+        long getLong(const HMObjectPath& path);
+
+        Deck getDeck(MonoObject* inst);
     };
     
 }

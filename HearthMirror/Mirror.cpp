@@ -13,6 +13,7 @@
 #include "Helpers/offsets.h"
 
 #include "Mono/MonoObject.hpp"
+#include <numeric>
 
 namespace hearthmirror {
     
@@ -94,6 +95,16 @@ namespace hearthmirror {
         MonoValue mv = getObject(path);
         if (IsMonoValueEmpty(mv)) return NULL;
         int value = mv.value.i32;
+
+        DeleteMonoValue(mv);
+        return value;
+    }
+
+    /** Helper to get a long */
+    long Mirror::getLong(const HMObjectPath& path) {
+        MonoValue mv = getObject(path);
+        if (IsMonoValueEmpty(mv)) return NULL;
+        long value = mv.value.i64;
 
         DeleteMonoValue(mv);
         return value;
@@ -338,6 +349,91 @@ namespace hearthmirror {
         DeleteMonoValue(netCacheValues);
 
         return result;
+    }
+
+    std::vector<Deck> Mirror::getDecks() {
+        std::vector<Deck> result;
+
+        MonoValue values = getObject({"CollectionManager","s_instance","m_decks","valueSlots"});
+        if (IsMonoValueEmpty(values) || !IsMonoValueArray(values)) return result;
+
+        for (unsigned int i=0; i< values.arrsize; i++) {
+            MonoValue mv = values[i];
+            MonoObject* inst = mv.value.obj.o;
+            MonoClass* instclass = inst->getClass();
+            std::string icname = instclass->getName();
+            delete instclass;
+
+            if (icname != "CollectionDeck") continue;
+
+            Deck deck = getDeck(inst);
+            if (deck.cards.size() == 0) continue;
+            // count cards
+            int sum = std::accumulate(begin(deck.cards), end(deck.cards), 0,
+                              [](const int& x, const Card& y) { return x + y.count; });
+            if (sum != 30) continue;
+
+            // don't add the same deck multiple times
+            auto iterator = find_if(result.begin(), result.end(),
+                                    [&deck](const Deck& obj) { return obj.id == deck.id; });
+            if (iterator == result.end()) {
+                result.push_back(deck);
+            }
+        }
+
+        DeleteMonoValue(values);
+        return result;
+    }
+
+    long Mirror::getSelectedDeckInMenu() {
+        return getLong({"DeckPickerTrayDisplay","s_instance","m_selectedCustomDeckBox","m_deckID"});
+    }
+
+    Deck Mirror::getDeck(MonoObject* inst) {
+        Deck deck;
+
+        deck.id = ((*inst)["ID"]).value.i64;
+        deck.name = ((*inst)["m_name"]).str;
+        deck.hero = ((*inst)["HeroCardID"]).str;
+        deck.isWild = ((*inst)["m_isWild"]).value.b;
+        deck.type = ((*inst)["Type"]).value.i32;
+        deck.seasonId = ((*inst)["SeasonId"]).value.i32;
+        deck.cardBackId = ((*inst)["CardBackID"]).value.i32;
+        deck.heroPremium = ((*inst)["HeroPremium"]).value.i32;
+
+        MonoValue _cardList = (*inst)["m_slots"];
+        if (IsMonoValueEmpty(_cardList)) return deck;
+
+        MonoObject *cardList = _cardList.value.obj.o;
+
+        MonoValue cards = (*cardList)["_items"];
+        MonoValue sizemv = (*cardList)["_size"];
+        if (IsMonoValueEmpty(cards) || IsMonoValueEmpty(sizemv)) return deck;
+        int size = sizemv.value.i32;
+        for (int i = 0; i < size; i++) {
+            MonoObject *card = cards[i].value.obj.o;
+
+            std::u16string name = ((*card)["m_cardId"]).str;
+            int count = ((*card)["m_count"]).value.i32;
+
+            auto iterator = find_if(deck.cards.begin(), deck.cards.end(),
+                              [&name](const Card& obj) { return obj.id == name; });
+            if (iterator != deck.cards.end()) {
+                auto index = std::distance(deck.cards.begin(), iterator);
+                Card c = deck.cards[index];
+                c.count += count;
+                deck.cards[index] = c;
+            } else {
+                Card c = Card(name, count, false);
+                deck.cards.push_back(c);
+            }
+        }
+
+        DeleteMonoValue(cards);
+        DeleteMonoValue(sizemv);
+        DeleteMonoValue(_cardList);
+
+        return deck;
     }
     
     std::vector<Card> Mirror::getCardCollection() {

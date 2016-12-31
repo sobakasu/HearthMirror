@@ -47,25 +47,47 @@
     @property NSNumber *hi;
 @end
 
+@interface MirrorCard: NSObject
+    @property NSString *cardId;
+    @property NSNumber *count;
+    @property BOOL premium;
+@end
+
+@interface MirrorDeck: NSObject
+    @property NSNumber *id;
+    @property NSString *name;
+    @property NSString *hero;
+    @property BOOL isWild;
+    @property NSNumber *type;
+    @property NSNumber *seasonId;
+    @property NSNumber *cardBackId;
+    @property NSNumber *heroPremium;
+    @property NSArray *cards;
+@end
+
 @interface HearthMirror : NSObject
 
--(id) initWithPID:(pid_t)pid;
+-(instancetype) initWithPID:(pid_t)pid;
 
 /** Returns the BattleTag as a single string in the following format: name#number. */
--(NSString*) getBattleTag;
+-(nullable NSString*) getBattleTag;
 
--(NSArray*) getCardCollection;
+-(nonnull NSArray*) getCardCollection;
 
--(MirrorGameServerInfo*) getGameServerInfo;
+-(nonnull MirrorGameServerInfo*) getGameServerInfo;
 
--(NSNumber *) getGameType;
+-(nullable NSNumber*) getGameType;
 
--(MirrorMatchInfo *) getMatchInfo;
+-(nonnull MirrorMatchInfo*) getMatchInfo;
 
--(NSNumber *) getFormat;
+-(nullable NSNumber*) getFormat;
 
 -(BOOL) isSpectating;
 
--(MirrorAccountId *) getAccountId;
+-(nonnull MirrorAccountId*) getAccountId;
+
+-(nonnull NSArray*) getDecks;
+
+-(nullable NSNumber*) getSelectedDeck;
 
 @end
