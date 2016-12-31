@@ -8,6 +8,7 @@
 
 #include "MonoType.hpp"
 #include "MonoObject.hpp"
+#include "MonoStruct.hpp"
 #include "../Helpers/offsets.h"
 
 namespace hearthmirror {
@@ -19,7 +20,11 @@ namespace hearthmirror {
     MonoType::~MonoType() {}
     
     uint32_t MonoType::getAttrs() {
+#ifdef __APPLE__
         return ReadUShort(_task, _pType + kMonoTypeAttrs);
+#else
+		return ReadUInt32(_task, _pType + kMonoTypeAttrs);
+#endif
     }
     
     uint32_t MonoType::getData() {
@@ -55,9 +60,7 @@ namespace hearthmirror {
 		return (MonoTypeEnum)ReadByte(_task, _pType + kMonoTypeType);
 #else
 		return (MonoTypeEnum)(0xff & (getAttrs() >> 16));
-#endif // __APPLE__
-
-        
+#endif // __APPLE__ 
     }
 
     void DeleteMonoValue(MonoValue& mv) {

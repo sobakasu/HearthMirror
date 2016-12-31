@@ -17,6 +17,11 @@ int main(int argc, char *argv[]) {
 	printf("Hearthstone PID: %u\n", pid);
 
 	Mirror* mirror = new Mirror(pid);
+
+	BattleTag btag = mirror->getBattleTag();
+	printf("%d\n",btag.number);
+
+	delete mirror;
 }
 
 DWORD GetProcId(WCHAR* ProcName) {

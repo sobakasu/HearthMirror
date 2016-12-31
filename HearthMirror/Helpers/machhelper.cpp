@@ -448,7 +448,7 @@ double ReadDouble(HANDLE task, mach_vm_address_t address) {
     Byte* buffer = (Byte*)readMem;
     return ToDouble((Byte*)buffer);
 }
-//TODO: this is buggy
+
 bool ReadBytes(HANDLE task, proc_address buf, uint32_t size, mach_vm_address_t address) {
     vm_offset_t readMem;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&size);

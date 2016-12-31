@@ -236,7 +236,6 @@ namespace hearthmirror {
                 bool avt = arrClass->isValueType();
                 uint32_t count = ReadInt32(_task, addr + 12);
                 uint32_t start = (uint32_t)addr + 16;
-                //void** result = new void*[count]; // array
                 result.arrsize = count;
                 result.value.arr = new MonoValue[count];
                 for (uint32_t i = 0; i < count; i++)

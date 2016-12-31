@@ -14,6 +14,7 @@
 
 #include "Mono/MonoObject.hpp"
 #include <numeric>
+#include <algorithm>
 
 namespace hearthmirror {
     
@@ -51,9 +52,11 @@ namespace hearthmirror {
         // we need to find the address of "mono_root_domain"
 		proc_address mono_grd_addr = getMonoRootDomainAddr(_task,baseaddress);
         if (mono_grd_addr == 0) return 5; // ASSERT
-        
+#ifdef __APPLE__       
         uint32_t rootDomain = ReadUInt32(_task, baseaddress+mono_grd_addr);
-        
+#else
+		uint32_t rootDomain = ReadUInt32(_task, mono_grd_addr);
+#endif
         // iterate GSList *domain_assemblies;
         uint32_t next = ReadUInt32(_task, rootDomain+kMonoDomainDomainAssemblies); // GList*
         uint32_t pImage = 0;
@@ -64,9 +67,11 @@ namespace hearthmirror {
             
             char* name = ReadCString(_task, ReadUInt32(_task, (proc_address)data + kMonoAssemblyName));
             if(strcmp(name, "Assembly-CSharp") == 0) {
+				free(name);
                 pImage = ReadUInt32(_task, (proc_address)data + kMonoAssemblyImage);
                 break;
             }
+			free(name);
         }
         
         // we have a pointer now to right assembly image
@@ -376,7 +381,7 @@ namespace hearthmirror {
             if (sum != 30) continue;
 
             // don't add the same deck multiple times
-            auto iterator = find_if(result.begin(), result.end(),
+            auto iterator = std::find_if(result.begin(), result.end(),
                                     [&deck](const Deck& obj) { return obj.id == deck.id; });
             if (iterator == result.end()) {
                 result.push_back(deck);

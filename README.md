@@ -6,6 +6,7 @@ HearthMirror is a library written in C/C++ that allows reading data directly fro
 
 ### MacOS:
 The library can be built as a dynamic lib or as an OSX Framework. If you intend to use the features in your app the following steps have to be done:
+
 - Add the following section to your plist file:
     ```xml
     <key>SecTaskAccess</key>
@@ -19,9 +20,9 @@ The library can be built as a dynamic lib or as an OSX Framework. If you intend 
 - Get task attach rights by calling the *acquireTaskportRight()* function
 
 ### Windows:
-The library is planned to be built on windows as well, though it is currently under development
+Full support with 32 bit. No extra access rights are necessary.
 
 ## FAQ
 
-#### Is it injecting or modifying the memory of the game? No.
-#### Is 64bit supported? On MacOS yes, on Windows not.
+* Is it injecting or modifying the memory of the game? No.
+* Is 64bit supported? On MacOS yes, on Windows not.

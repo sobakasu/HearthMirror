@@ -54,7 +54,6 @@ proc_address getMonoRootDomainAddr(HANDLE task, proc_address baseAddress) {
 		return NULL;
 	}
 
-	// DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress
 	int32_t _exportOffset = ReadInt32(task, baseAddress + e_lfanew + kImageNTHeadersExportDirectoryAddress);
 
 	if (_exportOffset <= 0 /*&& _exportOffset < _module.Length*/) {
@@ -62,19 +61,33 @@ proc_address getMonoRootDomainAddr(HANDLE task, proc_address baseAddress) {
 	}
 
 	// get export offset
-	int32_t nFunctions = ReadInt32(task, _exportOffset + kImageExportDirectoryNumberOfFunctions);
-	var ofsFunctions = BitConverter.ToInt32(_module, _exportOffset + (int)Offsets.ImageExportDirectory_AddressOfFunctions);
-	var ofsNames = BitConverter.ToInt32(_module, _exportOffset + (int)Offsets.ImageExportDirectory_AddressOfNames);
-	for (var i = 0; i < nFunctions; i++)
-	{
-		var nameRva = BitConverter.ToInt32(_module, ofsNames + 4 * i);
-		var fName = GetCString(_module, nameRva);
-		if (fName == name)
-			return _moduleBase + BitConverter.ToInt32(_module, ofsFunctions + 4 * i);
+	int32_t nFunctions = ReadInt32(task, baseAddress + _exportOffset + kImageExportDirectoryNumberOfFunctions);
+	int32_t ofsFunctions = ReadInt32(task, baseAddress + _exportOffset + kImageExportDirectoryAddressOfFunctions);
+	int32_t ofsNames = ReadInt32(task, baseAddress + _exportOffset + kImageExportDirectoryAddressOfNames);
+	int32_t rootDomainFunc = 0;
+	for (int32_t i = 0; i < nFunctions; i++) {
+		int32_t nameRva = ReadInt32(task, baseAddress + ofsNames + 4 * i);
+		char* fName = ReadCString(task, baseAddress + nameRva);
+		if (0 == strcmp(fName, "mono_get_root_domain")) {
+			rootDomainFunc = baseAddress + ReadInt32(task, baseAddress + ofsFunctions + 4 * i);
+			free(fName);
+			break;
+		}
+		free(fName);
 	}
-	return 0;
+	
+	if (rootDomainFunc == 0) return NULL;
 
-	return NULL;
+	uint8_t* buffer = new uint8_t[6];
+	ReadBytes(task, (proc_address)buffer, 6, rootDomainFunc);
+	if (buffer[0] != 0xa1 || buffer[5] != 0xc3) {
+		delete[] buffer;
+		return NULL;
+	}
+	uint32_t pRootDomain;
+	memcpy(&pRootDomain, buffer+1, sizeof(pRootDomain));
+
+	return pRootDomain;
 }
 
 bool ReadBytes(HANDLE task, proc_address buf, uint32_t size, proc_address address) {
@@ -111,8 +124,18 @@ int32_t ReadInt32(HANDLE task, proc_address address) {
 	return value;
 }
 
+#define kRemoteStringBufferSize 2048
 char* ReadCString(HANDLE task, proc_address address) {
-	return "";
+	char buf[kRemoteStringBufferSize] = { 0 };
+	size_t size = sizeof(buf);
+	ReadProcessMemory(task, (void*)address, &buf, size, 0);
+
+	// add ending
+	buf[kRemoteStringBufferSize - 1] = '\0';
+
+	char *result = _strdup(buf);
+
+	return result;
 }
 
 bool ReadBool(HANDLE task, proc_address address) {
