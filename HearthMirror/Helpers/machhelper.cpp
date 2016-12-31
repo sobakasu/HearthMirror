@@ -339,7 +339,7 @@ int64_t ReadInt64(HANDLE task, mach_vm_address_t address) {
     vm_size_t size = 8;
     mach_msg_type_number_t data_read;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
-    assert(err == KERN_SUCCESS);
+    if (err != KERN_SUCCESS) return 0;
     
     int64_t v = 0;
     memcpy((char *)&v, (Byte*)readMem, sizeof(int64_t));
@@ -351,7 +351,7 @@ uint32_t ReadUInt32(HANDLE task, mach_vm_address_t address) {
     vm_size_t size = 4;
     mach_msg_type_number_t data_read;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
-    assert(err == KERN_SUCCESS);
+    if (err != KERN_SUCCESS) return 0;
     
     uint32_t v = 0;
     memcpy((char *)&v, (Byte*)readMem, sizeof(uint32_t));
@@ -363,7 +363,7 @@ int32_t ReadInt32(HANDLE task, mach_vm_address_t address) {
     vm_size_t size = 4;
     mach_msg_type_number_t data_read;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
-    assert(err == KERN_SUCCESS);
+    if (err != KERN_SUCCESS) return 0;
     
     int32_t v = 0;
     memcpy((char *)&v, (Byte*)readMem, sizeof(int32_t));
@@ -375,7 +375,7 @@ bool ReadBool(HANDLE task, mach_vm_address_t address) {
     vm_size_t size = 1;
     mach_msg_type_number_t data_read;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
-    assert(err == KERN_SUCCESS);
+    if (err != KERN_SUCCESS) return 0;
     
     Byte* buffer = (Byte*)readMem;
     return (bool)buffer[0];
@@ -386,7 +386,7 @@ uint8_t ReadByte(HANDLE task, mach_vm_address_t address) {
     vm_size_t size = 1;
     mach_msg_type_number_t data_read;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
-    assert(err == KERN_SUCCESS);
+    if (err != KERN_SUCCESS) return 0;
     
     Byte* buffer = (Byte*)readMem;
     return (Byte)buffer[0];
@@ -397,7 +397,7 @@ int8_t ReadSByte(HANDLE task, mach_vm_address_t address) {
     vm_size_t size = 1;
     mach_msg_type_number_t data_read;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
-    assert(err == KERN_SUCCESS);
+    if (err != KERN_SUCCESS) return 0;
     
     SignedByte* buffer = (SignedByte*)readMem;
     return (SignedByte)buffer[0];
@@ -408,7 +408,7 @@ int16_t ReadShort(HANDLE task, mach_vm_address_t address) {
     vm_size_t size = 2;
     mach_msg_type_number_t data_read;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
-    assert(err == KERN_SUCCESS);
+    if (err != KERN_SUCCESS) return 0;
     
     int16_t v = 0;
     memcpy((char *)&v, (Byte*)readMem, sizeof(int16_t));
@@ -420,7 +420,7 @@ uint16_t ReadUShort(HANDLE task, mach_vm_address_t address) {
     vm_size_t size = 2;
     mach_msg_type_number_t data_read;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
-    assert(err == KERN_SUCCESS);
+    if (err != KERN_SUCCESS) return 0;
     
     uint16_t v = 0;
     memcpy((char *)&v, (Byte*)readMem, sizeof(uint16_t));
@@ -432,7 +432,7 @@ float ReadFloat(HANDLE task, mach_vm_address_t address) {
     vm_size_t size = 4;
     mach_msg_type_number_t data_read;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
-    assert(err == KERN_SUCCESS);
+    if (err != KERN_SUCCESS) return 0;
     
     Byte* buffer = (Byte*)readMem;
     return ToFloat((Byte*)buffer);
@@ -443,7 +443,7 @@ double ReadDouble(HANDLE task, mach_vm_address_t address) {
     vm_size_t size = 8;
     mach_msg_type_number_t data_read;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
-    assert(err == KERN_SUCCESS);
+    if (err != KERN_SUCCESS) return 0;
     
     Byte* buffer = (Byte*)readMem;
     return ToDouble((Byte*)buffer);
@@ -452,7 +452,7 @@ double ReadDouble(HANDLE task, mach_vm_address_t address) {
 bool ReadBytes(HANDLE task, proc_address buf, uint32_t size, mach_vm_address_t address) {
     vm_offset_t readMem;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&size);
-    assert(err == KERN_SUCCESS);
+    if (err != KERN_SUCCESS) return 0;
     
     memcpy((void*)buf, (void*)readMem, size);
     
@@ -468,7 +468,7 @@ char *ReadCString(HANDLE task, mach_vm_address_t pointer)
     mach_vm_size_t size = sizeof(buf);
     err = mach_vm_read_overwrite(task, pointer, size,
                                  (mach_vm_address_t)&buf, &size);
-    assert(err == KERN_SUCCESS);
+    if (err != KERN_SUCCESS) return 0;
     
     // add ending
     buf[kRemoteStringBufferSize-1] = '\0';

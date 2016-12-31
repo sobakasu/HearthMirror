@@ -80,9 +80,13 @@ int main(int argc, const char * argv[]) {
 
         // Get the match info
         MirrorMatchInfo *matchInfo = [mirror getMatchInfo];
-        NSLog(@"MatchInto: brawlSeasonId: %@, missionId: %@, rankedSessionId: %@", matchInfo.brawlSeasonId, matchInfo.missionId, matchInfo.rankedSeasonId);
-        NSLog(@"MatchInto.localPlayer: name: %@, playerId: %@, standardRank: %@, standardLegendRank: %@, standardStars: %@, wildRank: %@, wildLegendRank: %@, wildStars: %@, cardBackId: %@", matchInfo.localPlayer.name, matchInfo.localPlayer.playerId, matchInfo.localPlayer.standardRank, matchInfo.localPlayer.standardLegendRank, matchInfo.localPlayer.standardStars, matchInfo.localPlayer.wildRank, matchInfo.localPlayer.wildLegendRank, matchInfo.localPlayer.wildStars, matchInfo.localPlayer.cardBackId);
-        NSLog(@"MatchInto.opposingPlayer: name: %@, playerId: %@, standardRank: %@, standardLegendRank: %@, standardStars: %@, wildRank: %@, wildLegendRank: %@, wildStars: %@, cardBackId: %@", matchInfo.opposingPlayer.name, matchInfo.opposingPlayer.playerId, matchInfo.opposingPlayer.standardRank, matchInfo.opposingPlayer.standardLegendRank, matchInfo.opposingPlayer.standardStars, matchInfo.opposingPlayer.wildRank, matchInfo.opposingPlayer.wildLegendRank, matchInfo.opposingPlayer.wildStars, matchInfo.opposingPlayer.cardBackId);
+        if (matchInfo == nil) {
+            NSLog(@"MatchInfo is nil, are you playing ?");
+        } else {
+            NSLog(@"MatchInfo: brawlSeasonId: %@, missionId: %@, rankedSessionId: %@", matchInfo.brawlSeasonId, matchInfo.missionId, matchInfo.rankedSeasonId);
+            NSLog(@"MatchInfo.localPlayer: name: %@, playerId: %@, standardRank: %@, standardLegendRank: %@, standardStars: %@, wildRank: %@, wildLegendRank: %@, wildStars: %@, cardBackId: %@", matchInfo.localPlayer.name, matchInfo.localPlayer.playerId, matchInfo.localPlayer.standardRank, matchInfo.localPlayer.standardLegendRank, matchInfo.localPlayer.standardStars, matchInfo.localPlayer.wildRank, matchInfo.localPlayer.wildLegendRank, matchInfo.localPlayer.wildStars, matchInfo.localPlayer.cardBackId);
+            NSLog(@"MatchInfo.opposingPlayer: name: %@, playerId: %@, standardRank: %@, standardLegendRank: %@, standardStars: %@, wildRank: %@, wildLegendRank: %@, wildStars: %@, cardBackId: %@", matchInfo.opposingPlayer.name, matchInfo.opposingPlayer.playerId, matchInfo.opposingPlayer.standardRank, matchInfo.opposingPlayer.standardLegendRank, matchInfo.opposingPlayer.standardStars, matchInfo.opposingPlayer.wildRank, matchInfo.opposingPlayer.wildLegendRank, matchInfo.opposingPlayer.wildStars, matchInfo.opposingPlayer.cardBackId);
+        }
         // Get the decks
         NSArray *decks = [mirror getDecks];
         NSLog(@"Decks: %@", decks);

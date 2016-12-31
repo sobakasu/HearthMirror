@@ -80,11 +80,14 @@ namespace hearthmirror {
         
         MonoClass* baseclass = (*_monoImage)[path[0]]; // no need to free
         MonoValue mv = (*baseclass)[path[1]];
-        
+        if (IsMonoValueEmpty(mv)) return NULL;
+
         // this function might blow up with structs/enums
         for (unsigned int i = 2; i< path.size(); i++) {
             MonoObject* mo = mv.value.obj.o;
             mv = (*mo)[path[i]];
+            if (IsMonoValueEmpty(mv)) return NULL;
+            
             delete mo;
         }
         return mv;
@@ -93,7 +96,7 @@ namespace hearthmirror {
     /** Helper to get an int */
     int Mirror::getInt(const HMObjectPath& path) {
         MonoValue mv = getObject(path);
-        if (IsMonoValueEmpty(mv)) return NULL;
+        if (IsMonoValueEmpty(mv)) return 0;
         int value = mv.value.i32;
 
         DeleteMonoValue(mv);
@@ -103,7 +106,7 @@ namespace hearthmirror {
     /** Helper to get a long */
     long Mirror::getLong(const HMObjectPath& path) {
         MonoValue mv = getObject(path);
-        if (IsMonoValueEmpty(mv)) return NULL;
+        if (IsMonoValueEmpty(mv)) return 0;
         long value = mv.value.i64;
 
         DeleteMonoValue(mv);
@@ -113,7 +116,7 @@ namespace hearthmirror {
     /** Helper to get a bool */
     bool Mirror::getBool(const HMObjectPath& path) {
         MonoValue mv = getObject(path);
-        if (IsMonoValueEmpty(mv)) return NULL;
+        if (IsMonoValueEmpty(mv)) return false;
         bool value = mv.value.b;
 
         DeleteMonoValue(mv);
@@ -187,7 +190,6 @@ namespace hearthmirror {
 
     InternalMatchInfo Mirror::getMatchInfo() {
         InternalMatchInfo result;
-        if (!_monoImage) return result;
 
         MonoValue playerIds = getObject({"GameState","s_instance","m_playerMap","keySlots"});
         MonoValue players = getObject({"GameState","s_instance","m_playerMap","valueSlots"});

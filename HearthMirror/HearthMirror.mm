@@ -69,7 +69,7 @@ using namespace hearthmirror;
     return [NSArray arrayWithArray:result];
 }
 
--(nonnull MirrorGameServerInfo*) getGameServerInfo {
+-(nullable MirrorGameServerInfo*) getGameServerInfo {
     MirrorGameServerInfo *result = [MirrorGameServerInfo new];
     if (_mirror == NULL) return result;
 
@@ -100,13 +100,15 @@ using namespace hearthmirror;
     return @(_mirror->getFormat());
 }
 
--(nonnull MirrorMatchInfo *) getMatchInfo {
+-(nullable MirrorMatchInfo *) getMatchInfo {
+    if (_mirror == NULL) return nil;
     MirrorMatchInfo *result = [MirrorMatchInfo new];
-    if (_mirror == NULL) return result;
 
     InternalMatchInfo _matchInfo = _mirror->getMatchInfo();
+
     MirrorPlayer *localPlayer = [MirrorPlayer new];
     localPlayer.name = [NSString stringWithu16string:_matchInfo.localPlayer.name];
+    if (localPlayer.name == nil) return nil;
     localPlayer.playerId = @(_matchInfo.localPlayer.id);
     localPlayer.standardRank = @(_matchInfo.localPlayer.standardRank);
     localPlayer.standardLegendRank = @(_matchInfo.localPlayer.standardLegendRank);
@@ -119,6 +121,7 @@ using namespace hearthmirror;
 
     MirrorPlayer *opposingPlayer = [MirrorPlayer new];
     opposingPlayer.name = [NSString stringWithu16string:_matchInfo.opposingPlayer.name];
+    if (opposingPlayer.name == nil) return nil;
     opposingPlayer.playerId = @(_matchInfo.opposingPlayer.id);
     opposingPlayer.standardRank = @(_matchInfo.opposingPlayer.standardRank);
     opposingPlayer.standardLegendRank = @(_matchInfo.opposingPlayer.standardLegendRank);
@@ -192,8 +195,9 @@ using namespace hearthmirror;
     if (_mirror == NULL) return NULL;
 
     long deckId = _mirror->getSelectedDeckInMenu();
+    if (deckId == 0) return nil;
 
-    return deckId == NULL ? @0 : @(deckId);
+    return @(deckId);
 }
 
 -(void)dealloc {

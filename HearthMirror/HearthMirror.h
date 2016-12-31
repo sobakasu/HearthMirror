@@ -10,75 +10,75 @@
 #import <Foundation/Foundation.h>
 
 @interface MirrorGameServerInfo: NSObject
-    @property NSString *address;
-    @property NSString *auroraPassword;
-    @property NSNumber *clientHandle;
-    @property NSNumber *gameHandle;
-    @property NSNumber *mission;
-    @property NSNumber *port;
+    @property NSString *_Nonnull address;
+    @property NSString *_Nonnull auroraPassword;
+    @property NSNumber *_Nonnull clientHandle;
+    @property NSNumber *_Nonnull gameHandle;
+    @property NSNumber *_Nonnull mission;
+    @property NSNumber *_Nonnull port;
     @property BOOL resumable;
     @property BOOL spectatorMode;
-    @property NSString *spectatorPassword;
-    @property NSString *version;
+    @property NSString *_Nonnull spectatorPassword;
+    @property NSString *_Nonnull version;
 @end
 
 @interface MirrorPlayer: NSObject
-    @property NSString *name;
-    @property NSNumber *playerId;
-    @property NSNumber *standardRank;
-    @property NSNumber *standardLegendRank;
-    @property NSNumber *standardStars;
-    @property NSNumber *wildRank;
-    @property NSNumber *wildLegendRank;
-    @property NSNumber *wildStars;
-    @property NSNumber *cardBackId;
+    @property NSString *_Nonnull name;
+    @property NSNumber *_Nonnull playerId;
+    @property NSNumber *_Nonnull standardRank;
+    @property NSNumber *_Nonnull standardLegendRank;
+    @property NSNumber *_Nonnull standardStars;
+    @property NSNumber *_Nonnull wildRank;
+    @property NSNumber *_Nonnull wildLegendRank;
+    @property NSNumber *_Nonnull wildStars;
+    @property NSNumber *_Nonnull cardBackId;
 @end
 
 @interface MirrorMatchInfo: NSObject
-    @property MirrorPlayer *localPlayer;
-    @property MirrorPlayer *opposingPlayer;
-    @property NSNumber *brawlSeasonId;
-    @property NSNumber *missionId;
-    @property NSNumber *rankedSeasonId;
+    @property MirrorPlayer *_Nonnull localPlayer;
+    @property MirrorPlayer *_Nonnull opposingPlayer;
+    @property NSNumber *_Nonnull brawlSeasonId;
+    @property NSNumber *_Nonnull missionId;
+    @property NSNumber *_Nonnull rankedSeasonId;
 @end
 
 @interface MirrorAccountId: NSObject
-    @property NSNumber *lo;
-    @property NSNumber *hi;
+    @property NSNumber *_Nonnull lo;
+    @property NSNumber *_Nonnull hi;
 @end
 
 @interface MirrorCard: NSObject
-    @property NSString *cardId;
-    @property NSNumber *count;
+    @property NSString *_Nonnull cardId;
+    @property NSNumber *_Nonnull count;
     @property BOOL premium;
 @end
 
 @interface MirrorDeck: NSObject
-    @property NSNumber *id;
-    @property NSString *name;
-    @property NSString *hero;
+    @property NSNumber *_Nonnull id;
+    @property NSString *_Nonnull name;
+    @property NSString *_Nonnull hero;
     @property BOOL isWild;
-    @property NSNumber *type;
-    @property NSNumber *seasonId;
-    @property NSNumber *cardBackId;
-    @property NSNumber *heroPremium;
-    @property NSArray *cards;
+    @property NSNumber *_Nonnull type;
+    @property NSNumber *_Nonnull seasonId;
+    @property NSNumber *_Nonnull cardBackId;
+    @property NSNumber *_Nonnull heroPremium;
+    @property NSArray *_Nonnull cards;
 @end
 
 @interface HearthMirror : NSObject
 
--(instancetype) initWithPID:(pid_t)pid;
+-(nonnull instancetype) initWithPID:(pid_t)pid;
 
 /** Returns the BattleTag as a single string in the following format: name#number. */
 -(nullable NSString*) getBattleTag;
 
 -(nonnull NSArray*) getCardCollection;
 
--(nonnull MirrorGameServerInfo*) getGameServerInfo;
+-(nullable MirrorGameServerInfo*) getGameServerInfo;
 
 -(nullable NSNumber*) getGameType;
 
--(nonnull MirrorMatchInfo*) getMatchInfo;
+-(nullable MirrorMatchInfo*) getMatchInfo;
 
 -(nullable NSNumber*) getFormat;
 
