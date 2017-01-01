@@ -67,6 +67,8 @@ namespace hearthmirror {
         if (mv.arrsize == 0) return; // value is null
         switch (mv.type) {
             case Object:
+            case Var:
+            case GenericInst:
             case Class:
                 delete mv.value.obj.o;
                 break;
@@ -79,13 +81,14 @@ namespace hearthmirror {
                 }
                 delete[] mv.value.arr;
                 break;
-            default:
+            default: {
+            }
                 break;
         }
     }
     
     bool IsMonoValueEmpty(const MonoValue& mv) {
-        return (mv.arrsize == 0) || ((mv.type == Class || mv.type == GenericInst || mv.type == Object) && mv.value.obj.o == NULL);
+        return (mv.arrsize == 0) || ((mv.type == Class || mv.type == GenericInst || mv.type == Object || mv.type == Var) && mv.value.obj.o == NULL);
     }
     
     

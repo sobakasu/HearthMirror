@@ -46,7 +46,7 @@ int main(int argc, const char * argv[]) {
         // Get Account id
         MirrorAccountId *accountId = [mirror getAccountId];
         NSLog(@"AccountId: %@,%@", accountId.hi, accountId.lo);
-        
+
         // Get card collection
         NSArray* collection = [mirror getCardCollection];
         NSLog(@"Collection : %@", collection);

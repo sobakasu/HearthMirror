@@ -21,6 +21,8 @@ namespace hearthmirror {
     class MonoStruct {
     public:
         MonoStruct();
+        
+        /** Class takes ownership of the passed MonoClass instance */
         MonoStruct(HANDLE task, MonoClass* mClass, uint32_t pStruct);
         ~MonoStruct();
         

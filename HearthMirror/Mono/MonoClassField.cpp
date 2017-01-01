@@ -21,7 +21,10 @@ namespace hearthmirror {
     MonoClassField::~MonoClassField() {}
 
     std::string MonoClassField::getName() {
-        return ReadCString(_task, ReadUInt32(_task, _pField + kMonoClassFieldName));
+        char* pName = ReadCString(_task, ReadUInt32(_task, _pField + kMonoClassFieldName));
+        std::string name(pName);
+        free(pName);
+        return name;
     }
     
     int32_t MonoClassField::getOffset() {
@@ -112,11 +115,12 @@ namespace hearthmirror {
                     delete sClass;
                     return mv;
                 }
-                delete sClass;
                 delete type;
                 MonoValue mv;
                 mv.type = ValueType;
-                mv.value.obj.s = new MonoStruct(_task, sClass, (uint32_t) (data + offset));
+                MonoClass* c2 = new MonoClass(sClass);
+                mv.value.obj.s = new MonoStruct(_task, c2, (uint32_t) (data + offset));
+                delete sClass;
                 return mv;
             }
             delete type;
@@ -158,7 +162,10 @@ namespace hearthmirror {
             delete type;
             MonoValue mv;
             mv.type = MonoTypeEnum::ValueType;
-            mv.value.obj.s = new MonoStruct(_task, sClass, (uint32_t) (o->pObject + offset));
+            
+            MonoClass* c2 = new MonoClass(sClass);
+            mv.value.obj.s = new MonoStruct(_task, c2, (uint32_t) (o->pObject + offset));
+            delete sClass;
             return mv;
         }
         
@@ -233,39 +240,43 @@ namespace hearthmirror {
                 uint32_t pArrClass = ReadUInt32(_task, vt);
                 MonoClass* arrClass = new MonoClass(_task, pArrClass);
                 MonoClass* elClass = new MonoClass(_task, ReadUInt32(_task, pArrClass));
-                bool avt = arrClass->isValueType();
+                //bool avt = arrClass->isValueType();
                 uint32_t count = ReadInt32(_task, addr + 12);
                 uint32_t start = (uint32_t)addr + 16;
                 result.arrsize = count;
-                result.value.arr = new MonoValue[count];
-                for (uint32_t i = 0; i < count; i++)
-                {
-                    uint32_t ea = start + i* arrClass->size();
-                    if(elClass->isValueType()) {
-                        MonoType* mt = elClass->byValArg();
-                        if(mt->getType() == MonoTypeEnum::ValueType) {
-                            MonoStruct* stc = new MonoStruct(_task, elClass, (uint32_t) ea);
+                if (count > 0) {
+                    result.value.arr = new MonoValue[count];
+                    for (uint32_t i = 0; i < count; i++) {
+                        
+                        uint32_t ea = start + i* arrClass->size();
+                        if(elClass->isValueType()) {
+                            MonoType* mt = elClass->byValArg();
+                            if(mt->getType() == MonoTypeEnum::ValueType) {
+                                MonoClass* c2 = new MonoClass(elClass);
+                                MonoStruct* stc = new MonoStruct(_task, c2, (uint32_t) ea);
+                                MonoValue mv;
+                                mv.type = MonoTypeEnum::ValueType;
+                                mv.value.obj.s = stc;
+                                result[i] = mv;
+                            } else {
+                                result[i] = ReadValue(mt->getType(), ea);
+                            }
+                            delete mt;
+                        } else {
+                            uint32_t po = ReadUInt32(_task, ea);
                             MonoValue mv;
-                            mv.type = MonoTypeEnum::ValueType;
-                            mv.value.obj.s = stc;
-                            result[i] = mv;
-                        } else {
-                            result[i] = ReadValue(mt->getType(), ea);
-                        }
-                        delete mt;
-                    } else {
-                        uint32_t po = ReadUInt32(_task, ea);
-                        MonoValue mv;
-                        if(po == 0) {
-                            mv.arrsize = 0;
-                            result[i] = mv;
-                        } else {
-                            mv.type = GenericInst;
-                            mv.value.obj.o = new MonoObject(_task, po);
-                            result[i] = mv;
+                            if (po == 0) {
+                                mv.arrsize = 0;
+                                result[i] = mv;
+                            } else {
+                                mv.type = GenericInst;
+                                mv.value.obj.o = new MonoObject(_task, po);
+                                result[i] = mv;
+                            }
                         }
                     }
                 }
+                
                 delete arrClass;
                 delete elClass;
                 return result;

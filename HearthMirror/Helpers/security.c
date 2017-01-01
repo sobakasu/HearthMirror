@@ -26,15 +26,18 @@ EXPORT int acquireTaskportRight()
     stat = AuthorizationCreate(NULL, kAuthorizationEmptyEnvironment,auth_flags,&author);
     if (stat != errAuthorizationSuccess)
     {
+        AuthorizationFree(author, auth_flags);
         return 0;
     }
     
-    stat = AuthorizationCopyRights( author, &rights, kAuthorizationEmptyEnvironment, auth_flags, &out_rights);
+    stat = AuthorizationCopyRights( author, &rights, kAuthorizationEmptyEnvironment, auth_flags, NULL/*&out_rights*/);
     if (stat != errAuthorizationSuccess)
     {
+        AuthorizationFree(author, auth_flags);
         printf("fail");
         return 1;
     }
+    AuthorizationFree(author, auth_flags);
     return 0;
 }
 #endif

@@ -18,7 +18,9 @@ namespace hearthmirror {
         monoClass = mClass;
     }
     
-    MonoStruct::~MonoStruct() {}
+    MonoStruct::~MonoStruct() {
+        delete monoClass;
+    }
     
     std::map<std::string, MonoValue> MonoStruct::getFields() {
         

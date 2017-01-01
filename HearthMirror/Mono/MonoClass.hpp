@@ -22,6 +22,7 @@ namespace hearthmirror {
     public:
         MonoClass();
         MonoClass(HANDLE task, uint32_t pClass);
+        MonoClass(const MonoClass* other);
         ~MonoClass();
         
         std::string getName();

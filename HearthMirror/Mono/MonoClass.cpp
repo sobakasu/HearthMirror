@@ -17,14 +17,25 @@ namespace hearthmirror {
 
     MonoClass::~MonoClass() {}
     
+    MonoClass::MonoClass(const MonoClass* other) {
+        _task = other->_task;
+        _pClass = other->_pClass;
+    }
+    
     std::string MonoClass::getName() {
         uint32_t addr = ReadUInt32(_task, _pClass + kMonoClassName);
-        return std::string(ReadCString(_task, addr));
+        char* pName = ReadCString(_task, addr);
+        std::string name(pName);
+        free(pName);
+        return name;
     }
     
     std::string MonoClass::getNameSpace() {
         uint32_t addr = ReadUInt32(_task, _pClass + kMonoClassNameSpace);
-        return std::string(ReadCString(_task, addr));
+        char* pNamespace = ReadCString(_task, addr);
+        std::string ns(pNamespace);
+        free(pNamespace);
+        return ns;
     }
     
     std::string MonoClass::getFullName() {
@@ -98,8 +109,13 @@ namespace hearthmirror {
         }
         if (parent) {
             std::vector<MonoClassField*> pfs = parent->getFields();
+            
             for(uint32_t i = 0; i < nFieldsParent; i++) {
                 fs[nFields + i] = pfs[i];
+            }
+            // apparently returned fields from the parent might be more than the field reporting it
+            for (int i = nFieldsParent; i< pfs.size(); i++) {
+                    delete pfs[i];
             }
             delete parent;
         }

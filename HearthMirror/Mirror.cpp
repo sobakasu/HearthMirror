@@ -87,11 +87,13 @@ namespace hearthmirror {
         MonoValue mv = (*baseclass)[path[1]];
         if (IsMonoValueEmpty(mv)) return NULL;
 
-        // this function might blow up with structs/enums
         for (unsigned int i = 2; i< path.size(); i++) {
             MonoObject* mo = mv.value.obj.o;
             mv = (*mo)[path[i]];
-            if (IsMonoValueEmpty(mv)) return NULL;
+            if (IsMonoValueEmpty(mv)) {
+                delete mo;
+                return NULL;
+            }
             
             delete mo;
         }
@@ -198,10 +200,16 @@ namespace hearthmirror {
 
         MonoValue playerIds = getObject({"GameState","s_instance","m_playerMap","keySlots"});
         MonoValue players = getObject({"GameState","s_instance","m_playerMap","valueSlots"});
-        MonoValue netCacheValues = getObject({"NetCache","s_instance","m_netCache","valueSlots"});
-        if (IsMonoValueEmpty(playerIds) || !IsMonoValueArray(playerIds)) return result;
-        if (IsMonoValueEmpty(players) || !IsMonoValueArray(players)) return result;
-        if (IsMonoValueEmpty(netCacheValues) || !IsMonoValueArray(netCacheValues)) return result;
+        MonoValue netCacheValues = getObject({"NetCache","s_instance","m_netCache","valueSlots"});        
+        
+        if (IsMonoValueEmpty(playerIds) || !IsMonoValueArray(playerIds)
+            || IsMonoValueEmpty(players) || !IsMonoValueArray(players)
+            || IsMonoValueEmpty(netCacheValues) || !IsMonoValueArray(netCacheValues)) {
+            DeleteMonoValue(playerIds);
+            DeleteMonoValue(players);
+            DeleteMonoValue(netCacheValues);
+            return result;
+        }
 
         for (unsigned int i=0; i< playerIds.arrsize; i++) {
             MonoValue mv = players[i];
@@ -366,6 +374,7 @@ namespace hearthmirror {
 
         for (unsigned int i=0; i< values.arrsize; i++) {
             MonoValue mv = values[i];
+            if (IsMonoValueEmpty(mv)) continue;
             MonoObject* inst = mv.value.obj.o;
             MonoClass* instclass = inst->getClass();
             std::string icname = instclass->getName();
@@ -415,7 +424,12 @@ namespace hearthmirror {
 
         MonoValue cards = (*cardList)["_items"];
         MonoValue sizemv = (*cardList)["_size"];
-        if (IsMonoValueEmpty(cards) || IsMonoValueEmpty(sizemv)) return deck;
+        if (IsMonoValueEmpty(cards) || IsMonoValueEmpty(sizemv)) {
+            DeleteMonoValue(cards);
+            DeleteMonoValue(sizemv);
+            DeleteMonoValue(_cardList);
+            return deck;
+        }
         int size = sizemv.value.i32;
         for (int i = 0; i < size; i++) {
             MonoObject *card = cards[i].value.obj.o;
@@ -452,6 +466,7 @@ namespace hearthmirror {
         
         for (unsigned int i=0; i< valueSlots.arrsize; i++) {
             MonoValue mv = valueSlots[i];
+            if (IsMonoValueEmpty(mv)) continue;
             MonoObject* inst = mv.value.obj.o;
             MonoClass* instclass = inst->getClass();
             std::string icname = instclass->getName();
@@ -472,14 +487,12 @@ namespace hearthmirror {
 
                     MonoValue countmv = (*stack)["<Count>k__BackingField"];
                     if (IsMonoValueEmpty(countmv)) {
-                        DeleteMonoValue(stackmv);
                         continue;
                     }
                     int count = countmv.value.i32;
                     
                     MonoValue defmv = (*stack)["<Def>k__BackingField"];
                     if (IsMonoValueEmpty(defmv)) {
-                        DeleteMonoValue(stackmv);
                         DeleteMonoValue(countmv);
                         continue;
                     }
@@ -488,7 +501,6 @@ namespace hearthmirror {
                     MonoValue namemv = (*def)["<Name>k__BackingField"];
                     MonoValue premiummv = (*def)["<Premium>k__BackingField"];
 					if (IsMonoValueEmpty(namemv) || IsMonoValueEmpty(premiummv)) {
-                        DeleteMonoValue(stackmv);
                         DeleteMonoValue(countmv);
                         DeleteMonoValue(defmv);
                         continue;
@@ -498,11 +510,6 @@ namespace hearthmirror {
                     bool premium = premiummv.value.b;
                     result.push_back(Card(name,count,premium));
                     
-                    //std::wstring_convert<std::codecvt_utf8_utf16<char16_t>,char16_t> convert;
-                    //std::string namestr = convert.to_bytes(name);
-                    //printf("%s : %d | %d\n",namestr.c_str(),count,premium);
-                    
-                    DeleteMonoValue(stackmv);
                     DeleteMonoValue(countmv);
                     DeleteMonoValue(defmv);
                     DeleteMonoValue(namemv);
