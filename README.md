@@ -1,3 +1,4 @@
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 # What is HearthMirror?
 
 HearthMirror is a library written in C/C++ that allows reading data directly from a running [Hearthstone](http://battle.net/hearthstone "Hearthstone") game.
