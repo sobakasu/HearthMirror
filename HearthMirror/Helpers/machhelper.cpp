@@ -186,7 +186,6 @@ proc_address getMonoRootDomainAddr(HANDLE task, proc_address baseAddress) {
     }
     
     mach_vm_address_t symtab_addr = 0;
-    mach_vm_address_t dysymtab_addr = 0;
     mach_vm_address_t linkedit_addr = 0;
     mach_vm_address_t text_addr = 0;
     mach_vm_address_t data_addr = 0;
@@ -206,7 +205,6 @@ proc_address getMonoRootDomainAddr(HANDLE task, proc_address baseAddress) {
         if (command.cmd == LC_SYMTAB) {
             symtab_addr = command_addr;
         } else if (command.cmd == LC_DYSYMTAB) {
-            dysymtab_addr = command_addr;
         } else if (command.cmd == LC_SEGMENT || command.cmd == LC_SEGMENT_64) {
             /* struct load_command only has two fields (cmd & cmdsize), while its "child" type
              * struct segment_command has way more fields including `segname` at index 3, so we just

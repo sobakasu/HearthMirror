@@ -7,8 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BCB5AF721E196F0600244DDB /* HearthMirror.h in Headers */ = {isa = PBXBuildFile; fileRef = BCB5AF701E196F0600244DDB /* HearthMirror.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BCB5AF761E196F5300244DDB /* security.h in Headers */ = {isa = PBXBuildFile; fileRef = BCC527571E117DDE00F8DE94 /* security.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BCB5AF771E196F6200244DDB /* HearthMirror_imp.h in Headers */ = {isa = PBXBuildFile; fileRef = BCC5273B1E11768500F8DE94 /* HearthMirror_imp.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BCB5AF781E196F7800244DDB /* machhelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC5271F1E11405500F8DE94 /* machhelper.cpp */; };
+		BCB5AF791E196F7800244DDB /* security.c in Sources */ = {isa = PBXBuildFile; fileRef = BCC527561E117DDE00F8DE94 /* security.c */; };
+		BCB5AF7A1E196F7800244DDB /* MonoImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC527101E113D2000F8DE94 /* MonoImage.cpp */; };
+		BCB5AF7B1E196F7800244DDB /* MonoClass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC5270C1E113D0000F8DE94 /* MonoClass.cpp */; };
+		BCB5AF7C1E196F7800244DDB /* MonoClassField.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC5270E1E113D1500F8DE94 /* MonoClassField.cpp */; };
+		BCB5AF7D1E196F7800244DDB /* MonoObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC527121E113D2C00F8DE94 /* MonoObject.cpp */; };
+		BCB5AF7E1E196F7800244DDB /* MonoStruct.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC527141E113D3500F8DE94 /* MonoStruct.cpp */; };
+		BCB5AF7F1E196F7800244DDB /* MonoType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC527161E113D3600F8DE94 /* MonoType.cpp */; };
+		BCB5AF801E196F7800244DDB /* Mirror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC527271E11499900F8DE94 /* Mirror.cpp */; };
+		BCB5AF811E196F7800244DDB /* HearthMirror_imp.mm in Sources */ = {isa = PBXBuildFile; fileRef = BCC5273F1E11768500F8DE94 /* HearthMirror_imp.mm */; };
+		BCB5AF821E196F8600244DDB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCC5274D1E11772400F8DE94 /* Security.framework */; };
+		BCB5AF831E19708B00244DDB /* HearthMirror.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCB5AF6E1E196F0600244DDB /* HearthMirror.framework */; };
+		BCB5AF861E197D7900244DDB /* Mirror.hpp in Headers */ = {isa = PBXBuildFile; fileRef = BCC527281E11499900F8DE94 /* Mirror.hpp */; };
 		BCC527311E11760F00F8DE94 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BCC527301E11760F00F8DE94 /* main.m */; };
-		BCC527401E11768500F8DE94 /* HearthMirror.mm in Sources */ = {isa = PBXBuildFile; fileRef = BCC5273F1E11768500F8DE94 /* HearthMirror.mm */; };
+		BCC527401E11768500F8DE94 /* HearthMirror_imp.mm in Sources */ = {isa = PBXBuildFile; fileRef = BCC5273F1E11768500F8DE94 /* HearthMirror_imp.mm */; };
 		BCC527441E1176C400F8DE94 /* machhelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC5271F1E11405500F8DE94 /* machhelper.cpp */; };
 		BCC527451E1176C400F8DE94 /* MonoImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC527101E113D2000F8DE94 /* MonoImage.cpp */; };
 		BCC527461E1176C400F8DE94 /* MonoClass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC5270C1E113D0000F8DE94 /* MonoClass.cpp */; };
@@ -18,12 +34,21 @@
 		BCC5274A1E1176C400F8DE94 /* MonoType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC527161E113D3600F8DE94 /* MonoType.cpp */; };
 		BCC5274B1E1176C400F8DE94 /* Mirror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC527271E11499900F8DE94 /* Mirror.cpp */; };
 		BCC5274E1E11772400F8DE94 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCC5274D1E11772400F8DE94 /* Security.framework */; };
-		BCC5274F1E11774600F8DE94 /* libHearthMirror.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BCC527391E11768400F8DE94 /* libHearthMirror.dylib */; };
 		BCC527501E11782500F8DE94 /* Mirror.hpp in Headers */ = {isa = PBXBuildFile; fileRef = BCC527281E11499900F8DE94 /* Mirror.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
-		BCC527511E11791300F8DE94 /* HearthMirror.h in Headers */ = {isa = PBXBuildFile; fileRef = BCC5273B1E11768500F8DE94 /* HearthMirror.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BCC527511E11791300F8DE94 /* HearthMirror_imp.h in Headers */ = {isa = PBXBuildFile; fileRef = BCC5273B1E11768500F8DE94 /* HearthMirror_imp.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BCC527581E117DDE00F8DE94 /* security.c in Sources */ = {isa = PBXBuildFile; fileRef = BCC527561E117DDE00F8DE94 /* security.c */; };
 		BCC527591E117DDE00F8DE94 /* security.h in Headers */ = {isa = PBXBuildFile; fileRef = BCC527571E117DDE00F8DE94 /* security.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BCB5AF841E19729B00244DDB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BCCEAB001DF46C5200CC936C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BCB5AF6D1E196F0600244DDB;
+			remoteInfo = HearthMirrorFW;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		BCC5272C1E11760F00F8DE94 /* CopyFiles */ = {
@@ -38,6 +63,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BCB5AF6E1E196F0600244DDB /* HearthMirror.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HearthMirror.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BCB5AF701E196F0600244DDB /* HearthMirror.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HearthMirror.h; sourceTree = "<group>"; };
+		BCB5AF711E196F0600244DDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BCC527081E11347600F8DE94 /* memhelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = memhelper.h; sourceTree = "<group>"; };
 		BCC5270C1E113D0000F8DE94 /* MonoClass.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MonoClass.cpp; path = Mono/MonoClass.cpp; sourceTree = "<group>"; };
 		BCC5270E1E113D1500F8DE94 /* MonoClassField.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MonoClassField.cpp; path = Mono/MonoClassField.cpp; sourceTree = "<group>"; };
@@ -59,8 +87,8 @@
 		BCC5272E1E11760F00F8DE94 /* TestAppMacOS */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestAppMacOS; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCC527301E11760F00F8DE94 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		BCC527391E11768400F8DE94 /* libHearthMirror.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libHearthMirror.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
-		BCC5273B1E11768500F8DE94 /* HearthMirror.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HearthMirror.h; sourceTree = "<group>"; };
-		BCC5273F1E11768500F8DE94 /* HearthMirror.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = HearthMirror.mm; sourceTree = "<group>"; };
+		BCC5273B1E11768500F8DE94 /* HearthMirror_imp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HearthMirror_imp.h; sourceTree = "<group>"; };
+		BCC5273F1E11768500F8DE94 /* HearthMirror_imp.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = HearthMirror_imp.mm; sourceTree = "<group>"; };
 		BCC5274D1E11772400F8DE94 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		BCC527561E117DDE00F8DE94 /* security.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = security.c; path = Helpers/security.c; sourceTree = "<group>"; };
 		BCC527571E117DDE00F8DE94 /* security.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = security.h; path = Helpers/security.h; sourceTree = "<group>"; };
@@ -69,11 +97,19 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		BCB5AF6A1E196F0600244DDB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BCB5AF821E196F8600244DDB /* Security.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BCC5272B1E11760F00F8DE94 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BCC5274F1E11774600F8DE94 /* libHearthMirror.dylib in Frameworks */,
+				BCB5AF831E19708B00244DDB /* HearthMirror.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,6 +124,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BCB5AF6F1E196F0600244DDB /* HearthMirrorFW */ = {
+			isa = PBXGroup;
+			children = (
+				BCB5AF701E196F0600244DDB /* HearthMirror.h */,
+				BCB5AF711E196F0600244DDB /* Info.plist */,
+			);
+			path = HearthMirrorFW;
+			sourceTree = "<group>";
+		};
 		BCC527181E113D4900F8DE94 /* Mono */ = {
 			isa = PBXGroup;
 			children = (
@@ -130,8 +175,8 @@
 		BCC5273A1E11768500F8DE94 /* HearthMirror */ = {
 			isa = PBXGroup;
 			children = (
-				BCC5273B1E11768500F8DE94 /* HearthMirror.h */,
-				BCC5273F1E11768500F8DE94 /* HearthMirror.mm */,
+				BCC5273B1E11768500F8DE94 /* HearthMirror_imp.h */,
+				BCC5273F1E11768500F8DE94 /* HearthMirror_imp.mm */,
 			);
 			path = HearthMirror;
 			sourceTree = "<group>";
@@ -142,6 +187,7 @@
 				BCCEAB0A1DF46C5200CC936C /* HearthMirror */,
 				BCC5272F1E11760F00F8DE94 /* TestAppMacOS */,
 				BCC5273A1E11768500F8DE94 /* HearthMirror */,
+				BCB5AF6F1E196F0600244DDB /* HearthMirrorFW */,
 				BCCEAB091DF46C5200CC936C /* Products */,
 				BCCEAB191DF4C5C400CC936C /* Frameworks */,
 			);
@@ -152,6 +198,7 @@
 			children = (
 				BCC5272E1E11760F00F8DE94 /* TestAppMacOS */,
 				BCC527391E11768400F8DE94 /* libHearthMirror.dylib */,
+				BCB5AF6E1E196F0600244DDB /* HearthMirror.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -181,11 +228,22 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		BCB5AF6B1E196F0600244DDB /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BCB5AF721E196F0600244DDB /* HearthMirror.h in Headers */,
+				BCB5AF761E196F5300244DDB /* security.h in Headers */,
+				BCB5AF771E196F6200244DDB /* HearthMirror_imp.h in Headers */,
+				BCB5AF861E197D7900244DDB /* Mirror.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BCC527371E11768400F8DE94 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BCC527511E11791300F8DE94 /* HearthMirror.h in Headers */,
+				BCC527511E11791300F8DE94 /* HearthMirror_imp.h in Headers */,
 				BCC527591E117DDE00F8DE94 /* security.h in Headers */,
 				BCC527501E11782500F8DE94 /* Mirror.hpp in Headers */,
 			);
@@ -194,6 +252,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		BCB5AF6D1E196F0600244DDB /* HearthMirrorFW */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BCB5AF751E196F0600244DDB /* Build configuration list for PBXNativeTarget "HearthMirrorFW" */;
+			buildPhases = (
+				BCB5AF691E196F0600244DDB /* Sources */,
+				BCB5AF6A1E196F0600244DDB /* Frameworks */,
+				BCB5AF6B1E196F0600244DDB /* Headers */,
+				BCB5AF6C1E196F0600244DDB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HearthMirrorFW;
+			productName = HearthMirrorFW;
+			productReference = BCB5AF6E1E196F0600244DDB /* HearthMirror.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		BCC5272D1E11760F00F8DE94 /* TestAppMacOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = BCC527341E11760F00F8DE94 /* Build configuration list for PBXNativeTarget "TestAppMacOS" */;
@@ -205,15 +281,16 @@
 			buildRules = (
 			);
 			dependencies = (
+				BCB5AF851E19729B00244DDB /* PBXTargetDependency */,
 			);
 			name = TestAppMacOS;
 			productName = TestAppMacOS;
 			productReference = BCC5272E1E11760F00F8DE94 /* TestAppMacOS */;
 			productType = "com.apple.product-type.tool";
 		};
-		BCC527381E11768400F8DE94 /* HearthMirror */ = {
+		BCC527381E11768400F8DE94 /* HearthMirrorLib */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BCC527411E11768500F8DE94 /* Build configuration list for PBXNativeTarget "HearthMirror" */;
+			buildConfigurationList = BCC527411E11768500F8DE94 /* Build configuration list for PBXNativeTarget "HearthMirrorLib" */;
 			buildPhases = (
 				BCC527351E11768400F8DE94 /* Sources */,
 				BCC527361E11768400F8DE94 /* Frameworks */,
@@ -223,7 +300,7 @@
 			);
 			dependencies = (
 			);
-			name = HearthMirror;
+			name = HearthMirrorLib;
 			productName = HearthMirror;
 			productReference = BCC527391E11768400F8DE94 /* libHearthMirror.dylib */;
 			productType = "com.apple.product-type.library.dynamic";
@@ -237,6 +314,11 @@
 				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = com.ifehervari;
 				TargetAttributes = {
+					BCB5AF6D1E196F0600244DDB = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = LCPPMESTJX;
+						ProvisioningStyle = Automatic;
+					};
 					BCC5272D1E11760F00F8DE94 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = LCPPMESTJX;
@@ -255,6 +337,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = BCCEAAFF1DF46C5200CC936C;
 			productRefGroup = BCCEAB091DF46C5200CC936C /* Products */;
@@ -262,12 +345,40 @@
 			projectRoot = "";
 			targets = (
 				BCC5272D1E11760F00F8DE94 /* TestAppMacOS */,
-				BCC527381E11768400F8DE94 /* HearthMirror */,
+				BCC527381E11768400F8DE94 /* HearthMirrorLib */,
+				BCB5AF6D1E196F0600244DDB /* HearthMirrorFW */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		BCB5AF6C1E196F0600244DDB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		BCB5AF691E196F0600244DDB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BCB5AF781E196F7800244DDB /* machhelper.cpp in Sources */,
+				BCB5AF791E196F7800244DDB /* security.c in Sources */,
+				BCB5AF7A1E196F7800244DDB /* MonoImage.cpp in Sources */,
+				BCB5AF7B1E196F7800244DDB /* MonoClass.cpp in Sources */,
+				BCB5AF7C1E196F7800244DDB /* MonoClassField.cpp in Sources */,
+				BCB5AF7D1E196F7800244DDB /* MonoObject.cpp in Sources */,
+				BCB5AF7E1E196F7800244DDB /* MonoStruct.cpp in Sources */,
+				BCB5AF7F1E196F7800244DDB /* MonoType.cpp in Sources */,
+				BCB5AF801E196F7800244DDB /* Mirror.cpp in Sources */,
+				BCB5AF811E196F7800244DDB /* HearthMirror_imp.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BCC5272A1E11760F00F8DE94 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -288,20 +399,79 @@
 				BCC527491E1176C400F8DE94 /* MonoStruct.cpp in Sources */,
 				BCC5274A1E1176C400F8DE94 /* MonoType.cpp in Sources */,
 				BCC5274B1E1176C400F8DE94 /* Mirror.cpp in Sources */,
-				BCC527401E11768500F8DE94 /* HearthMirror.mm in Sources */,
+				BCC527401E11768500F8DE94 /* HearthMirror_imp.mm in Sources */,
 				BCC527581E117DDE00F8DE94 /* security.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		BCB5AF851E19729B00244DDB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BCB5AF6D1E196F0600244DDB /* HearthMirrorFW */;
+			targetProxy = BCB5AF841E19729B00244DDB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
-		BCC527321E11760F00F8DE94 /* Debug */ = {
+		BCB5AF731E196F0600244DDB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = LCPPMESTJX;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = HearthMirrorFW/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ifehervari.HearthMirror;
+				PRODUCT_NAME = HearthMirror;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		BCB5AF741E196F0600244DDB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = LCPPMESTJX;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = HearthMirrorFW/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ifehervari.HearthMirror;
+				PRODUCT_NAME = HearthMirror;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		BCC527321E11760F00F8DE94 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
 				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
 				DEVELOPMENT_TEAM = LCPPMESTJX;
+				FRAMEWORK_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
 				INFOPLIST_FILE = "$(SRCROOT)/HearthMirror/Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ifehervari.hearthmirrortestapp;
@@ -312,9 +482,12 @@
 		BCC527331E11760F00F8DE94 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
 				DEVELOPMENT_TEAM = LCPPMESTJX;
+				FRAMEWORK_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
 				INFOPLIST_FILE = "$(SRCROOT)/HearthMirror/Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ifehervari.hearthmirrortestapp;
@@ -337,7 +510,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_CFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ifehervari.hearthmirror;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = HearthMirror;
 			};
 			name = Debug;
 		};
@@ -356,7 +529,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_CFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ifehervari.hearthmirror;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = HearthMirror;
 			};
 			name = Release;
 		};
@@ -382,7 +555,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -430,7 +603,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -452,6 +625,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		BCB5AF751E196F0600244DDB /* Build configuration list for PBXNativeTarget "HearthMirrorFW" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BCB5AF731E196F0600244DDB /* Debug */,
+				BCB5AF741E196F0600244DDB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		BCC527341E11760F00F8DE94 /* Build configuration list for PBXNativeTarget "TestAppMacOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -461,7 +642,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BCC527411E11768500F8DE94 /* Build configuration list for PBXNativeTarget "HearthMirror" */ = {
+		BCC527411E11768500F8DE94 /* Build configuration list for PBXNativeTarget "HearthMirrorLib" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BCC527421E11768500F8DE94 /* Debug */,

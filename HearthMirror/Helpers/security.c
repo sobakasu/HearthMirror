@@ -18,7 +18,7 @@ EXPORT int acquireTaskportRight()
 {
     OSStatus stat;
     AuthorizationItem taskport_item[] = {{"system.privilege.taskport:"}};
-    AuthorizationRights rights = {1, taskport_item}, *out_rights = NULL;
+    AuthorizationRights rights = {1, taskport_item};
     AuthorizationRef author;
     
     AuthorizationFlags auth_flags = kAuthorizationFlagExtendRights | kAuthorizationFlagPreAuthorize | kAuthorizationFlagInteractionAllowed | ( 1 << 5);

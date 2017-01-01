@@ -7,7 +7,7 @@
  *
  */
 
-#import "HearthMirror.h"
+#import "HearthMirror_imp.h"
 #import "Mirror.hpp"
 
 @interface NSString (cppstring_additions)

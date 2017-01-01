@@ -8,8 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
-#import "HearthMirror.h"
-#import "security.h"
+#import <HearthMirror/HearthMirror.h>
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {

@@ -244,7 +244,7 @@ namespace hearthmirror {
                 uint32_t count = ReadInt32(_task, addr + 12);
                 uint32_t start = (uint32_t)addr + 16;
                 result.arrsize = count;
-                if (count > 0) {
+                if (count > 0) {
                     result.value.arr = new MonoValue[count];
                     for (uint32_t i = 0; i < count; i++) {
                         

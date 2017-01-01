@@ -9,9 +9,12 @@
 #ifndef security_h
 #define security_h
 
+#define EXPORT __attribute__((visibility("default")))
+
 #ifdef __APPLE__
+
 /** Requests access to attach to another process. Required for HearthMirror to function properly. */
-int acquireTaskportRight();
+int EXPORT acquireTaskportRight();
 #endif
 
 #endif /* security_h */
