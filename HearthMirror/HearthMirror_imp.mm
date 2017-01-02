@@ -10,6 +10,7 @@
 #import "HearthMirror_imp.h"
 #import "Mirror.hpp"
 
+#pragma mark - NSString extension
 @interface NSString (cppstring_additions)
 +(NSString*) stringWithu16string:(const std::u16string&)string;
 @end
@@ -28,6 +29,7 @@
 
 using namespace hearthmirror;
 
+#pragma mark - HearthMirror implementation
 @implementation HearthMirror {
     Mirror* _mirror;
 }
@@ -58,11 +60,7 @@ using namespace hearthmirror;
     for (int i = 0; i < cards.size(); i++) {
         Card card = cards[i];
 
-        MirrorCard *mirrorCard = [MirrorCard new];
-        mirrorCard.cardId = [NSString stringWithu16string:card.id];
-        mirrorCard.count = @(card.count);
-        mirrorCard.premium = card.premium;
-
+        MirrorCard *mirrorCard = [self buildCard:card];
         [result addObject:mirrorCard];
     }
     
@@ -150,6 +148,36 @@ using namespace hearthmirror;
     return result;
 }
 
+-(MirrorDeck *)buildDeck:(Deck)deck {
+    MirrorDeck *mirrorDeck = [MirrorDeck new];
+    mirrorDeck.id = @(deck.id);
+    mirrorDeck.name = [NSString stringWithu16string:deck.name];
+    mirrorDeck.hero = [NSString stringWithu16string:deck.hero];
+    mirrorDeck.isWild = deck.isWild;
+    mirrorDeck.type = @(deck.type);
+    mirrorDeck.seasonId = @(deck.seasonId);
+    mirrorDeck.cardBackId = @(deck.cardBackId);
+    mirrorDeck.heroPremium = @(deck.heroPremium);
+
+    NSMutableArray *cards = [NSMutableArray array];
+    for (int c = 0; c < deck.cards.size(); c++) {
+        Card card = deck.cards[c];
+        MirrorCard *mirrorCard = [self buildCard:card];
+        [cards addObject:mirrorCard];
+    }
+    mirrorDeck.cards = [NSArray arrayWithArray:cards];
+
+    return mirrorDeck;
+}
+
+-(MirrorCard *)buildCard:(Card)card {
+    MirrorCard *mirrorCard = [MirrorCard new];
+    mirrorCard.cardId = [NSString stringWithu16string:card.id];
+    mirrorCard.count = @(card.count);
+    mirrorCard.premium = card.premium;
+    return mirrorCard;
+}
+
 -(nonnull NSArray *) getDecks {
     if (_mirror == NULL) return [NSArray array];
 
@@ -157,27 +185,7 @@ using namespace hearthmirror;
     std::vector<Deck> decks = _mirror->getDecks();
     for (int i = 0; i < decks.size(); i++) {
         Deck deck = decks[i];
-        MirrorDeck *mirrorDeck = [MirrorDeck new];
-        mirrorDeck.id = @(deck.id);
-        mirrorDeck.name = [NSString stringWithu16string:deck.name];
-        mirrorDeck.hero = [NSString stringWithu16string:deck.hero];
-        mirrorDeck.isWild = deck.isWild;
-        mirrorDeck.type = @(deck.type);
-        mirrorDeck.seasonId = @(deck.seasonId);
-        mirrorDeck.cardBackId = @(deck.cardBackId);
-        mirrorDeck.heroPremium = @(deck.heroPremium);
-
-        NSMutableArray *cards = [NSMutableArray array];
-        for (int c = 0; c < deck.cards.size(); c++) {
-            Card card = deck.cards[c];
-            MirrorCard *mirrorCard = [MirrorCard new];
-            mirrorCard.cardId = [NSString stringWithu16string:card.id];
-            mirrorCard.count = @(card.count);
-            mirrorCard.premium = card.premium;
-
-            [cards addObject:mirrorCard];
-        }
-        mirrorDeck.cards = [NSArray arrayWithArray:cards];
+        MirrorDeck *mirrorDeck = [self buildDeck:deck];
 
         [result addObject:mirrorDeck];
     }
@@ -192,12 +200,118 @@ using namespace hearthmirror;
 }
 
 -(nullable NSNumber*) getSelectedDeck {
-    if (_mirror == NULL) return NULL;
+    if (_mirror == NULL) return nil;
 
     long deckId = _mirror->getSelectedDeckInMenu();
     if (deckId == 0) return nil;
 
     return @(deckId);
+}
+
+-(nullable MirrorArenaInfo*) getArenaDeck {
+    if (_mirror == NULL) return nil;
+
+    ArenaInfo info = _mirror->getArenaDeck();
+    if (info.deck.cards.size() == 0) return nil;
+
+    MirrorArenaInfo *arenaInfo = [MirrorArenaInfo new];
+    arenaInfo.losses = @(info.losses);
+    arenaInfo.wins = @(info.wins);
+    arenaInfo.currentSlot = @(info.currentSlot);
+    arenaInfo.deck = [self buildDeck:info.deck];
+    NSMutableArray *rewards = [NSMutableArray array];
+    for (int i = 0; i < info.rewards.size(); i++) {
+        RewardData *data = info.rewards[i];
+
+        switch (data->type) {
+            case ARCANE_DUST: {
+                ArcaneDustRewardData *_data = static_cast<ArcaneDustRewardData*>(data);
+                MirrorArcaneDustRewardData *reward = [MirrorArcaneDustRewardData new];
+                reward.amount = @(_data->amount);
+                [rewards addObject:reward];
+                break;
+            }
+            case BOOSTER_PACK: {
+                BoosterPackRewardData *_data = static_cast<BoosterPackRewardData*>(data);
+                MirrorBoosterPackRewardData *reward = [MirrorBoosterPackRewardData new];
+                reward.boosterId = @(_data->id);
+                reward.count = @(_data->count);
+                [rewards addObject:reward];
+                break;
+            }
+            case CARD: {
+                CardRewardData *_data = static_cast<CardRewardData*>(data);
+                MirrorCardRewardData *reward = [MirrorCardRewardData new];
+                reward.cardId = [NSString stringWithu16string:_data->id];
+                reward.count = @(_data->count);
+                [rewards addObject:reward];
+                break;
+            }
+            case CARD_BACK: {
+                CardBackRewardData *_data = static_cast<CardBackRewardData*>(data);
+                MirrorCardBackRewardData *reward = [MirrorCardBackRewardData new];
+                reward.cardbackId = @(_data->id);
+                [rewards addObject:reward];
+                break;
+            }
+            case FORGE_TICKET: {
+                ForgeTicketRewardData *_data = static_cast<ForgeTicketRewardData*>(data);
+                MirrorForgeTicketRewardData *reward = [MirrorForgeTicketRewardData new];
+                reward.quantity = @(_data->quantity);
+                [rewards addObject:reward];
+                break;
+            }
+            case GOLD: {
+                GoldRewardData *_data = static_cast<GoldRewardData*>(data);
+                MirrorGoldRewardData *reward = [MirrorGoldRewardData new];
+                reward.amount = @(_data->amount);
+                [rewards addObject:reward];
+                break;
+            }
+            case MOUNT: {
+                MountRewardData *_data = static_cast<MountRewardData*>(data);
+                MirrorMountRewardData *reward = [MirrorMountRewardData new];
+                reward.mountType = @(_data->mountType);
+                [rewards addObject:reward];
+                break;
+            }
+            case CLASS_CHALLENGE: break;
+            case CRAFTABLE_CARD: break;
+        }
+    }
+    arenaInfo.rewards = [NSArray arrayWithArray:rewards];
+
+    return arenaInfo;
+}
+
+-(nonnull NSArray*) getArenaDraftChoices {
+    if (_mirror == NULL) return [NSArray array];
+
+    std::vector<Card> choices = _mirror->getArenaDraftChoices();
+    if (choices.size() != 3) return [NSArray array];
+
+    NSMutableArray *cards = [NSMutableArray array];
+    for (unsigned int i = 0; i < choices.size(); i++) {
+        MirrorCard *mirrorCard = [self buildCard:choices[i]];
+        [cards addObject:mirrorCard];
+    }
+
+    return [NSArray arrayWithArray:cards];
+}
+
+-(nonnull NSArray*) getPackCards {
+    if (_mirror == NULL) return [NSArray array];
+
+    std::vector<Card> cards = _mirror->getPackCards();
+    if (cards.size() != 5) return [NSArray array];
+
+    NSMutableArray *result = [NSMutableArray array];
+    for (unsigned int i = 0; i < cards.size(); i++) {
+        MirrorCard *mirrorCard = [self buildCard:cards[i]];
+        [result addObject:mirrorCard];
+    }
+
+    return [NSArray arrayWithArray:result];
 }
 
 -(void)dealloc {
@@ -206,16 +320,29 @@ using namespace hearthmirror;
 
 @end
 
+#pragma mark - Objective-C mirror classes
 @implementation MirrorGameServerInfo
+- (NSString *)description {
+    return [NSString stringWithFormat:@"address: %@, auroraPassword: %@, clientHandle: %@, gameHandle: %@, mission: %@, port: %@, resumable: %@, spectatorMode: %@, version: %@", self.address, self.auroraPassword, self.clientHandle, self.gameHandle, self.mission, self.port, @(self.resumable), @(self.spectatorMode), self.version];
+}
 @end
 
 @implementation MirrorPlayer
+- (NSString *)description {
+    return [NSString stringWithFormat:@"name: %@, playerId: %@, standardRank: %@, standardLegendRank: %@, standardStars: %@, wildRank: %@, wildLegendRank: %@, wildStars: %@, cardBackId: %@", self.name, self.playerId, self.standardRank, self.standardLegendRank, self.standardStars, self.wildRank, self.wildLegendRank, self.wildStars, self.cardBackId];
+}
 @end
 
 @implementation MirrorMatchInfo
+- (NSString *)description {
+    return [NSString stringWithFormat:@"localPlayer: %@, opposingPlayer: %@, brawlSeasonId: %@, missionId: %@, rankedSeasonId: %@", self.localPlayer, self.opposingPlayer, self.brawlSeasonId, self.missionId, self.rankedSeasonId];
+}
 @end
 
 @implementation MirrorAccountId
+- (NSString *)description {
+    return [NSString stringWithFormat:@"hi: %@, lo: %@", self.hi, self.lo];
+}
 @end
 
 @implementation MirrorCard
@@ -227,5 +354,56 @@ using namespace hearthmirror;
 @implementation MirrorDeck
 - (NSString *)description {
     return [NSString stringWithFormat:@"id: %@, name: %@, hero: %@, isWild: %@, type: %@, seasonId: %@, cardBackId: %@, heroPremium: %@, cards: %@", self.id, self.name, self.hero, @(self.isWild), self.type, self.seasonId, self.cardBackId, self.heroPremium, self.cards];
+}
+@end
+
+@implementation MirrorArenaInfo
+- (NSString *)description {
+    return [NSString stringWithFormat:@"deck: %@, losses: %@, wins: %@, currentSlot: %@, rewards: %@", self.deck, self.losses, self.wins, self.currentSlot, self.rewards];
+}
+@end
+
+@implementation MirrorRewardData
+@end
+
+@implementation MirrorArcaneDustRewardData
+- (NSString *)description {
+    return [NSString stringWithFormat:@"Arcane Dust: amount: %@", self.amount];
+}
+@end
+
+@implementation MirrorBoosterPackRewardData
+- (NSString *)description {
+    return [NSString stringWithFormat:@"Booster pack: boosterId: %@, count: %@", self.boosterId, self.count];
+}
+@end
+
+@implementation MirrorCardRewardData
+- (NSString *)description {
+    return [NSString stringWithFormat:@"Card cardId: %@, count: %@, premium: %@", self.cardId, self.count, @(self.premium)];
+}
+@end
+
+@implementation MirrorCardBackRewardData
+- (NSString *)description {
+    return [NSString stringWithFormat:@"CardBack cardbackId: %@", self.cardbackId];
+}
+@end
+
+@implementation MirrorForgeTicketRewardData
+- (NSString *)description {
+    return [NSString stringWithFormat:@"ForgeTicket quantity: %@", self.quantity];
+}
+@end
+
+@implementation MirrorGoldRewardData
+- (NSString *)description {
+    return [NSString stringWithFormat:@"Gold: amout: %@", self.amount];
+}
+@end
+
+@implementation MirrorMountRewardData
+- (NSString *)description {
+    return [NSString stringWithFormat:@"Mount: mountType: %@", self.mountType];
 }
 @end

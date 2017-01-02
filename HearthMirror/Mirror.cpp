@@ -78,6 +78,23 @@ namespace hearthmirror {
         _monoImage = new MonoImage(_task,pImage); // apply life cycle
         return 0;
     }
+
+    MonoValue Mirror::getObject(MonoValue from, const HMObjectPath& path) {
+        MonoValue mv = from;
+        if (IsMonoValueEmpty(mv)) return NULL;
+
+        for (unsigned int i = 0; i< path.size(); i++) {
+            MonoObject* mo = mv.value.obj.o;
+            mv = (*mo)[path[i]];
+            if (IsMonoValueEmpty(mv)) {
+                delete mo;
+                return NULL;
+            }
+
+            delete mo;
+        }
+        return mv;
+    }
     
     /** Helper function to find MonoObject at the given path. */
     MonoValue Mirror::getObject(const HMObjectPath& path) {
@@ -213,6 +230,7 @@ namespace hearthmirror {
 
         for (unsigned int i=0; i< playerIds.arrsize; i++) {
             MonoValue mv = players[i];
+            if (IsMonoValueEmpty(mv)) continue;
             MonoObject* inst = mv.value.obj.o;
 
             MonoClass* instclass = inst->getClass();
@@ -346,6 +364,7 @@ namespace hearthmirror {
 
         for (unsigned int i=0; i< netCacheValues.arrsize; i++) {
             MonoValue netCache = netCacheValues[i];
+            if (IsMonoValueEmpty(netCache)) continue;
             MonoObject* net = netCache.value.obj.o;
             MonoClass* instclass = net->getClass();
             std::string icname = instclass->getName();
@@ -380,14 +399,17 @@ namespace hearthmirror {
             std::string icname = instclass->getName();
             delete instclass;
 
-            if (icname != "CollectionDeck") continue;
+            if (icname != "CollectionDeck") {
+                continue;
+            }
 
             Deck deck = getDeck(inst);
-            if (deck.cards.size() == 0) continue;
             // count cards
             int sum = std::accumulate(begin(deck.cards), end(deck.cards), 0,
                               [](const int& x, const Card& y) { return x + y.count; });
-            if (sum != 30) continue;
+            if (deck.cards.size() == 0 || sum != 30) {
+                continue;
+            }
 
             // don't add the same deck multiple times
             auto iterator = std::find_if(result.begin(), result.end(),
@@ -455,6 +477,164 @@ namespace hearthmirror {
         DeleteMonoValue(_cardList);
 
         return deck;
+    }
+
+    std::vector<Card> Mirror::getPackCards() {
+        std::vector<Card> result;
+        MonoValue cards = getObject({"PackOpening","s_instance","m_director","m_hiddenCards","_items"});
+        if (IsMonoValueEmpty(cards) || !IsMonoValueArray(cards)) return result;
+
+        for (unsigned int i = 0; i < cards.arrsize; i++) {
+            MonoValue mv = cards[i];
+            if (IsMonoValueEmpty(mv)) continue;
+
+            MonoObject* inst = mv.value.obj.o;
+            MonoClass* instclass = inst->getClass();
+            std::string icname = instclass->getName();
+            delete instclass;
+
+            if (icname != "PackOpeningCard") continue;
+            MonoValue def = getObject(mv, {"m_boosterCard","<Def>k__BackingField"});
+            if (IsMonoValueEmpty(def)) continue;
+            
+            MonoObject *_def = def.value.obj.o;
+            MonoValue namemv = (*_def)["<Name>k__BackingField"];
+            MonoValue premiummv = (*_def)["<Premium>k__BackingField"];
+            if (IsMonoValueEmpty(namemv) || IsMonoValueEmpty(premiummv)) {
+                continue;
+            }
+
+            std::u16string name = namemv.str;
+            bool premium = premiummv.value.i32 > 0;
+            result.push_back(Card(name, 1, premium));
+        }
+
+        return result;
+    }
+
+    ArenaInfo Mirror::getArenaDeck() {
+        ArenaInfo result;
+
+        MonoValue _draftManager = getObject({"DraftManager","s_instance"});
+        if (IsMonoValueEmpty(_draftManager)) return result;
+        MonoObject* draftManager = _draftManager.value.obj.o;
+
+        MonoValue draftDeck = (*draftManager)["m_draftDeck"];
+        if (IsMonoValueEmpty(draftDeck)) {
+            DeleteMonoValue(_draftManager);
+            return result;
+        }
+
+        MonoObject* inst = draftDeck.value.obj.o;
+        Deck deck = getDeck(inst);
+        result.deck = deck;
+
+        MonoValue wins = (*draftManager)["m_wins"];
+        MonoValue losses = (*draftManager)["m_losses"];
+        MonoValue currentSlot = (*draftManager)["m_currentSlot"];
+
+        result.wins = wins.value.i32;
+        result.losses = losses.value.i32;
+        result.currentSlot = currentSlot.value.i32;
+        MonoValue chest = (*draftManager)["m_chest"];
+        if (!IsMonoValueEmpty(chest)) {
+            MonoObject *_chest = chest.value.obj.o;
+            MonoValue rewards = (*_chest)["<Rewards>k__BackingField"];
+            if (IsMonoValueEmpty(rewards)) {
+                DeleteMonoValue(chest);
+            } else {
+                MonoObject *_rewards = rewards.value.obj.o;
+                MonoValue items = (*_rewards)["_items"];
+                if (!IsMonoValueEmpty(items) && IsMonoValueArray(items)) {
+                    result.rewards = parseRewards(items);
+                    DeleteMonoValue(items);
+                }
+
+                DeleteMonoValue(rewards);
+            }
+            DeleteMonoValue(chest);
+        }
+
+        DeleteMonoValue(draftDeck);
+        DeleteMonoValue(_draftManager);
+        return result;
+    }
+
+    std::vector<Card> Mirror::getArenaDraftChoices() {
+        std::vector<Card> result;
+        MonoValue values = getObject({"DraftDisplay","s_instance","m_choices"});
+        if (IsMonoValueEmpty(values)) return result;
+
+        MonoObject *stacks = values.value.obj.o;
+        MonoValue choices = (*stacks)["_items"];
+        MonoValue sizemv = (*stacks)["_size"];
+
+        int size = sizemv.value.i32;
+        for (unsigned int i = 0; i < size; i++) {
+            MonoValue mv = getObject(choices[i], {"m_actor","m_entityDef","m_cardId"});
+            if (IsMonoValueEmpty(mv)) continue;
+
+            result.push_back(Card(mv.str, 1, false));
+        }
+
+        DeleteMonoValue(values);
+        return result;
+    }
+
+    std::vector<RewardData*> Mirror::parseRewards(MonoValue items) {
+        std::vector<RewardData*> result;
+
+        for (unsigned int i = 0; i < items.arrsize; i++) {
+            MonoValue mv = items[i];
+            if (IsMonoValueEmpty(mv)) continue;
+
+            MonoObject* inst = mv.value.obj.o;
+            MonoClass* instclass = inst->getClass();
+            std::string icname = instclass->getName();
+            delete instclass;
+
+            if (icname == "ArcaneDustRewardData") {
+                ArcaneDustRewardData *data = new ArcaneDustRewardData();
+                data->type = ARCANE_DUST;
+                data->amount = ((*inst)["<Amount>k__BackingField"]).value.i32;
+                result.push_back(data);
+            } else if (icname == "BoosterPackRewardData") {
+                BoosterPackRewardData *data = new BoosterPackRewardData();
+                data->id = ((*inst)["<Id>k__BackingField"]).value.i32;
+                data->type = BOOSTER_PACK;
+                data->count = ((*inst)["<Count>k__BackingField"]).value.i32;
+                result.push_back(data);
+            } else if (icname == "CardRewardData") {
+                CardRewardData *data = new CardRewardData();
+                data->id = ((*inst)["<CardID>k__BackingField"]).str;
+                data->count = ((*inst)["<Count>k__BackingField"]).value.i32;
+                data->premium = ((*inst)["<Premium>k__BackingField"]).value.i32 > 0;
+                data->type = CARD;
+                result.push_back(data);
+            } else if (icname == "CardBackRewardData") {
+                CardBackRewardData *data = new CardBackRewardData();
+                data->id = ((*inst)["<CardBackID>k__BackingField"]).value.i32;
+                data->type = CARD_BACK;
+                result.push_back(data);
+            } else if (icname == "ForgeTicketRewardData") {
+                ForgeTicketRewardData *data = new ForgeTicketRewardData();
+                data->quantity = ((*inst)["<Quantity>k__BackingField"]).value.i32;
+                data->type = FORGE_TICKET;
+                result.push_back(data);
+            } else if (icname == "GoldRewardData") {
+                GoldRewardData *data = new GoldRewardData();
+                data->amount = ((*inst)["<Amount>k__BackingField"]).value.i32;
+                data->type = GOLD;
+                result.push_back(data);
+            } else if (icname == "MountRewardData") {
+                MountRewardData *data = new MountRewardData();
+                data->mountType = ((*inst)["<Mount>k__BackingField"]).value.i32;
+                data->type = MOUNT;
+                result.push_back(data);
+            }
+        }
+
+        return result;
     }
     
     std::vector<Card> Mirror::getCardCollection() {

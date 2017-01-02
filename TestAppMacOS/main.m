@@ -37,14 +37,14 @@ int main(int argc, const char * argv[]) {
         }
         
         HearthMirror* mirror = [[HearthMirror alloc] initWithPID:[hsapp processIdentifier]];
-        
+
         // Get BattleTag
         NSString* battletag = [mirror getBattleTag];
-        NSLog(@"BattleTag: %@",battletag);
+        NSLog(@"BattleTag: %@", battletag);
 
         // Get Account id
         MirrorAccountId *accountId = [mirror getAccountId];
-        NSLog(@"AccountId: %@,%@", accountId.hi, accountId.lo);
+        NSLog(@"AccountId: %@", accountId);
 
         // Get card collection
         NSArray* collection = [mirror getCardCollection];
@@ -52,7 +52,7 @@ int main(int argc, const char * argv[]) {
 
         // Get Game server info
         MirrorGameServerInfo *serverInfo = [mirror getGameServerInfo];
-        NSLog(@"GameServerInfo: address : %@, auroraPassword: %@, clientHandle: %@, gameHandle: %@, mission: %@, port: %@, resumable: %d, spectatorMode: %d, spectatorPassword: %@, version: %@", serverInfo.address, serverInfo.auroraPassword, serverInfo.clientHandle, serverInfo.gameHandle, serverInfo.mission, serverInfo.port, serverInfo.resumable, serverInfo.spectatorMode, serverInfo.spectatorPassword, serverInfo.version);
+        NSLog(@"GameServerInfo: %@", serverInfo);
 
         // Get the game type
         // GT_UNKNOWN = 0,
@@ -82,10 +82,9 @@ int main(int argc, const char * argv[]) {
         if (matchInfo == nil) {
             NSLog(@"MatchInfo is nil, are you playing ?");
         } else {
-            NSLog(@"MatchInfo: brawlSeasonId: %@, missionId: %@, rankedSessionId: %@", matchInfo.brawlSeasonId, matchInfo.missionId, matchInfo.rankedSeasonId);
-            NSLog(@"MatchInfo.localPlayer: name: %@, playerId: %@, standardRank: %@, standardLegendRank: %@, standardStars: %@, wildRank: %@, wildLegendRank: %@, wildStars: %@, cardBackId: %@", matchInfo.localPlayer.name, matchInfo.localPlayer.playerId, matchInfo.localPlayer.standardRank, matchInfo.localPlayer.standardLegendRank, matchInfo.localPlayer.standardStars, matchInfo.localPlayer.wildRank, matchInfo.localPlayer.wildLegendRank, matchInfo.localPlayer.wildStars, matchInfo.localPlayer.cardBackId);
-            NSLog(@"MatchInfo.opposingPlayer: name: %@, playerId: %@, standardRank: %@, standardLegendRank: %@, standardStars: %@, wildRank: %@, wildLegendRank: %@, wildStars: %@, cardBackId: %@", matchInfo.opposingPlayer.name, matchInfo.opposingPlayer.playerId, matchInfo.opposingPlayer.standardRank, matchInfo.opposingPlayer.standardLegendRank, matchInfo.opposingPlayer.standardStars, matchInfo.opposingPlayer.wildRank, matchInfo.opposingPlayer.wildLegendRank, matchInfo.opposingPlayer.wildStars, matchInfo.opposingPlayer.cardBackId);
+            NSLog(@"MatchInfo: %@", matchInfo);
         }
+        
         // Get the decks
         NSArray *decks = [mirror getDecks];
         NSLog(@"Decks: %@", decks);
@@ -93,9 +92,18 @@ int main(int argc, const char * argv[]) {
         // Get the selected deck
         NSNumber *deckId = [mirror getSelectedDeck];
         NSLog(@"Selected deck: %@", deckId);
-        if (deckId.longValue > 0) {
 
-        }
+        // Get info for arena
+        MirrorArenaInfo *arenaInfo = [mirror getArenaDeck];
+        NSLog(@"Arena deck: %@", arenaInfo);
+
+        // Get cards from arena drafting
+        NSArray *arenaChoice = [mirror getArenaDraftChoices];
+        NSLog(@"Arena Choice: %@", arenaChoice);
+
+        // Get the cards from a pack opening
+        NSArray *packCards = [mirror getPackCards];
+        NSLog(@"Pack Cards: %@", packCards);
     }
     return 0;
 }

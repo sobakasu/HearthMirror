@@ -83,6 +83,62 @@ typedef struct _InternalMatchInfo {
     int rankedSeasonId;
 } InternalMatchInfo;
 
+typedef enum _RewardType {
+    ARCANE_DUST,
+    BOOSTER_PACK,
+    CARD,
+    CARD_BACK,
+    CRAFTABLE_CARD,
+    FORGE_TICKET,
+    GOLD,
+    MOUNT,
+    CLASS_CHALLENGE
+} RewardType;
+
+typedef struct _RewardData {
+    RewardType type;
+    virtual ~_RewardData() {}
+} RewardData;
+
+typedef struct _ArcaneDustRewardData : RewardData {
+    int amount;
+} ArcaneDustRewardData;
+
+typedef struct _BoosterPackRewardData : RewardData {
+    int id;
+    int count;
+} BoosterPackRewardData;
+
+typedef struct _CardRewardData : RewardData {
+    std::u16string id;
+    int count;
+    bool premium;
+} CardRewardData;
+
+typedef struct _CardBackRewardData : RewardData {
+    int id;
+} CardBackRewardData;
+
+typedef struct _ForgeTicketRewardData : RewardData {
+    int quantity;
+} ForgeTicketRewardData;
+
+typedef struct _GoldRewardData : RewardData {
+    int amount;
+} GoldRewardData;
+
+typedef struct _MountRewardData : RewardData {
+    int mountType;
+} MountRewardData;
+
+typedef struct _ArenaInfo {
+    Deck deck;
+    int losses;
+    int wins;
+    int currentSlot;
+    std::vector<RewardData*> rewards;
+} ArenaInfo;
+
 typedef struct _AccountId {
     long hi = 0;
     long lo = 0;
@@ -130,17 +186,28 @@ namespace hearthmirror {
 
         /** Returns the selected deck */
         long getSelectedDeckInMenu();
+
+        /** Returns an arena deck */
+        ArenaInfo getArenaDeck();
+
+        /** Returns the choice for the arena draft */
+        std::vector<Card> getArenaDraftChoices();
+
+        /** Returns cards from an opening pack */
+        std::vector<Card> getPackCards();
         
     private:
 		HANDLE _task;
         MonoImage* _monoImage = NULL;
         
         MonoValue getObject(const HMObjectPath& path);
+        MonoValue getObject(MonoValue from, const HMObjectPath& path);
         int getInt(const HMObjectPath& path);
         bool getBool(const HMObjectPath& path);
         long getLong(const HMObjectPath& path);
 
         Deck getDeck(MonoObject* inst);
+        std::vector<RewardData*> parseRewards(MonoValue items);
     };
     
 }

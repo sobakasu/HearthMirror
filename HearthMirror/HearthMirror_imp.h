@@ -66,6 +66,48 @@
     @property NSArray *_Nonnull cards;
 @end
 
+@interface MirrorRewardData: NSObject
+@end
+
+@interface MirrorArcaneDustRewardData : MirrorRewardData
+    @property NSNumber *_Nonnull amount;
+@end
+
+@interface MirrorBoosterPackRewardData : MirrorRewardData
+    @property NSNumber *_Nonnull boosterId;
+    @property NSNumber *_Nonnull count;
+@end
+
+@interface MirrorCardRewardData : MirrorRewardData
+    @property NSString *_Nonnull cardId;
+    @property NSNumber *_Nonnull count;
+    @property BOOL premium;
+@end
+
+@interface MirrorCardBackRewardData : MirrorRewardData
+    @property NSNumber *_Nonnull cardbackId;
+@end
+
+@interface MirrorForgeTicketRewardData : MirrorRewardData
+    @property NSNumber *_Nonnull quantity;
+@end
+
+@interface MirrorGoldRewardData : MirrorRewardData
+    @property NSNumber *_Nonnull amount;
+@end
+
+@interface MirrorMountRewardData : MirrorRewardData
+    @property NSNumber *_Nonnull mountType;
+@end
+
+@interface MirrorArenaInfo: NSObject
+    @property MirrorDeck *_Nonnull deck;
+    @property NSNumber *_Nonnull losses;
+    @property NSNumber *_Nonnull wins;
+    @property NSNumber *_Nonnull currentSlot;
+    @property NSArray *_Nonnull rewards;
+@end
+
 EXPORT @interface HearthMirror : NSObject
 
 -(nonnull instancetype) initWithPID:(pid_t)pid;
@@ -90,5 +132,11 @@ EXPORT @interface HearthMirror : NSObject
 -(nonnull NSArray*) getDecks;
 
 -(nullable NSNumber*) getSelectedDeck;
+
+-(nullable MirrorArenaInfo*) getArenaDeck;
+
+-(nonnull NSArray*) getArenaDraftChoices;
+
+-(nonnull NSArray*) getPackCards;
 
 @end
