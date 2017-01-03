@@ -10,6 +10,16 @@
 #import <Foundation/Foundation.h>
 #define EXPORT __attribute__((visibility("default")))
 
+@interface MirrorBrawlInfo: NSObject
+    @property NSNumber *_Nullable maxWins;
+    @property NSNumber *_Nullable maxLosses;
+    @property BOOL isSessionBased;
+    @property NSNumber *_Nonnull wins;
+    @property NSNumber *_Nonnull losses;
+    @property NSNumber *_Nonnull gamesPlayed;
+    @property NSNumber *_Nonnull winStreak;
+@end
+
 @interface MirrorGameServerInfo: NSObject
     @property NSString *_Nonnull address;
     @property NSString *_Nonnull auroraPassword;
@@ -127,7 +137,7 @@ EXPORT @interface HearthMirror : NSObject
 
 -(BOOL) isSpectating;
 
--(nonnull MirrorAccountId*) getAccountId;
+-(nullable MirrorAccountId*) getAccountId;
 
 -(nonnull NSArray*) getDecks;
 
@@ -138,5 +148,7 @@ EXPORT @interface HearthMirror : NSObject
 -(nonnull NSArray*) getArenaDraftChoices;
 
 -(nonnull NSArray*) getPackCards;
+
+-(nullable MirrorBrawlInfo *) getBrawlInfo;
 
 @end

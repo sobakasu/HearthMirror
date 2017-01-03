@@ -144,8 +144,18 @@ typedef struct _AccountId {
     long lo = 0;
 } AccountId;
 
+typedef struct _BrawlInfo {
+    int maxWins = -1;
+    int maxLosses = -1;
+    bool isSessionBased;
+    int wins;
+    int losses;
+    int gamesPlayed;
+    int winStreak;
+} BrawlInfo;
+
 namespace hearthmirror {
-    
+
 	class HEARTHMIRROR_API Mirror {
         
     public:
@@ -195,7 +205,10 @@ namespace hearthmirror {
 
         /** Returns cards from an opening pack */
         std::vector<Card> getPackCards();
-        
+
+        /** Returns the informations about brawl */
+        BrawlInfo getBrawlInfo();
+
     private:
 		HANDLE _task;
         MonoImage* _monoImage = NULL;

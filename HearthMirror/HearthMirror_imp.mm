@@ -19,6 +19,8 @@
 
 +(NSString*) stringWithu16string:(const std::u16string&)ws
 {
+    if (ws.size() == 0) return nil;
+    
     char* data = (char*)ws.data();
     
     NSString* result = [[NSString alloc] initWithBytes:data length:ws.size()*2 encoding:NSUTF16LittleEndianStringEncoding];
@@ -48,104 +50,142 @@ using namespace hearthmirror;
     if (_mirror == NULL) return nil;
 
     BattleTag tag = _mirror->getBattleTag();
-    NSString* battlename = [NSString stringWithu16string:tag.name];
-    return [NSString stringWithFormat:@"%@#%d",battlename,tag.number];
+    try {
+        NSString* battlename = [NSString stringWithu16string:tag.name];
+        return [NSString stringWithFormat:@"%@#%d",battlename,tag.number];
+    } catch (const std::exception &e) {
+        NSLog(@"Error: %s", e.what());
+        return nil;
+    }
 }
 
 -(nonnull NSArray*) getCardCollection {
     if (_mirror == NULL) return [NSArray array];
 
-    NSMutableArray  *result = [NSMutableArray array];
-    std::vector<Card> cards = _mirror->getCardCollection();
-    for (int i = 0; i < cards.size(); i++) {
-        Card card = cards[i];
+    try {
+        NSMutableArray  *result = [NSMutableArray array];
+        std::vector<Card> cards = _mirror->getCardCollection();
+        for (int i = 0; i < cards.size(); i++) {
+            Card card = cards[i];
 
-        MirrorCard *mirrorCard = [self buildCard:card];
-        [result addObject:mirrorCard];
+            MirrorCard *mirrorCard = [self buildCard:card];
+            [result addObject:mirrorCard];
+        }
+
+        return [NSArray arrayWithArray:result];
+    } catch (const std::exception &e) {
+        NSLog(@"Error: %s", e.what());
+        return [NSArray array];
     }
-    
-    return [NSArray arrayWithArray:result];
 }
 
 -(nullable MirrorGameServerInfo*) getGameServerInfo {
-    MirrorGameServerInfo *result = [MirrorGameServerInfo new];
-    if (_mirror == NULL) return result;
+    if (_mirror == NULL) return nil;
 
-    InternalGameServerInfo _serverInfo = _mirror->getGameServerInfo();
-    result.address = [NSString stringWithu16string:_serverInfo.address];
-    result.auroraPassword = [NSString stringWithu16string:_serverInfo.auroraPassword];
-    result.clientHandle = @(_serverInfo.clientHandle);
-    result.gameHandle = @(_serverInfo.gameHandle);
-    result.mission = @(_serverInfo.mission);
-    result.port = @(_serverInfo.port);
-    result.resumable = _serverInfo.resumable;
-    result.spectatorMode = _serverInfo.spectatorMode;
-    result.spectatorPassword = [NSString stringWithu16string:_serverInfo.spectatorPassword];
-    result.version = [NSString stringWithu16string:_serverInfo.version];
+    try {
+        MirrorGameServerInfo *result = [MirrorGameServerInfo new];
+        InternalGameServerInfo _serverInfo = _mirror->getGameServerInfo();
+        result.address = [NSString stringWithu16string:_serverInfo.address];
+        result.auroraPassword = [NSString stringWithu16string:_serverInfo.auroraPassword];
+        result.clientHandle = @(_serverInfo.clientHandle);
+        result.gameHandle = @(_serverInfo.gameHandle);
+        result.mission = @(_serverInfo.mission);
+        result.port = @(_serverInfo.port);
+        result.resumable = _serverInfo.resumable;
+        result.spectatorMode = _serverInfo.spectatorMode;
+        result.spectatorPassword = [NSString stringWithu16string:_serverInfo.spectatorPassword];
+        result.version = [NSString stringWithu16string:_serverInfo.version];
 
-    return result;
+        return result;
+    } catch (const std::exception &e) {
+        NSLog(@"Error: %s", e.what());
+        return nil;
+    }
 }
 
 -(nullable NSNumber *) getGameType {
     if (_mirror == NULL) return nil;
 
-    return @(_mirror->getGameType());
+    try {
+        return @(_mirror->getGameType());
+    } catch (const std::exception &e) {
+        NSLog(@"Error: %s", e.what());
+        return nil;
+    }
 }
 
 -(nullable NSNumber *) getFormat {
     if (_mirror == NULL) return nil;
 
-    return @(_mirror->getFormat());
+    try {
+        return @(_mirror->getFormat());
+    } catch (const std::exception &e) {
+        NSLog(@"Error: %s", e.what());
+        return nil;
+    }
 }
 
 -(nullable MirrorMatchInfo *) getMatchInfo {
     if (_mirror == NULL) return nil;
-    MirrorMatchInfo *result = [MirrorMatchInfo new];
 
-    InternalMatchInfo _matchInfo = _mirror->getMatchInfo();
+    try {
+        MirrorMatchInfo *result = [MirrorMatchInfo new];
 
-    MirrorPlayer *localPlayer = [MirrorPlayer new];
-    localPlayer.name = [NSString stringWithu16string:_matchInfo.localPlayer.name];
-    if (localPlayer.name == nil) return nil;
-    localPlayer.playerId = @(_matchInfo.localPlayer.id);
-    localPlayer.standardRank = @(_matchInfo.localPlayer.standardRank);
-    localPlayer.standardLegendRank = @(_matchInfo.localPlayer.standardLegendRank);
-    localPlayer.standardStars = @(_matchInfo.localPlayer.standardStars);
-    localPlayer.wildRank = @(_matchInfo.localPlayer.wildRank);
-    localPlayer.wildLegendRank = @(_matchInfo.localPlayer.wildLegendRank);
-    localPlayer.wildStars = @(_matchInfo.localPlayer.wildStars);
-    localPlayer.cardBackId = @(_matchInfo.localPlayer.cardBackId);
-    result.localPlayer = localPlayer;
+        InternalMatchInfo _matchInfo = _mirror->getMatchInfo();
 
-    MirrorPlayer *opposingPlayer = [MirrorPlayer new];
-    opposingPlayer.name = [NSString stringWithu16string:_matchInfo.opposingPlayer.name];
-    if (opposingPlayer.name == nil) return nil;
-    opposingPlayer.playerId = @(_matchInfo.opposingPlayer.id);
-    opposingPlayer.standardRank = @(_matchInfo.opposingPlayer.standardRank);
-    opposingPlayer.standardLegendRank = @(_matchInfo.opposingPlayer.standardLegendRank);
-    opposingPlayer.standardStars = @(_matchInfo.opposingPlayer.standardStars);
-    opposingPlayer.wildRank = @(_matchInfo.opposingPlayer.wildRank);
-    opposingPlayer.wildLegendRank = @(_matchInfo.opposingPlayer.wildLegendRank);
-    opposingPlayer.wildStars = @(_matchInfo.opposingPlayer.wildStars);
-    opposingPlayer.cardBackId = @(_matchInfo.opposingPlayer.cardBackId);
-    result.opposingPlayer = opposingPlayer;
+        MirrorPlayer *localPlayer = [MirrorPlayer new];
+        if (_matchInfo.localPlayer.name.empty()) return nil;
+        localPlayer.name = [NSString stringWithu16string:_matchInfo.localPlayer.name];
+        if (localPlayer.name == nil) return nil;
+        localPlayer.playerId = @(_matchInfo.localPlayer.id);
+        localPlayer.standardRank = @(_matchInfo.localPlayer.standardRank);
+        localPlayer.standardLegendRank = @(_matchInfo.localPlayer.standardLegendRank);
+        localPlayer.standardStars = @(_matchInfo.localPlayer.standardStars);
+        localPlayer.wildRank = @(_matchInfo.localPlayer.wildRank);
+        localPlayer.wildLegendRank = @(_matchInfo.localPlayer.wildLegendRank);
+        localPlayer.wildStars = @(_matchInfo.localPlayer.wildStars);
+        localPlayer.cardBackId = @(_matchInfo.localPlayer.cardBackId);
+        result.localPlayer = localPlayer;
 
-    result.brawlSeasonId = @(_matchInfo.brawlSeasonId);
-    result.missionId = @(_matchInfo.missionId);
-    result.rankedSeasonId = @(_matchInfo.rankedSeasonId);
+        MirrorPlayer *opposingPlayer = [MirrorPlayer new];
+        if (_matchInfo.opposingPlayer.name.empty()) return nil;
+        opposingPlayer.name = [NSString stringWithu16string:_matchInfo.opposingPlayer.name];
+        if (opposingPlayer.name == nil) return nil;
+        opposingPlayer.playerId = @(_matchInfo.opposingPlayer.id);
+        opposingPlayer.standardRank = @(_matchInfo.opposingPlayer.standardRank);
+        opposingPlayer.standardLegendRank = @(_matchInfo.opposingPlayer.standardLegendRank);
+        opposingPlayer.standardStars = @(_matchInfo.opposingPlayer.standardStars);
+        opposingPlayer.wildRank = @(_matchInfo.opposingPlayer.wildRank);
+        opposingPlayer.wildLegendRank = @(_matchInfo.opposingPlayer.wildLegendRank);
+        opposingPlayer.wildStars = @(_matchInfo.opposingPlayer.wildStars);
+        opposingPlayer.cardBackId = @(_matchInfo.opposingPlayer.cardBackId);
+        result.opposingPlayer = opposingPlayer;
 
-    return result;
+        result.brawlSeasonId = @(_matchInfo.brawlSeasonId);
+        result.missionId = @(_matchInfo.missionId);
+        result.rankedSeasonId = @(_matchInfo.rankedSeasonId);
+        
+        return result;
+    } catch (const std::exception &e) {
+        NSLog(@"Error: %s", e.what());
+        return nil;
+    }
 }
 
--(nonnull MirrorAccountId *) getAccountId {
-    MirrorAccountId *result = [MirrorAccountId new];
-    if (_mirror == NULL) return result;
+-(nullable MirrorAccountId *) getAccountId {
+    if (_mirror == NULL) return nil;
 
-    AccountId _account = _mirror->getAccountId();
-    result.lo = @(_account.lo);
-    result.hi = @(_account.hi);
+    try {
+        MirrorAccountId *result = [MirrorAccountId new];
+        AccountId _account = _mirror->getAccountId();
+        result.lo = @(_account.lo);
+        result.hi = @(_account.hi);
 
-    return result;
+        return result;
+    } catch (const std::exception &e) {
+        NSLog(@"Error: %s", e.what());
+        return nil;
+    }
 }
 
 -(MirrorDeck *)buildDeck:(Deck)deck {
@@ -181,137 +221,188 @@ using namespace hearthmirror;
 -(nonnull NSArray *) getDecks {
     if (_mirror == NULL) return [NSArray array];
 
-    NSMutableArray *result = [NSMutableArray array];
-    std::vector<Deck> decks = _mirror->getDecks();
-    for (int i = 0; i < decks.size(); i++) {
-        Deck deck = decks[i];
-        MirrorDeck *mirrorDeck = [self buildDeck:deck];
+    try {
+        NSMutableArray *result = [NSMutableArray array];
+        std::vector<Deck> decks = _mirror->getDecks();
+        for (int i = 0; i < decks.size(); i++) {
+            Deck deck = decks[i];
+            MirrorDeck *mirrorDeck = [self buildDeck:deck];
 
-        [result addObject:mirrorDeck];
+            [result addObject:mirrorDeck];
+        }
+
+        return [NSArray arrayWithArray:result];
+    } catch (const std::exception &e) {
+        NSLog(@"Error: %s", e.what());
+        return [NSArray array];
     }
-
-    return [NSArray arrayWithArray:result];
 }
 
 -(BOOL) isSpectating {
     if (_mirror == NULL) return NO;
 
-    return _mirror->isSpectating();
+    try {
+        return _mirror->isSpectating();
+    } catch (const std::exception &e) {
+        NSLog(@"Error: %s", e.what());
+        return NO;
+    }
 }
 
 -(nullable NSNumber*) getSelectedDeck {
     if (_mirror == NULL) return nil;
 
-    long deckId = _mirror->getSelectedDeckInMenu();
-    if (deckId == 0) return nil;
+    try {
+        long deckId = _mirror->getSelectedDeckInMenu();
+        if (deckId == 0) return nil;
 
-    return @(deckId);
+        return @(deckId);
+    } catch (const std::exception &e) {
+        NSLog(@"Error: %s", e.what());
+        return nil;
+    }
 }
 
 -(nullable MirrorArenaInfo*) getArenaDeck {
     if (_mirror == NULL) return nil;
 
-    ArenaInfo info = _mirror->getArenaDeck();
-    if (info.deck.cards.size() == 0) return nil;
+    try {
+        ArenaInfo info = _mirror->getArenaDeck();
+        if (info.deck.cards.size() == 0) return nil;
 
-    MirrorArenaInfo *arenaInfo = [MirrorArenaInfo new];
-    arenaInfo.losses = @(info.losses);
-    arenaInfo.wins = @(info.wins);
-    arenaInfo.currentSlot = @(info.currentSlot);
-    arenaInfo.deck = [self buildDeck:info.deck];
-    NSMutableArray *rewards = [NSMutableArray array];
-    for (int i = 0; i < info.rewards.size(); i++) {
-        RewardData *data = info.rewards[i];
+        MirrorArenaInfo *arenaInfo = [MirrorArenaInfo new];
+        arenaInfo.losses = @(info.losses);
+        arenaInfo.wins = @(info.wins);
+        arenaInfo.currentSlot = @(info.currentSlot);
+        arenaInfo.deck = [self buildDeck:info.deck];
+        NSMutableArray *rewards = [NSMutableArray array];
+        for (int i = 0; i < info.rewards.size(); i++) {
+            RewardData *data = info.rewards[i];
 
-        switch (data->type) {
-            case ARCANE_DUST: {
-                ArcaneDustRewardData *_data = static_cast<ArcaneDustRewardData*>(data);
-                MirrorArcaneDustRewardData *reward = [MirrorArcaneDustRewardData new];
-                reward.amount = @(_data->amount);
-                [rewards addObject:reward];
-                break;
+            switch (data->type) {
+                case ARCANE_DUST: {
+                    ArcaneDustRewardData *_data = static_cast<ArcaneDustRewardData*>(data);
+                    MirrorArcaneDustRewardData *reward = [MirrorArcaneDustRewardData new];
+                    reward.amount = @(_data->amount);
+                    [rewards addObject:reward];
+                    break;
+                }
+                case BOOSTER_PACK: {
+                    BoosterPackRewardData *_data = static_cast<BoosterPackRewardData*>(data);
+                    MirrorBoosterPackRewardData *reward = [MirrorBoosterPackRewardData new];
+                    reward.boosterId = @(_data->id);
+                    reward.count = @(_data->count);
+                    [rewards addObject:reward];
+                    break;
+                }
+                case CARD: {
+                    CardRewardData *_data = static_cast<CardRewardData*>(data);
+                    MirrorCardRewardData *reward = [MirrorCardRewardData new];
+                    reward.cardId = [NSString stringWithu16string:_data->id];
+                    reward.count = @(_data->count);
+                    [rewards addObject:reward];
+                    break;
+                }
+                case CARD_BACK: {
+                    CardBackRewardData *_data = static_cast<CardBackRewardData*>(data);
+                    MirrorCardBackRewardData *reward = [MirrorCardBackRewardData new];
+                    reward.cardbackId = @(_data->id);
+                    [rewards addObject:reward];
+                    break;
+                }
+                case FORGE_TICKET: {
+                    ForgeTicketRewardData *_data = static_cast<ForgeTicketRewardData*>(data);
+                    MirrorForgeTicketRewardData *reward = [MirrorForgeTicketRewardData new];
+                    reward.quantity = @(_data->quantity);
+                    [rewards addObject:reward];
+                    break;
+                }
+                case GOLD: {
+                    GoldRewardData *_data = static_cast<GoldRewardData*>(data);
+                    MirrorGoldRewardData *reward = [MirrorGoldRewardData new];
+                    reward.amount = @(_data->amount);
+                    [rewards addObject:reward];
+                    break;
+                }
+                case MOUNT: {
+                    MountRewardData *_data = static_cast<MountRewardData*>(data);
+                    MirrorMountRewardData *reward = [MirrorMountRewardData new];
+                    reward.mountType = @(_data->mountType);
+                    [rewards addObject:reward];
+                    break;
+                }
+                case CLASS_CHALLENGE: break;
+                case CRAFTABLE_CARD: break;
             }
-            case BOOSTER_PACK: {
-                BoosterPackRewardData *_data = static_cast<BoosterPackRewardData*>(data);
-                MirrorBoosterPackRewardData *reward = [MirrorBoosterPackRewardData new];
-                reward.boosterId = @(_data->id);
-                reward.count = @(_data->count);
-                [rewards addObject:reward];
-                break;
-            }
-            case CARD: {
-                CardRewardData *_data = static_cast<CardRewardData*>(data);
-                MirrorCardRewardData *reward = [MirrorCardRewardData new];
-                reward.cardId = [NSString stringWithu16string:_data->id];
-                reward.count = @(_data->count);
-                [rewards addObject:reward];
-                break;
-            }
-            case CARD_BACK: {
-                CardBackRewardData *_data = static_cast<CardBackRewardData*>(data);
-                MirrorCardBackRewardData *reward = [MirrorCardBackRewardData new];
-                reward.cardbackId = @(_data->id);
-                [rewards addObject:reward];
-                break;
-            }
-            case FORGE_TICKET: {
-                ForgeTicketRewardData *_data = static_cast<ForgeTicketRewardData*>(data);
-                MirrorForgeTicketRewardData *reward = [MirrorForgeTicketRewardData new];
-                reward.quantity = @(_data->quantity);
-                [rewards addObject:reward];
-                break;
-            }
-            case GOLD: {
-                GoldRewardData *_data = static_cast<GoldRewardData*>(data);
-                MirrorGoldRewardData *reward = [MirrorGoldRewardData new];
-                reward.amount = @(_data->amount);
-                [rewards addObject:reward];
-                break;
-            }
-            case MOUNT: {
-                MountRewardData *_data = static_cast<MountRewardData*>(data);
-                MirrorMountRewardData *reward = [MirrorMountRewardData new];
-                reward.mountType = @(_data->mountType);
-                [rewards addObject:reward];
-                break;
-            }
-            case CLASS_CHALLENGE: break;
-            case CRAFTABLE_CARD: break;
         }
+        arenaInfo.rewards = [NSArray arrayWithArray:rewards];
+        
+        return arenaInfo;
+    } catch (const std::exception &e) {
+        NSLog(@"Error: %s", e.what());
+        return nil;
     }
-    arenaInfo.rewards = [NSArray arrayWithArray:rewards];
-
-    return arenaInfo;
 }
 
 -(nonnull NSArray*) getArenaDraftChoices {
     if (_mirror == NULL) return [NSArray array];
 
-    std::vector<Card> choices = _mirror->getArenaDraftChoices();
-    if (choices.size() != 3) return [NSArray array];
+    try {
+        std::vector<Card> choices = _mirror->getArenaDraftChoices();
+        if (choices.size() != 3) return [NSArray array];
 
-    NSMutableArray *cards = [NSMutableArray array];
-    for (unsigned int i = 0; i < choices.size(); i++) {
-        MirrorCard *mirrorCard = [self buildCard:choices[i]];
-        [cards addObject:mirrorCard];
+        NSMutableArray *cards = [NSMutableArray array];
+        for (unsigned int i = 0; i < choices.size(); i++) {
+            MirrorCard *mirrorCard = [self buildCard:choices[i]];
+            [cards addObject:mirrorCard];
+        }
+
+        return [NSArray arrayWithArray:cards];
+    } catch (const std::exception &e) {
+        NSLog(@"Error: %s", e.what());
+        return [NSArray array];
     }
-
-    return [NSArray arrayWithArray:cards];
 }
 
 -(nonnull NSArray*) getPackCards {
     if (_mirror == NULL) return [NSArray array];
 
-    std::vector<Card> cards = _mirror->getPackCards();
-    if (cards.size() != 5) return [NSArray array];
+    try {
+        std::vector<Card> cards = _mirror->getPackCards();
+        if (cards.size() != 5) return [NSArray array];
 
-    NSMutableArray *result = [NSMutableArray array];
-    for (unsigned int i = 0; i < cards.size(); i++) {
-        MirrorCard *mirrorCard = [self buildCard:cards[i]];
-        [result addObject:mirrorCard];
+        NSMutableArray *result = [NSMutableArray array];
+        for (unsigned int i = 0; i < cards.size(); i++) {
+            MirrorCard *mirrorCard = [self buildCard:cards[i]];
+            [result addObject:mirrorCard];
+        }
+
+        return [NSArray arrayWithArray:result];
+    } catch (const std::exception &e) {
+        NSLog(@"Error: %s", e.what());
+        return [NSArray array];
+    }
+}
+
+-(nullable MirrorBrawlInfo *) getBrawlInfo {
+    if (_mirror == NULL) return nil;
+
+    try {
+        BrawlInfo info = _mirror->getBrawlInfo();
+        MirrorBrawlInfo *result = [MirrorBrawlInfo new];
+        result.maxWins = info.maxWins == -1 ? nil : @(info.maxWins);
+        result.maxLosses = info.maxLosses == -1 ? nil : @(info.maxLosses);
+        result.isSessionBased = info.isSessionBased;
+        result.wins = @(info.wins);
+        result.losses = @(info.losses);
+        result.gamesPlayed = @(info.gamesPlayed);
+        result.winStreak = @(info.winStreak);
+        return result;
+    } catch (const std::exception &e) {
+        NSLog(@"Error: %s", e.what());
     }
 
-    return [NSArray arrayWithArray:result];
+    return nil;
 }
 
 -(void)dealloc {
@@ -406,4 +497,11 @@ using namespace hearthmirror;
 - (NSString *)description {
     return [NSString stringWithFormat:@"Mount: mountType: %@", self.mountType];
 }
+@end
+
+@implementation MirrorBrawlInfo
+- (NSString *)description {
+    return [NSString stringWithFormat:@"maxWins: %@, maxLosses: %@, isSessionBased: %@, wins: %@, losses: %@, gamesPlayed: %@, winStreak: %@", self.maxWins, self.maxLosses, @(self.isSessionBased), self.wins, self.losses, self.gamesPlayed, self.winStreak];
+}
+
 @end

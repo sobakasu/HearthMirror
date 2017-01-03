@@ -24,6 +24,10 @@ namespace hearthmirror {
     
     std::string MonoClass::getName() {
         uint32_t addr = ReadUInt32(_task, _pClass + kMonoClassName);
+        if (addr == 0) {
+            std::string result;
+            return result;
+        }
         char* pName = ReadCString(_task, addr);
         std::string name(pName);
         free(pName);
@@ -32,6 +36,7 @@ namespace hearthmirror {
     
     std::string MonoClass::getNameSpace() {
         uint32_t addr = ReadUInt32(_task, _pClass + kMonoClassNameSpace);
+        if (addr == 0) return NULL;
         char* pNamespace = ReadCString(_task, addr);
         std::string ns(pNamespace);
         free(pNamespace);

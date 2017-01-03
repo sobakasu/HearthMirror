@@ -148,14 +148,14 @@ namespace hearthmirror {
     }
     
     BattleTag Mirror::getBattleTag() {
-        BattleTag result;
-        if (!_monoImage) return result;
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
         
         MonoValue mv = getObject({"BnetPresenceMgr","s_instance","m_myPlayer","m_account","m_battleTag"});
-        if (IsMonoValueEmpty(mv)) return result;
+        if (IsMonoValueEmpty(mv)) throw std::domain_error("Bnet manager can't be found");
         
         MonoObject* m_battleTag = mv.value.obj.o;
-        
+
+        BattleTag result;
         result.name = ((*m_battleTag)["m_name"]).str;
         result.number = ((*m_battleTag)["m_number"]).value.i32;
 
@@ -165,11 +165,13 @@ namespace hearthmirror {
     }
 
     AccountId Mirror::getAccountId() {
-        AccountId account;
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+
         MonoValue mv = getObject({"BnetPresenceMgr","s_instance","m_myGameAccountId"});
-        if (IsMonoValueEmpty(mv)) return account;
+        if (IsMonoValueEmpty(mv)) throw std::domain_error("BNet presence manager can't be found");
 
         MonoObject* m_accountId = mv.value.obj.o;
+        AccountId account;
         account.lo = ((*m_accountId)["m_lo"]).value.i64;
         account.hi = ((*m_accountId)["m_hi"]).value.i64;
 
@@ -178,13 +180,13 @@ namespace hearthmirror {
     }
 
     InternalGameServerInfo Mirror::getGameServerInfo() {
-        InternalGameServerInfo result;
-        if (!_monoImage) return result;
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
 
         MonoValue mv = getObject({"Network","s_instance","m_lastGameServerInfo"});
-        if (IsMonoValueEmpty(mv)) return result;
+        if (IsMonoValueEmpty(mv)) throw std::domain_error("Game server info can't be found");
         MonoObject* m_serverInfo = mv.value.obj.o;
 
+        InternalGameServerInfo result;
         result.address = ((*m_serverInfo)["<Address>k__BackingField"]).str;
         result.auroraPassword = ((*m_serverInfo)["<AuroraPassword>k__BackingField"]).str;
         result.clientHandle = ((*m_serverInfo)["<ClientHandle>k__BackingField"]).value.i64;
@@ -201,19 +203,25 @@ namespace hearthmirror {
     }
 
     int Mirror::getGameType() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+
         return getInt({"GameMgr","s_instance","m_gameType"});
     }
 
     int Mirror::getFormat() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+
         return getInt({"GameMgr","s_instance","m_formatType"});
     }
 
     bool Mirror::isSpectating() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+
         return getBool({"GameMgr","s_instance","m_spectator"});
     }
 
     InternalMatchInfo Mirror::getMatchInfo() {
-        InternalMatchInfo result;
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
 
         MonoValue playerIds = getObject({"GameState","s_instance","m_playerMap","keySlots"});
         MonoValue players = getObject({"GameState","s_instance","m_playerMap","valueSlots"});
@@ -225,8 +233,10 @@ namespace hearthmirror {
             DeleteMonoValue(playerIds);
             DeleteMonoValue(players);
             DeleteMonoValue(netCacheValues);
-            return result;
+            throw std::domain_error("Game state and/or net cache can't be found");
         }
+
+        InternalMatchInfo result;
 
         for (unsigned int i=0; i< playerIds.arrsize; i++) {
             MonoValue mv = players[i];
@@ -284,6 +294,7 @@ namespace hearthmirror {
             }
 
             std::u16string name = ((*inst)["m_name"]).str;
+            if (name.empty()) throw std::domain_error("Found a player with an empty name");
 
             int cardBack = ((*inst)["m_cardBackId"]).value.i32;
             int id = playerIds[i].value.i32;
@@ -318,7 +329,6 @@ namespace hearthmirror {
                     vm = (*net)["<Wild>k__BackingField"];
                     stars = vm.value.obj.o;
                     wStars = ((*stars)["<Stars>k__BackingField"]).value.i32;
-                    DeleteMonoValue(netCacheMedalInfo);
                 }
 
                 result.localPlayer.name = name;
@@ -343,7 +353,6 @@ namespace hearthmirror {
             }
 
             DeleteMonoValue(_medalInfo);
-            DeleteMonoValue(mv);
         }
 
         MonoValue _brawlSeasonId = getObject({"TavernBrawlManager","s_instance","m_currentMission", "seasonId"});
@@ -385,11 +394,82 @@ namespace hearthmirror {
         return result;
     }
 
+    BrawlInfo Mirror::getBrawlInfo() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+
+        MonoValue brawlManager = getObject({"TavernBrawlManager","s_instance"});
+        if (IsMonoValueEmpty(brawlManager)) throw std::domain_error("Brawl manager can't be found");
+
+        BrawlInfo result;
+        MonoValue mission = getObject(brawlManager, {"m_currentMission"});
+        if (!IsMonoValueEmpty(mission)) {
+            MonoObject *_mission = mission.value.obj.o;
+            result.maxWins = ((*_mission)["maxWins"]).value.i32;
+            result.maxLosses = ((*_mission)["maxLosses"]).value.i32;
+        }
+
+        MonoValue netCacheValues = getObject({"NetCache","s_instance","m_netCache","valueSlots"});
+        if (IsMonoValueEmpty(netCacheValues) || !IsMonoValueArray(netCacheValues)) {
+            throw std::domain_error("Net cache can't be found");
+        }
+        MonoValue record;
+        for (unsigned int i=0; i< netCacheValues.arrsize; i++) {
+            MonoValue netCache = netCacheValues[i];
+            if (IsMonoValueEmpty(netCache)) continue;
+            MonoObject* net = netCache.value.obj.o;
+            MonoClass* instclass = net->getClass();
+            std::string icname = instclass->getName();
+            delete instclass;
+
+            if (icname != "NetCacheTavernBrawlRecord") {
+                continue;
+            }
+
+            record = getObject(netCache, {"<Record>k__BackingField"});
+            break;
+        }
+        if (IsMonoValueEmpty(record)) throw std::domain_error("Can't get record");
+
+        MonoObject *_record = record.value.obj.o;
+        if (_record == NULL) {
+            DeleteMonoValue(netCacheValues);
+            throw std::domain_error("Can't get record");
+        }
+
+        result.gamesPlayed = ((*_record)["_GamesPlayed"]).value.i32;
+        result.winStreak = ((*_record)["_WinStreak"]).value.i32;
+        result.isSessionBased = result.maxWins > 0 || result.maxLosses > 0;
+        if (result.isSessionBased) {
+            if (!((*_record)["HasSession"]).value.b) {
+                DeleteMonoValue(netCacheValues);
+                DeleteMonoValue(brawlManager);
+                return result;
+            }
+
+            MonoValue session = getObject(record, {"_Session"});
+            MonoObject *_session = session.value.obj.o;
+            result.wins = ((*_session)["<Wins>k__BackingField"]).value.i32;
+            result.losses = ((*_session)["<Losses>k__BackingField"]).value.i32;
+            DeleteMonoValue(session);
+        } else {
+            result.wins = ((*_record)["<GamesWon>k__BackingField"]).value.i32;
+            result.losses = result.gamesPlayed - result.wins;
+        }
+
+        DeleteMonoValue(netCacheValues);
+        DeleteMonoValue(brawlManager);
+        return result;
+    }
+
     std::vector<Deck> Mirror::getDecks() {
-        std::vector<Deck> result;
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
 
         MonoValue values = getObject({"CollectionManager","s_instance","m_decks","valueSlots"});
-        if (IsMonoValueEmpty(values) || !IsMonoValueArray(values)) return result;
+        if (IsMonoValueEmpty(values) || !IsMonoValueArray(values)) {
+            throw std::domain_error("Collection manager can't be found");
+        }
+
+        std::vector<Deck> result;
 
         for (unsigned int i=0; i< values.arrsize; i++) {
             MonoValue mv = values[i];
@@ -424,6 +504,8 @@ namespace hearthmirror {
     }
 
     long Mirror::getSelectedDeckInMenu() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+
         return getLong({"DeckPickerTrayDisplay","s_instance","m_selectedCustomDeckBox","m_deckID"});
     }
 
@@ -480,10 +562,14 @@ namespace hearthmirror {
     }
 
     std::vector<Card> Mirror::getPackCards() {
-        std::vector<Card> result;
-        MonoValue cards = getObject({"PackOpening","s_instance","m_director","m_hiddenCards","_items"});
-        if (IsMonoValueEmpty(cards) || !IsMonoValueArray(cards)) return result;
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
 
+        MonoValue cards = getObject({"PackOpening","s_instance","m_director","m_hiddenCards","_items"});
+        if (IsMonoValueEmpty(cards) || !IsMonoValueArray(cards)) {
+            throw std::domain_error("Pack opening informations can't be found");
+        }
+
+        std::vector<Card> result;
         for (unsigned int i = 0; i < cards.arrsize; i++) {
             MonoValue mv = cards[i];
             if (IsMonoValueEmpty(mv)) continue;
@@ -513,16 +599,18 @@ namespace hearthmirror {
     }
 
     ArenaInfo Mirror::getArenaDeck() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+
         ArenaInfo result;
 
         MonoValue _draftManager = getObject({"DraftManager","s_instance"});
-        if (IsMonoValueEmpty(_draftManager)) return result;
+        if (IsMonoValueEmpty(_draftManager)) throw std::domain_error("Draft manager can't be found");
         MonoObject* draftManager = _draftManager.value.obj.o;
 
         MonoValue draftDeck = (*draftManager)["m_draftDeck"];
         if (IsMonoValueEmpty(draftDeck)) {
             DeleteMonoValue(_draftManager);
-            return result;
+            throw std::domain_error("Draft deck can't be found");
         }
 
         MonoObject* inst = draftDeck.value.obj.o;
@@ -561,9 +649,11 @@ namespace hearthmirror {
     }
 
     std::vector<Card> Mirror::getArenaDraftChoices() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+
         std::vector<Card> result;
         MonoValue values = getObject({"DraftDisplay","s_instance","m_choices"});
-        if (IsMonoValueEmpty(values)) return result;
+        if (IsMonoValueEmpty(values)) throw std::domain_error("Draft choices can't be found");
 
         MonoObject *stacks = values.value.obj.o;
         MonoValue choices = (*stacks)["_items"];
@@ -638,11 +728,14 @@ namespace hearthmirror {
     }
     
     std::vector<Card> Mirror::getCardCollection() {
- 
-        std::vector<Card> result;
-        
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+
         MonoValue valueSlots = getObject({"NetCache","s_instance","m_netCache","valueSlots"});
-        if (IsMonoValueEmpty(valueSlots) || !IsMonoValueArray(valueSlots)) return result;
+        if (IsMonoValueEmpty(valueSlots) || !IsMonoValueArray(valueSlots)) {
+            throw std::domain_error("Net cache can't be found");
+        }
+
+        std::vector<Card> result;
         
         for (unsigned int i=0; i< valueSlots.arrsize; i++) {
             MonoValue mv = valueSlots[i];

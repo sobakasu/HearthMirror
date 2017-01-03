@@ -104,6 +104,9 @@ int main(int argc, const char * argv[]) {
         // Get the cards from a pack opening
         NSArray *packCards = [mirror getPackCards];
         NSLog(@"Pack Cards: %@", packCards);
+
+        MirrorBrawlInfo *brawlInfo = [mirror getBrawlInfo];
+        NSLog(@"Brawl Info: %@", brawlInfo);
     }
     return 0;
 }
