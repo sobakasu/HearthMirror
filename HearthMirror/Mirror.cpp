@@ -81,7 +81,7 @@ namespace hearthmirror {
 
     MonoValue Mirror::getObject(MonoValue from, const HMObjectPath& path) {
         MonoValue mv = from;
-        if (IsMonoValueEmpty(mv)) return NULL;
+        if (IsMonoValueEmpty(mv) || path.size() < 1) return NULL;
 
         for (unsigned int i = 0; i< path.size(); i++) {
             MonoObject* mo = mv.value.obj.o;
@@ -91,7 +91,7 @@ namespace hearthmirror {
                 return NULL;
             }
 
-            delete mo;
+            if (i>0) delete mo; // retain the original "from" object
         }
         return mv;
     }
