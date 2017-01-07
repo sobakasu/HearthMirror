@@ -12,7 +12,7 @@
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
-        
+
         // get Hearthstone app
         NSArray* apps = [[NSWorkspace sharedWorkspace] runningApplications]; // NSRunningApplication
         
@@ -37,7 +37,7 @@ int main(int argc, const char * argv[]) {
         }
         
         HearthMirror* mirror = [[HearthMirror alloc] initWithPID:[hsapp processIdentifier]];
-
+/*
         // Get BattleTag
         NSString* battletag = [mirror getBattleTag];
         NSLog(@"BattleTag: %@", battletag);
@@ -107,6 +107,9 @@ int main(int argc, const char * argv[]) {
 
         MirrorBrawlInfo *brawlInfo = [mirror getBrawlInfo];
         NSLog(@"Brawl Info: %@", brawlInfo);
+*/
+        MirrorDeck *editedDeck = [mirror getEditedDeck];
+        NSLog(@"Edited deck: %@", editedDeck);
     }
     return 0;
 }

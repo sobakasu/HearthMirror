@@ -143,6 +143,8 @@ EXPORT @interface HearthMirror : NSObject
 
 -(nullable NSNumber*) getSelectedDeck;
 
+-(nullable MirrorDeck*) getEditedDeck;
+
 -(nullable MirrorArenaInfo*) getArenaDeck;
 
 -(nonnull NSArray*) getArenaDraftChoices;

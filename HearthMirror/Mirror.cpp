@@ -461,6 +461,35 @@ namespace hearthmirror {
         return result;
     }
 
+    Deck Mirror::getEditedDeck() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+
+        MonoValue taggedDecks = getObject({"CollectionManager","s_instance","m_taggedDecks"});
+        if (IsMonoValueEmpty(taggedDecks)) {
+            throw std::domain_error("Collection manager can't be found");
+        }
+        MonoObject *_taggedDecks = taggedDecks.value.obj.o;
+        MonoValue tags = (*_taggedDecks)["keySlots"];
+        MonoValue decks = (*_taggedDecks)["valueSlots"];
+        if (IsMonoValueEmpty(tags) || IsMonoValueEmpty(decks)) {
+            throw std::domain_error("No edited deck ?");
+        }
+        for (unsigned int i = 0; i < tags.arrsize; i++) {
+            MonoValue tag = tags[i];
+            MonoValue deck = decks[i];
+            if (IsMonoValueEmpty(tag) || IsMonoValueEmpty(deck)) continue;
+
+            MonoObject *_tag = tag.value.obj.o;
+
+            if (((*_tag)["value__"]).value.i32 == 0) {
+                return getDeck(deck.value.obj.o);
+            }
+        }
+
+        DeleteMonoValue(taggedDecks);
+        throw std::domain_error("No edited deck ?");
+    }
+
     std::vector<Deck> Mirror::getDecks() {
         if (!_monoImage) throw std::domain_error("Mono image can't be found");
 

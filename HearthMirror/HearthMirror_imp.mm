@@ -238,6 +238,18 @@ using namespace hearthmirror;
     }
 }
 
+-(nullable MirrorDeck*) getEditedDeck {
+    if (_mirror == NULL) return nil;
+
+    try {
+        Deck deck = _mirror->getEditedDeck();
+        return [self buildDeck:deck];
+    } catch (const std::exception &e) {
+        NSLog(@"Error: %s", e.what());
+        return nil;
+    }
+}
+
 -(BOOL) isSpectating {
     if (_mirror == NULL) return NO;
 

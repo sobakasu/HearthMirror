@@ -209,6 +209,9 @@ namespace hearthmirror {
         /** Returns the informations about brawl */
         BrawlInfo getBrawlInfo();
 
+        /** Returns the edited deck */
+        Deck getEditedDeck();
+
     private:
 		HANDLE _task;
         MonoImage* _monoImage = NULL;
