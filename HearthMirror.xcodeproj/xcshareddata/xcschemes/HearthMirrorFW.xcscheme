@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "BCB5AF6D1E196F0600244DDB"
-               BuildableName = "HearthMirrorFW.framework"
+               BuildableName = "HearthMirror.framework"
                BlueprintName = "HearthMirrorFW"
                ReferencedContainer = "container:HearthMirror.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "BCB5AF6D1E196F0600244DDB"
-            BuildableName = "HearthMirrorFW.framework"
+            BuildableName = "HearthMirror.framework"
             BlueprintName = "HearthMirrorFW"
             ReferencedContainer = "container:HearthMirror.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "BCB5AF6D1E196F0600244DDB"
-            BuildableName = "HearthMirrorFW.framework"
+            BuildableName = "HearthMirror.framework"
             BlueprintName = "HearthMirrorFW"
             ReferencedContainer = "container:HearthMirror.xcodeproj">
          </BuildableReference>

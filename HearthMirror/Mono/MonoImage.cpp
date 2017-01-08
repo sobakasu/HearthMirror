@@ -21,14 +21,29 @@ namespace hearthmirror {
         for (auto it = _classes.begin(); it != _classes.end(); it++) {
             delete it->second;
         }
+        _classes.clear();
     }
 
-    MonoClass* MonoImage::operator[](const std::string& key) {
-        return this->_classes.at(key);
+    MonoClass* MonoImage::get(const std::string& key, bool isBlocking) {
+        if (this->_classes.count(key)) {
+            return this->_classes.at(key);
+        }
+        if (!isBlocking) return NULL;
+        
+        while (true) {
+            if (this->_classes.count(key)) return this->_classes.at(key);
+            sleep(1); // wait 1 second
+            LoadClasses();
+        }
     }
 
     void MonoImage::LoadClasses() {
     
+        for (auto it = _classes.begin(); it != _classes.end(); it++) {
+            delete it->second;
+        }
+        _classes.clear();
+        
         uint32_t ht = _pImage + kMonoImageClassCache;
         uint32_t size = ReadInt32(_task, ht + kMonoInternalHashTableSize);
         //uint32_t entries = ReadInt32(_task, ht + kMonoInternalHashTableNum_entries);
@@ -39,7 +54,6 @@ namespace hearthmirror {
             while (pClass != 0) {
                 MonoClass* klass = new MonoClass(_task, pClass);
                 std::string cfname = klass->getFullName();
-                //printf("%s\n",cfname.c_str());
                 _classes[cfname] = klass;
 
                 pClass = ReadUInt32(_task, pClass + kMonoClassNextClassCache);

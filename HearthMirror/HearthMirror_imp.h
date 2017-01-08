@@ -153,4 +153,8 @@ EXPORT @interface HearthMirror : NSObject
 
 -(nullable MirrorBrawlInfo *) getBrawlInfo;
 
+-(void) setBlocking:(bool) blocking;
+
+-(bool) isBlocking;
+
 @end

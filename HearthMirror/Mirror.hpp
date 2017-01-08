@@ -164,6 +164,9 @@ namespace hearthmirror {
         Mirror(int pid);
         ~Mirror();
         
+        bool isBlocking() {return this->_isBlocking;}
+        void setBlocking(bool blocking) {this->_isBlocking = blocking;}
+        
         /** Initializes this Mirror object with the given PID. */
         int initWithPID(int pid);
         
@@ -215,6 +218,7 @@ namespace hearthmirror {
     private:
 		HANDLE _task;
         MonoImage* _monoImage = NULL;
+        bool _isBlocking = true;
         
         MonoValue getObject(const HMObjectPath& path);
         MonoValue getObject(MonoValue from, const HMObjectPath& path);

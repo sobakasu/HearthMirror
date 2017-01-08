@@ -100,7 +100,9 @@ namespace hearthmirror {
     MonoValue Mirror::getObject(const HMObjectPath& path) {
         if (path.size() < 2) return NULL;
         
-        MonoClass* baseclass = (*_monoImage)[path[0]]; // no need to free
+        MonoClass* baseclass = _monoImage->get(path[0], isBlocking()); // no need to free
+        if (!baseclass) return NULL;
+        
         MonoValue mv = (*baseclass)[path[1]];
         if (IsMonoValueEmpty(mv)) return NULL;
 

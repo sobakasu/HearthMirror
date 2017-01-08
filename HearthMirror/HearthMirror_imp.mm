@@ -46,6 +46,14 @@ using namespace hearthmirror;
     return self;
 }
 
+-(void) setBlocking:(bool) blocking {
+    _mirror->setBlocking(blocking);
+}
+
+-(bool) isBlocking {
+    return _mirror->isBlocking();
+}
+
 -(nullable NSString*) getBattleTag {
     if (_mirror == NULL) return nil;
 
