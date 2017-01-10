@@ -16,6 +16,8 @@ namespace HearthMirror
 		{
 			try
 			{
+				if(Mirror.Proc.HasExited)
+					Mirror.Clean();
 				if(clearCache)
 					Mirror.View?.ClearCache();
 				return action.Invoke();
