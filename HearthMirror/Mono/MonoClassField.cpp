@@ -22,6 +22,9 @@ namespace hearthmirror {
 
     std::string MonoClassField::getName() {
         char* pName = ReadCString(_task, ReadUInt32(_task, _pField + kMonoClassFieldName));
+        
+        if (pName == NULL) return std::string("");
+        
         std::string name(pName);
         free(pName);
         return name;

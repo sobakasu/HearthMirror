@@ -466,7 +466,7 @@ char *ReadCString(HANDLE task, mach_vm_address_t pointer)
     mach_vm_size_t size = sizeof(buf);
     err = mach_vm_read_overwrite(task, pointer, size,
                                  (mach_vm_address_t)&buf, &size);
-    if (err != KERN_SUCCESS) return 0;
+    if (err != KERN_SUCCESS) return NULL;
     
     // add ending
     buf[kRemoteStringBufferSize-1] = '\0';
