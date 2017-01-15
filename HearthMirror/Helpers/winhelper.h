@@ -12,6 +12,9 @@
 #include "windows.h"
 #include <cstdint>
 
+// Alias the windows Sleep function as the unix sleep function
+#define sleep(x) Sleep(1000 * x)
+
 typedef intptr_t proc_address;
 bool ReadBytes(HANDLE task, proc_address buf, uint32_t size, proc_address address);
 
