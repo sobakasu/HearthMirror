@@ -29,6 +29,49 @@ typedef struct _BattleTag {
     int number;
 } BattleTag;
 
+enum BoxState
+{
+    kBoxStateInvalid,
+    kBoxStateStartup,
+    kBoxStatePressStart,
+    kBoxStateLoading,
+    kBoxStateLoadingHub,
+    kBoxStateHub,
+    kBoxStateHubWithDrawer,
+    kBoxStateOpen,
+    kBoxStateClosed,
+    kBoxStateError,
+    kBoxStateSetRotationLoading,
+    kBoxStateSetRotation,
+    kBoxStateSetRotationOpen,
+};
+
+enum UI_WINDOW
+{
+    NONE,
+    GENERAL_STORE,
+    ARENA_STORE,
+    QUEST_LOG,
+};
+
+enum SceneMode
+{
+    kSceneModeInvalid,
+    kSceneModeStartup,
+    kSceneModeLogin,
+    kSceneModeHub,
+    kSceneModeGameplay,
+    kSceneModeCollectionManager,
+    kSceneModePackopening,
+    kSceneModeTournament,
+    kSceneModeFriendly,
+    kSceneModeFatalError,
+    kSceneModeDraft,
+    kSceneModeCredits,
+    kSceneModeReset,
+    kSceneModeAdventure,
+    kSceneModeTavernBrawl,
+};
 
 typedef struct _Card {
     std::u16string id;
@@ -214,6 +257,63 @@ namespace hearthmirror {
 
         /** Returns the edited deck */
         Deck getEditedDeck();
+        
+        /** Returns true if friends list is visible */
+        bool isFriendsListVisible();
+        
+        /** Returns true if game menu is visible */
+        bool isGameMenuVisible();
+        
+        /** Returns true if options menu is visible */
+        bool isOptionsMenuVisible();
+        
+        /** Returns true if game is at the mulligan phase */
+        bool isMulligan();
+        
+        /** Returns the number of mulliganed cards */
+        int getNumMulliganCards();
+        
+        bool isChoosingCard();
+        
+        int getNumChoiceCards();
+        
+        bool isPlayerEmotesVisible();
+        
+        bool isEnemyEmotesVisible();
+        
+        bool isInBattlecryEffect();
+        
+        bool isDragging();
+        
+        bool isTargetingHeroPower();
+        
+        int getBattlecrySourceCardZonePosition();
+        
+        bool isHoldingCard();
+        
+        bool isTargetReticleActive();
+        
+        bool isEnemyTargeting();
+        
+        bool isGameOver();
+        
+        bool isInMainMenu();
+        
+        UI_WINDOW getShownUiWindowId();
+        
+        SceneMode GetCurrentSceneMode();
+        
+        bool isPlayerHandZoneUpdatingLayout();
+        
+        bool isPlayerPlayZoneUpdatingLayout();
+        
+        int getNumCardsPlayerHand();
+        
+        int getNumCardsPlayerBoard();
+        
+        int getNavigationHistorySize();
+        
+        int getCurrentManaFilter();
 
     private:
 		HANDLE _task;

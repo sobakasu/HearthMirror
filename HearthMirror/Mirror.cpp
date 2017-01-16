@@ -831,5 +831,162 @@ namespace hearthmirror {
         
         return result;
     }
+    
+    bool Mirror::isFriendsListVisible() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getBool({"ChatMgr","s_instance","m_friendListFrame"});
+    }
+    
+    bool Mirror::isGameMenuVisible() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getBool({"GameMenu","s_instance","m_isShown"});
+    }
+    
+    bool Mirror::isOptionsMenuVisible() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getBool({"OptionsMenu","s_instance","m_isShown"});
+    }
+    
+    bool Mirror::isMulligan() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getBool({"MulliganManager","s_instance","mulliganChooseBanner"});
+    }
+    
+    int Mirror::getNumMulliganCards() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getInt({"MulliganManager","s_instance","m_startingCards","_size"});
+    }
+    
+    bool Mirror::isChoosingCard() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getBool({"ChoiceCardMgr","s_instance","m_subOptionState"}) ||
+                getInt({"ChoiceCardMgr","s_instance","m_choiceStateMap","count"}) > 0;
+    }
 
+    int Mirror::getNumChoiceCards() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getInt({"ChoiceCardMgr","s_instance","m_lastShownChoices","_size"});
+    }
+    
+    bool Mirror::isPlayerEmotesVisible() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getBool({"EmoteHandler","s_instance","m_emotesShown"});
+    }
+    
+    bool Mirror::isEnemyEmotesVisible() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getBool({"EnemyEmoteHandler","s_instance","m_emotesShown"});
+    }
+    
+    bool Mirror::isInBattlecryEffect() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getBool({"InputManager","s_instance","m_isInBattleCryEffect"});
+    }
+    
+    bool Mirror::isDragging() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getBool({"InputManager","s_instance","m_dragging"});
+    }
+    
+    bool Mirror::isTargetingHeroPower() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getBool({"InputManager","s_instance","m_targettingHeroPower"});
+    }
+    
+    int Mirror::getBattlecrySourceCardZonePosition() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getInt({"InputManager","s_instance","m_battlecrySourceCard","m_zonePosition"});
+    }
+    
+    bool Mirror::isHoldingCard() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getBool({"InputManager","s_instance","m_heldCard"});
+    }
+    
+    bool Mirror::isTargetReticleActive() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getBool({"TargetReticleManager","s_instance","m_isActive"});
+    }
+    
+    bool Mirror::isEnemyTargeting() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getBool({"InputManager","s_instance","m_isEnemyArrow"});
+    }
+    
+    bool Mirror::isGameOver() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getBool({"GameState","s_instance","m_gameOver"});
+    }
+    
+    bool Mirror::isInMainMenu() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getInt({"Box","s_instance","m_state"}) == (int)kBoxStateHubWithDrawer;
+    }
+    
+    UI_WINDOW Mirror::getShownUiWindowId() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return (UI_WINDOW)getInt({"ShownUIMgr","s_instance","m_shownUI"});
+    }
+    
+    SceneMode Mirror::GetCurrentSceneMode() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return (SceneMode)getInt({"SceneMgr","s_instance","m_mode"});
+    }
+    
+    bool Mirror::isPlayerHandZoneUpdatingLayout() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getBool({"InputManager","s_instance","m_myHandZone", "m_updatingLayout"});
+    }
+    
+    bool Mirror::isPlayerPlayZoneUpdatingLayout() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getBool({"InputManager","s_instance","m_myPlayZone", "m_updatingLayout"});
+    }
+    
+    int Mirror::getNumCardsPlayerHand() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getInt({"InputManager","s_instance","m_myHandZone","m_cards","_size"});
+    }
+    
+    int Mirror::getNumCardsPlayerBoard() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getInt({"InputManager","s_instance","m_myPlayZone","m_cards","_size"});
+    }
+    
+    int Mirror::getNavigationHistorySize() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getInt({"Navigation","history","_size"});
+    }
+    
+    int Mirror::getCurrentManaFilter() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getInt({"CollectionManagerDisplay","s_instance","m_manaTabManager","m_currentFilterValue"});
+    }
+    
 }
