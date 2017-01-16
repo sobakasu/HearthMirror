@@ -57,8 +57,8 @@ using namespace hearthmirror;
 -(nullable NSString*) getBattleTag {
     if (_mirror == NULL) return nil;
 
-    BattleTag tag = _mirror->getBattleTag();
     try {
+        BattleTag tag = _mirror->getBattleTag();
         NSString* battlename = [NSString stringWithu16string:tag.name];
         return [NSString stringWithFormat:@"%@#%d",battlename,tag.number];
     } catch (const std::exception &e) {
