@@ -209,14 +209,12 @@ namespace hearthmirror {
     public:
         
         Mirror();
-        Mirror(int pid);
+        Mirror(int pid, bool isBlocking = true);
         ~Mirror();
         
-        bool isBlocking() {return this->_isBlocking;}
-        void setBlocking(bool blocking) {this->_isBlocking = blocking;}
         
         /** Initializes this Mirror object with the given PID. */
-        int initWithPID(int pid);
+        int initWithPID(int pid, bool isBlocking = true);
         
         /** Returns the battletag of the current user. */
         BattleTag getBattleTag();
@@ -327,7 +325,6 @@ namespace hearthmirror {
     private:
 		HANDLE _task;
         MonoImage* _monoImage = NULL;
-        bool _isBlocking = true;
         
         MonoValue getObject(const HMObjectPath& path);
         MonoValue getObject(MonoValue from, const HMObjectPath& path);

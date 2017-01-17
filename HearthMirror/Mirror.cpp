@@ -22,15 +22,15 @@ namespace hearthmirror {
         
     }
     
-    Mirror::Mirror(int pid) {
-        initWithPID(pid);
+    Mirror::Mirror(int pid, bool isBlocking) {
+        initWithPID(pid, isBlocking);
     }
     
     Mirror::~Mirror() {
         delete _monoImage;
     }
 
-    int Mirror::initWithPID(int pid) {
+    int Mirror::initWithPID(int pid, bool isBlocking) {
         if (_monoImage) delete _monoImage;
         _monoImage = NULL;
         
@@ -47,7 +47,7 @@ namespace hearthmirror {
 			FALSE, pid);
 #endif
         
-        while (true && isBlocking()) {
+        while (true && isBlocking) {
             
             proc_address baseaddress = getMonoLoadAddress(_task);
             if (baseaddress == 0) return 4;

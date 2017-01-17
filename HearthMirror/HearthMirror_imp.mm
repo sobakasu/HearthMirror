@@ -36,22 +36,14 @@ using namespace hearthmirror;
     Mirror* _mirror;
 }
 
--(instancetype) initWithPID:(pid_t)pid {
+-(instancetype) initWithPID:(pid_t)pid withBlocking:(BOOL)blocking {
     
     self = [super init];
     if (self)
     {
-        _mirror = new Mirror(pid);
+        _mirror = new Mirror(pid,blocking);
     }
     return self;
-}
-
--(void) setBlocking:(bool) blocking {
-    _mirror->setBlocking(blocking);
-}
-
--(bool) isBlocking {
-    return _mirror->isBlocking();
 }
 
 -(nullable NSString*) getBattleTag {

@@ -120,7 +120,7 @@
 
 EXPORT @interface HearthMirror : NSObject
 
--(nonnull instancetype) initWithPID:(pid_t)pid;
+-(nonnull instancetype) initWithPID:(pid_t)pid withBlocking:(BOOL)blocking;
 
 /** Returns the BattleTag as a single string in the following format: name#number. */
 -(nullable NSString*) getBattleTag;
@@ -152,9 +152,5 @@ EXPORT @interface HearthMirror : NSObject
 -(nonnull NSArray*) getPackCards;
 
 -(nullable MirrorBrawlInfo *) getBrawlInfo;
-
--(void) setBlocking:(bool) blocking;
-
--(bool) isBlocking;
 
 @end

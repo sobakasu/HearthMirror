@@ -36,7 +36,7 @@ int main(int argc, const char * argv[]) {
             return 2;
         }
         
-        HearthMirror* mirror = [[HearthMirror alloc] initWithPID:[hsapp processIdentifier]];
+        HearthMirror* mirror = [[HearthMirror alloc] initWithPID:[hsapp processIdentifier] withBlocking:YES];
 
         // Get BattleTag
         NSString* battletag = [mirror getBattleTag];
