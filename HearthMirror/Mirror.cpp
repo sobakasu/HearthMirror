@@ -989,4 +989,27 @@ namespace hearthmirror {
         return getInt({"CollectionManagerDisplay","s_instance","m_manaTabManager","m_currentFilterValue"});
     }
     
+    SetFilterItem Mirror::getCurrentSetFilter() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        MonoValue item = getObject({"CollectionManagerDisplay","s_instance","m_setFilterTray","m_selected"});
+        if (IsMonoValueEmpty(item)) {
+            DeleteMonoValue(item);
+            return SetFilterItem();
+        }
+        
+        DeleteMonoValue(item);
+        SetFilterItem result = SetFilterItem();
+        
+        result.isAllStandard = getBool({"CollectionManagerDisplay","s_instance","m_setFilterTray","m_selected","m_isAllStandard"});
+        result.isWild = getBool({"CollectionManagerDisplay","s_instance","m_setFilterTray","m_selected","m_isWild"});
+        return result;
+    }
+    
+    int Mirror::getLastOpenedBoosterId() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+        
+        return getInt({"PackOpening","s_instance","m_lastOpenedBoosterId"});
+    }
+    
 }

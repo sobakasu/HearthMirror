@@ -197,6 +197,11 @@ typedef struct _BrawlInfo {
     int winStreak;
 } BrawlInfo;
 
+typedef struct _SetFilterItem {
+    bool isAllStandard;
+    bool isWild;
+} SetFilterItem;
+
 namespace hearthmirror {
 
 	class HEARTHMIRROR_API Mirror {
@@ -314,6 +319,10 @@ namespace hearthmirror {
         int getNavigationHistorySize();
         
         int getCurrentManaFilter();
+        
+        SetFilterItem getCurrentSetFilter();
+        
+        int getLastOpenedBoosterId();
 
     private:
 		HANDLE _task;
