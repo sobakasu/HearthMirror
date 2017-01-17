@@ -37,13 +37,13 @@ int main(int argc, const char * argv[]) {
         }
         
         HearthMirror* mirror = [[HearthMirror alloc] initWithPID:[hsapp processIdentifier]];
-/*
+
         // Get BattleTag
         NSString* battletag = [mirror getBattleTag];
         NSLog(@"BattleTag: %@", battletag);
 
         // Get Account id
-        MirrorAccountId *accountId = [mirror getAccountId];
+/*        MirrorAccountId *accountId = [mirror getAccountId];
         NSLog(@"AccountId: %@", accountId);
 
         // Get card collection

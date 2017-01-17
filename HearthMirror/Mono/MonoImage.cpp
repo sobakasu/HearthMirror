@@ -23,18 +23,16 @@ namespace hearthmirror {
         }
         _classes.clear();
     }
+    
+    bool MonoImage::hasClasses() {
+        return this->_classes.size() > 0;
+    }
 
-    MonoClass* MonoImage::get(const std::string& key, bool isBlocking) {
+    MonoClass* MonoImage::get(const std::string& key) {
         if (this->_classes.count(key)) {
             return this->_classes.at(key);
         }
-        if (!isBlocking) return NULL;
-        
-        while (true) {
-            if (this->_classes.count(key)) return this->_classes.at(key);
-            sleep(1); // wait 1 second
-            LoadClasses();
-        }
+        return NULL;
     }
 
     void MonoImage::LoadClasses() {

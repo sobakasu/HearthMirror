@@ -21,7 +21,9 @@ namespace hearthmirror {
         MonoImage(HANDLE task, uint32_t pImage);
         ~MonoImage();
         
-        MonoClass* get(const std::string& key, bool isBlocking = true);
+        MonoClass* get(const std::string& key);
+        
+        bool hasClasses();
         
     private:
 		HANDLE _task;
