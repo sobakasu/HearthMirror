@@ -268,42 +268,47 @@ namespace hearthmirror {
 
             int sRank = 0;
             int sLegendRank = 0;
-            MonoValue _sMedalInfo = (*medalInfo)["m_currMedalInfo"];
-            if (!IsMonoValueEmpty(_sMedalInfo)) {
-                MonoObject *sMedalInfo = _sMedalInfo.value.obj.o;
-                MonoValue rank = (*sMedalInfo)["rank"];
-                if (!IsMonoValueEmpty(rank)) {
-                    sRank = rank.value.i32;
-                    DeleteMonoValue(rank);
-                }
-                MonoValue legendRank = (*sMedalInfo)["legendIndex"];
-                if (!IsMonoValueEmpty(legendRank)) {
-                    sLegendRank = legendRank.value.i32;
-                    DeleteMonoValue(legendRank);
-                }
-
-                DeleteMonoValue(_sMedalInfo);
-            }
-
             int wRank = 0;
             int wLegendRank = 0;
-            MonoValue _wMedalInfo = (*medalInfo)["m_currWildMedalInfo"];
-            if (!IsMonoValueEmpty(_wMedalInfo)) {
-                MonoObject *wMedalInfo = _wMedalInfo.value.obj.o;
-                MonoValue rank = (*wMedalInfo)["rank"];
-                if (!IsMonoValueEmpty(rank)) {
-                    wRank = rank.value.i32;
-                    DeleteMonoValue(rank);
+            
+            // spectated games have no medalinfo
+            if (medalInfo != NULL) {
+                
+                MonoValue _sMedalInfo = (*medalInfo)["m_currMedalInfo"];
+                if (!IsMonoValueEmpty(_sMedalInfo)) {
+                    MonoObject *sMedalInfo = _sMedalInfo.value.obj.o;
+                    MonoValue rank = (*sMedalInfo)["rank"];
+                    if (!IsMonoValueEmpty(rank)) {
+                        sRank = rank.value.i32;
+                        DeleteMonoValue(rank);
+                    }
+                    MonoValue legendRank = (*sMedalInfo)["legendIndex"];
+                    if (!IsMonoValueEmpty(legendRank)) {
+                        sLegendRank = legendRank.value.i32;
+                        DeleteMonoValue(legendRank);
+                    }
+                    
+                    DeleteMonoValue(_sMedalInfo);
                 }
-                MonoValue legendRank = (*wMedalInfo)["legendIndex"];
-                if (!IsMonoValueEmpty(legendRank)) {
-                    wLegendRank = legendRank.value.i32;
-                    DeleteMonoValue(legendRank);
+                
+                MonoValue _wMedalInfo = (*medalInfo)["m_currWildMedalInfo"];
+                if (!IsMonoValueEmpty(_wMedalInfo)) {
+                    MonoObject *wMedalInfo = _wMedalInfo.value.obj.o;
+                    MonoValue rank = (*wMedalInfo)["rank"];
+                    if (!IsMonoValueEmpty(rank)) {
+                        wRank = rank.value.i32;
+                        DeleteMonoValue(rank);
+                    }
+                    MonoValue legendRank = (*wMedalInfo)["legendIndex"];
+                    if (!IsMonoValueEmpty(legendRank)) {
+                        wLegendRank = legendRank.value.i32;
+                        DeleteMonoValue(legendRank);
+                    }
+                    
+                    DeleteMonoValue(_wMedalInfo);
                 }
-
-                DeleteMonoValue(_wMedalInfo);
             }
-
+            
             std::u16string name = ((*inst)["m_name"]).str;
             if (name.empty()) throw std::domain_error("Found a player with an empty name");
 
