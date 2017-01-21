@@ -101,20 +101,32 @@ uint32_t findLibBaseAddress32(mach_port_t task, const char* libname, task_dyld_i
     vm_offset_t readMem;
     vm_read(task,address,size,&readMem,&size);
     
-    struct dyld_all_image_infos_32* infos = (struct dyld_all_image_infos_32 *) readMem;
+    void* pImageInfos = malloc(size);
+    memcpy(pImageInfos, (void*)readMem, size);
+    struct dyld_all_image_infos_32* infos = (struct dyld_all_image_infos_32 *) pImageInfos;
+    vm_deallocate(mach_task_self(), readMem, size);
+
     size = sizeof(struct dyld_image_info_32) * infos->infoArrayCount;
     vm_read(task,(vm_address_t) infos->infoArray,size,&readMem,&size);
+    void* pInfoArray = malloc(size);
+    memcpy(pInfoArray, (void*)readMem, size);
+    struct dyld_image_info_32* info = (struct dyld_image_info_32*) pInfoArray;
+    vm_deallocate(mach_task_self(), readMem, size);
     
-    struct dyld_image_info_32* info = (struct dyld_image_info_32*) readMem;
     mach_msg_type_number_t sizeMax=512;
-    
     for (int i=0; i < infos->infoArrayCount; i++) {
         vm_read(task,(vm_address_t) info[i].imageFilePath,sizeMax,&readMem,&sizeMax);
         char *path = (char *) readMem;
         if (strstr(path, libname) != NULL) {
+            vm_deallocate(mach_task_self(), readMem, sizeMax);
+            free(pImageInfos);
+            free(pInfoArray);
             return info[i].imageLoadAddress;
         }
+        vm_deallocate(mach_task_self(), readMem, sizeMax);
     }
+    free(pImageInfos);
+    free(pInfoArray);
     return NULL;
 }
 
@@ -329,6 +341,7 @@ uint64_t ReadUInt64(HANDLE task, mach_vm_address_t address) {
     
     uint64_t v = 0;
     memcpy((char *)&v, (Byte*)readMem, sizeof(uint64_t));
+    mach_vm_deallocate(mach_task_self(), readMem, size);
     return v;
 }
 
@@ -341,6 +354,7 @@ int64_t ReadInt64(HANDLE task, mach_vm_address_t address) {
     
     int64_t v = 0;
     memcpy((char *)&v, (Byte*)readMem, sizeof(int64_t));
+    mach_vm_deallocate(mach_task_self(), readMem, size);
     return v;
 }
 
@@ -353,6 +367,7 @@ uint32_t ReadUInt32(HANDLE task, mach_vm_address_t address) {
     
     uint32_t v = 0;
     memcpy((char *)&v, (Byte*)readMem, sizeof(uint32_t));
+    mach_vm_deallocate(mach_task_self(), readMem, size);
     return v;
 }
 
@@ -365,6 +380,7 @@ int32_t ReadInt32(HANDLE task, mach_vm_address_t address) {
     
     int32_t v = 0;
     memcpy((char *)&v, (Byte*)readMem, sizeof(int32_t));
+    mach_vm_deallocate(mach_task_self(), readMem, size);
     return v;
 }
 
@@ -376,7 +392,9 @@ bool ReadBool(HANDLE task, mach_vm_address_t address) {
     if (err != KERN_SUCCESS) return 0;
     
     Byte* buffer = (Byte*)readMem;
-    return (bool)buffer[0];
+    bool result = (bool)buffer[0];
+    mach_vm_deallocate(mach_task_self(), readMem, size);
+    return result;
 }
 
 uint8_t ReadByte(HANDLE task, mach_vm_address_t address) {
@@ -387,7 +405,9 @@ uint8_t ReadByte(HANDLE task, mach_vm_address_t address) {
     if (err != KERN_SUCCESS) return 0;
     
     Byte* buffer = (Byte*)readMem;
-    return (Byte)buffer[0];
+    uint8_t result = (Byte)buffer[0];
+    mach_vm_deallocate(mach_task_self(), readMem, size);
+    return result;
 }
 
 int8_t ReadSByte(HANDLE task, mach_vm_address_t address) {
@@ -398,7 +418,9 @@ int8_t ReadSByte(HANDLE task, mach_vm_address_t address) {
     if (err != KERN_SUCCESS) return 0;
     
     SignedByte* buffer = (SignedByte*)readMem;
-    return (SignedByte)buffer[0];
+    int8_t result = (SignedByte)buffer[0];
+    mach_vm_deallocate(mach_task_self(), readMem, size);
+    return result;
 }
 
 int16_t ReadShort(HANDLE task, mach_vm_address_t address) {
@@ -410,6 +432,7 @@ int16_t ReadShort(HANDLE task, mach_vm_address_t address) {
     
     int16_t v = 0;
     memcpy((char *)&v, (Byte*)readMem, sizeof(int16_t));
+    mach_vm_deallocate(mach_task_self(), readMem, size);
     return v;
 }
 
@@ -422,6 +445,7 @@ uint16_t ReadUShort(HANDLE task, mach_vm_address_t address) {
     
     uint16_t v = 0;
     memcpy((char *)&v, (Byte*)readMem, sizeof(uint16_t));
+    mach_vm_deallocate(mach_task_self(), readMem, size);
     return v;
 }
 
@@ -433,7 +457,9 @@ float ReadFloat(HANDLE task, mach_vm_address_t address) {
     if (err != KERN_SUCCESS) return 0;
     
     Byte* buffer = (Byte*)readMem;
-    return ToFloat((Byte*)buffer);
+    float result = ToFloat((Byte*)buffer);
+    mach_vm_deallocate(mach_task_self(), readMem, size);
+    return result;
 }
 
 double ReadDouble(HANDLE task, mach_vm_address_t address) {
@@ -444,16 +470,18 @@ double ReadDouble(HANDLE task, mach_vm_address_t address) {
     if (err != KERN_SUCCESS) return 0;
     
     Byte* buffer = (Byte*)readMem;
-    return ToDouble((Byte*)buffer);
+    double result = ToDouble((Byte*)buffer);
+    mach_vm_deallocate(mach_task_self(), readMem, size);
+    return result;
 }
 
 bool ReadBytes(HANDLE task, proc_address buf, uint32_t size, mach_vm_address_t address) {
     vm_offset_t readMem;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&size);
-    if (err != KERN_SUCCESS) return 0;
+    if (err != KERN_SUCCESS) return false;
     
     memcpy((void*)buf, (void*)readMem, size);
-    
+    mach_vm_deallocate(mach_task_self(), readMem, size);
     return true;
 }
 
