@@ -11,7 +11,8 @@
 #include <mach-o/loader.h>
 #include <mach-o/nlist.h>
 #include <MacTypes.h>
-#include <assert.h>
+#include <stdexcept>
+#include <stdlib.h>
 
 struct dyld_image_info_32 {
     uint32_t imageLoadAddress;
@@ -333,11 +334,13 @@ double ToDouble(Byte* buffer, int start=0) {
 }
 
 uint64_t ReadUInt64(HANDLE task, mach_vm_address_t address) {
+    if (address == 0) throw std::runtime_error("Pointer is NULL");
+    
     vm_offset_t readMem;
     vm_size_t size = 8;
     mach_msg_type_number_t data_read;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
-    assert(err == KERN_SUCCESS);
+    if (err != KERN_SUCCESS) return 0;
     
     uint64_t v = 0;
     memcpy((char *)&v, (Byte*)readMem, sizeof(uint64_t));
@@ -346,6 +349,8 @@ uint64_t ReadUInt64(HANDLE task, mach_vm_address_t address) {
 }
 
 int64_t ReadInt64(HANDLE task, mach_vm_address_t address) {
+    if (address == 0) throw std::runtime_error("Pointer is NULL");
+    
     vm_offset_t readMem;
     vm_size_t size = 8;
     mach_msg_type_number_t data_read;
@@ -359,6 +364,8 @@ int64_t ReadInt64(HANDLE task, mach_vm_address_t address) {
 }
 
 uint32_t ReadUInt32(HANDLE task, mach_vm_address_t address) {
+    if (address == 0) throw std::runtime_error("Pointer is NULL");
+    
     vm_offset_t readMem;
     vm_size_t size = 4;
     mach_msg_type_number_t data_read;
@@ -372,6 +379,8 @@ uint32_t ReadUInt32(HANDLE task, mach_vm_address_t address) {
 }
 
 int32_t ReadInt32(HANDLE task, mach_vm_address_t address) {
+    if (address == 0) throw std::runtime_error("Pointer is NULL");
+    
     vm_offset_t readMem;
     vm_size_t size = 4;
     mach_msg_type_number_t data_read;
@@ -385,6 +394,8 @@ int32_t ReadInt32(HANDLE task, mach_vm_address_t address) {
 }
 
 bool ReadBool(HANDLE task, mach_vm_address_t address) {
+    if (address == 0) throw std::runtime_error("Pointer is NULL");
+    
     vm_offset_t readMem;
     vm_size_t size = 1;
     mach_msg_type_number_t data_read;
@@ -398,6 +409,8 @@ bool ReadBool(HANDLE task, mach_vm_address_t address) {
 }
 
 uint8_t ReadByte(HANDLE task, mach_vm_address_t address) {
+    if (address == 0) throw std::runtime_error("Pointer is NULL");
+    
     vm_offset_t readMem;
     vm_size_t size = 1;
     mach_msg_type_number_t data_read;
@@ -411,6 +424,8 @@ uint8_t ReadByte(HANDLE task, mach_vm_address_t address) {
 }
 
 int8_t ReadSByte(HANDLE task, mach_vm_address_t address) {
+    if (address == 0) throw std::runtime_error("Pointer is NULL");
+    
     vm_offset_t readMem;
     vm_size_t size = 1;
     mach_msg_type_number_t data_read;
@@ -424,6 +439,8 @@ int8_t ReadSByte(HANDLE task, mach_vm_address_t address) {
 }
 
 int16_t ReadShort(HANDLE task, mach_vm_address_t address) {
+    if (address == 0) throw std::runtime_error("Pointer is NULL");
+    
     vm_offset_t readMem;
     vm_size_t size = 2;
     mach_msg_type_number_t data_read;
@@ -437,6 +454,8 @@ int16_t ReadShort(HANDLE task, mach_vm_address_t address) {
 }
 
 uint16_t ReadUShort(HANDLE task, mach_vm_address_t address) {
+    if (address == 0) throw std::runtime_error("Pointer is NULL");
+    
     vm_offset_t readMem;
     vm_size_t size = 2;
     mach_msg_type_number_t data_read;
@@ -450,6 +469,8 @@ uint16_t ReadUShort(HANDLE task, mach_vm_address_t address) {
 }
 
 float ReadFloat(HANDLE task, mach_vm_address_t address) {
+    if (address == 0) throw std::runtime_error("Pointer is NULL");
+    
     vm_offset_t readMem;
     vm_size_t size = 4;
     mach_msg_type_number_t data_read;
@@ -463,6 +484,8 @@ float ReadFloat(HANDLE task, mach_vm_address_t address) {
 }
 
 double ReadDouble(HANDLE task, mach_vm_address_t address) {
+    if (address == 0) throw std::runtime_error("Pointer is NULL");
+    
     vm_offset_t readMem;
     vm_size_t size = 8;
     mach_msg_type_number_t data_read;
@@ -476,6 +499,8 @@ double ReadDouble(HANDLE task, mach_vm_address_t address) {
 }
 
 bool ReadBytes(HANDLE task, proc_address buf, uint32_t size, mach_vm_address_t address) {
+    if (address == 0) throw std::runtime_error("Pointer is NULL");
+    
     vm_offset_t readMem;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&size);
     if (err != KERN_SUCCESS) return false;
@@ -487,7 +512,8 @@ bool ReadBytes(HANDLE task, proc_address buf, uint32_t size, mach_vm_address_t a
 
 char *ReadCString(HANDLE task, mach_vm_address_t pointer)
 {
-    assert(pointer > 0);
+    if (pointer == 0) throw std::runtime_error("Pointer is NULL");
+    
     int err = KERN_FAILURE;
     
     char buf[kRemoteStringBufferSize] = {0}; // too long symbol names might not fit in
