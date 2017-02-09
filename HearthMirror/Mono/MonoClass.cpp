@@ -29,18 +29,26 @@ namespace hearthmirror {
             return result;
         }
         char* pName = ReadCString(_task, addr);
-        std::string name(pName);
-        free(pName);
-        return name;
+        if (pName != NULL) {
+            std::string name(pName);
+            free(pName);
+            return name;
+        }
+        
+        throw std::runtime_error("Could not read MonoClass namespace");
     }
     
     std::string MonoClass::getNameSpace() {
         uint32_t addr = ReadUInt32(_task, _pClass + kMonoClassNameSpace);
         if (addr == 0) return "";
         char* pNamespace = ReadCString(_task, addr);
-        std::string ns(pNamespace);
-        free(pNamespace);
-        return ns;
+        if (pNamespace != NULL) {
+            std::string ns(pNamespace);
+            free(pNamespace);
+            return ns;
+        }
+
+        throw std::runtime_error("Could not read MonoClass namespace");
     }
     
     std::string MonoClass::getFullName() {

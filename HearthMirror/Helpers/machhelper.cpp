@@ -191,9 +191,7 @@ proc_address getMonoRootDomainAddr(HANDLE task, proc_address baseAddress) {
     if (err != KERN_SUCCESS) return 0;
     
     bool sixtyfourbit = (header.magic == MH_MAGIC_64);
-    //*imageFromSharedCache = ((header.flags & kImageFromSharedCacheFlag) == kImageFromSharedCacheFlag);
     
-    // We don't support anything but i386 and x86_64
     if (header.magic != MH_MAGIC && header.magic != MH_MAGIC_64) {
         return 0;
     }
@@ -340,7 +338,9 @@ uint64_t ReadUInt64(HANDLE task, mach_vm_address_t address) {
     vm_size_t size = 8;
     mach_msg_type_number_t data_read;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
-    if (err != KERN_SUCCESS) return 0;
+    if (err != KERN_SUCCESS) {
+        throw std::runtime_error("Could not read memory region");
+    }
     
     uint64_t v = 0;
     memcpy((char *)&v, (Byte*)readMem, sizeof(uint64_t));
@@ -355,7 +355,9 @@ int64_t ReadInt64(HANDLE task, mach_vm_address_t address) {
     vm_size_t size = 8;
     mach_msg_type_number_t data_read;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
-    if (err != KERN_SUCCESS) return 0;
+    if (err != KERN_SUCCESS) {
+        throw std::runtime_error("Could not read memory region");
+    }
     
     int64_t v = 0;
     memcpy((char *)&v, (Byte*)readMem, sizeof(int64_t));
@@ -370,7 +372,9 @@ uint32_t ReadUInt32(HANDLE task, mach_vm_address_t address) {
     vm_size_t size = 4;
     mach_msg_type_number_t data_read;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
-    if (err != KERN_SUCCESS) return 0;
+    if (err != KERN_SUCCESS) {
+        throw std::runtime_error("Could not read memory region");
+    }
     
     uint32_t v = 0;
     memcpy((char *)&v, (Byte*)readMem, sizeof(uint32_t));
@@ -385,7 +389,9 @@ int32_t ReadInt32(HANDLE task, mach_vm_address_t address) {
     vm_size_t size = 4;
     mach_msg_type_number_t data_read;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
-    if (err != KERN_SUCCESS) return 0;
+    if (err != KERN_SUCCESS) {
+        throw std::runtime_error("Could not read memory region");
+    }
     
     int32_t v = 0;
     memcpy((char *)&v, (Byte*)readMem, sizeof(int32_t));
@@ -400,7 +406,9 @@ bool ReadBool(HANDLE task, mach_vm_address_t address) {
     vm_size_t size = 1;
     mach_msg_type_number_t data_read;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
-    if (err != KERN_SUCCESS) return 0;
+    if (err != KERN_SUCCESS) {
+        throw std::runtime_error("Could not read memory region");
+    }
     
     Byte* buffer = (Byte*)readMem;
     bool result = (bool)buffer[0];
@@ -415,7 +423,9 @@ uint8_t ReadByte(HANDLE task, mach_vm_address_t address) {
     vm_size_t size = 1;
     mach_msg_type_number_t data_read;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
-    if (err != KERN_SUCCESS) return 0;
+    if (err != KERN_SUCCESS) {
+        throw std::runtime_error("Could not read memory region");
+    }
     
     Byte* buffer = (Byte*)readMem;
     uint8_t result = (Byte)buffer[0];
@@ -430,7 +440,9 @@ int8_t ReadSByte(HANDLE task, mach_vm_address_t address) {
     vm_size_t size = 1;
     mach_msg_type_number_t data_read;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
-    if (err != KERN_SUCCESS) return 0;
+    if (err != KERN_SUCCESS) {
+        throw std::runtime_error("Could not read memory region");
+    }
     
     SignedByte* buffer = (SignedByte*)readMem;
     int8_t result = (SignedByte)buffer[0];
@@ -445,7 +457,9 @@ int16_t ReadShort(HANDLE task, mach_vm_address_t address) {
     vm_size_t size = 2;
     mach_msg_type_number_t data_read;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
-    if (err != KERN_SUCCESS) return 0;
+    if (err != KERN_SUCCESS) {
+        throw std::runtime_error("Could not read memory region");
+    }
     
     int16_t v = 0;
     memcpy((char *)&v, (Byte*)readMem, sizeof(int16_t));
@@ -460,7 +474,9 @@ uint16_t ReadUShort(HANDLE task, mach_vm_address_t address) {
     vm_size_t size = 2;
     mach_msg_type_number_t data_read;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
-    if (err != KERN_SUCCESS) return 0;
+    if (err != KERN_SUCCESS) {
+        throw std::runtime_error("Could not read memory region");
+    }
     
     uint16_t v = 0;
     memcpy((char *)&v, (Byte*)readMem, sizeof(uint16_t));
@@ -475,7 +491,9 @@ float ReadFloat(HANDLE task, mach_vm_address_t address) {
     vm_size_t size = 4;
     mach_msg_type_number_t data_read;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
-    if (err != KERN_SUCCESS) return 0;
+    if (err != KERN_SUCCESS) {
+        throw std::runtime_error("Could not read memory region");
+    }
     
     Byte* buffer = (Byte*)readMem;
     float result = ToFloat((Byte*)buffer);
@@ -490,7 +508,9 @@ double ReadDouble(HANDLE task, mach_vm_address_t address) {
     vm_size_t size = 8;
     mach_msg_type_number_t data_read;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
-    if (err != KERN_SUCCESS) return 0;
+    if (err != KERN_SUCCESS) {
+        throw std::runtime_error("Could not read memory region");
+    }
     
     Byte* buffer = (Byte*)readMem;
     double result = ToDouble((Byte*)buffer);
@@ -503,7 +523,9 @@ bool ReadBytes(HANDLE task, proc_address buf, uint32_t size, mach_vm_address_t a
     
     vm_offset_t readMem;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&size);
-    if (err != KERN_SUCCESS) return false;
+    if (err != KERN_SUCCESS) {
+        throw std::runtime_error("Could not read memory region");
+    }
     
     memcpy((void*)buf, (void*)readMem, size);
     mach_vm_deallocate(mach_task_self(), readMem, size);
@@ -514,13 +536,13 @@ char *ReadCString(HANDLE task, mach_vm_address_t pointer)
 {
     if (pointer == 0) throw std::runtime_error("Pointer is NULL");
     
-    int err = KERN_FAILURE;
-    
     char buf[kRemoteStringBufferSize] = {0}; // too long symbol names might not fit in
     mach_vm_size_t size = sizeof(buf);
-    err = mach_vm_read_overwrite(task, pointer, size,
+    kern_return_t err = mach_vm_read_overwrite(task, pointer, size,
                                  (mach_vm_address_t)&buf, &size);
-    if (err != KERN_SUCCESS) return NULL;
+    if (err != KERN_SUCCESS) {
+        throw std::runtime_error("Could not read memory region");
+    }
     
     // add ending
     buf[kRemoteStringBufferSize-1] = '\0';
