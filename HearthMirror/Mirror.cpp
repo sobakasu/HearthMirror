@@ -342,10 +342,12 @@ namespace hearthmirror {
                     MonoValue vm = (*net)["<Standard>k__BackingField"];
                     MonoObject* stars = vm.value.obj.o;
                     sStars = ((*stars)["<Stars>k__BackingField"]).value.i32;
+                    DeleteMonoValue(vm);
 
                     vm = (*net)["<Wild>k__BackingField"];
                     stars = vm.value.obj.o;
                     wStars = ((*stars)["<Stars>k__BackingField"]).value.i32;
+                    DeleteMonoValue(vm);
                 }
 
                 result.localPlayer.name = name;
