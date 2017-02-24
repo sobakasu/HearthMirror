@@ -21,13 +21,15 @@ namespace hearthmirror {
     MonoClassField::~MonoClassField() {}
 
     std::string MonoClassField::getName() {
-        char* pName = ReadCString(_task, ReadUInt32(_task, _pField + kMonoClassFieldName));
-        
-        if (pName == NULL) return std::string("");
-        
-        std::string name(pName);
-        free(pName);
-        return name;
+        try {
+            char* pName = ReadCString(_task, ReadUInt32(_task, _pField + kMonoClassFieldName));
+            if (pName == NULL) return std::string("");
+            std::string name(pName);
+            free(pName);
+            return name;
+        } catch (std::exception& exp) {
+            return std::string("");
+        }
     }
     
     int32_t MonoClassField::getOffset() {

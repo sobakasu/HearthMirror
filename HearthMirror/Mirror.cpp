@@ -47,8 +47,7 @@ namespace hearthmirror {
 			FALSE, pid);
 #endif
         
-        while (true && isBlocking) {
-            
+        do {
             proc_address baseaddress = getMonoLoadAddress(_task);
             if (baseaddress == 0) return 4;
             
@@ -78,13 +77,15 @@ namespace hearthmirror {
             }
             
             // we have a pointer now to the right assembly image
-            _monoImage = new MonoImage(_task,pImage); // apply life cycle
-            if (_monoImage->hasClasses()) break;
-            
-            delete _monoImage;
-        }
+            try {
+                _monoImage = new MonoImage(_task,pImage); // apply life cycle
+                if (_monoImage->hasClasses()) break;
+                delete _monoImage;
+            } catch (std::runtime_error& err) {
+                delete _monoImage;
+            }
+        } while (isBlocking);
         
-		
         return 0;
     }
 
