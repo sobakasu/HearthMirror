@@ -59,11 +59,11 @@ using namespace hearthmirror;
     }
 }
 
--(nonnull NSArray*) getCardCollection {
+-(nonnull NSArray<MirrorCard*>*) getCardCollection {
     if (_mirror == NULL) return [NSArray array];
 
     try {
-        NSMutableArray  *result = [NSMutableArray array];
+        NSMutableArray<MirrorCard*>  *result = [NSMutableArray array];
         std::vector<Card> cards = _mirror->getCardCollection();
         for (int i = 0; i < cards.size(); i++) {
             Card card = cards[i];
@@ -218,11 +218,11 @@ using namespace hearthmirror;
     return mirrorCard;
 }
 
--(nonnull NSArray *) getDecks {
+-(nonnull NSArray<MirrorDeck*>*) getDecks {
     if (_mirror == NULL) return [NSArray array];
 
     try {
-        NSMutableArray *result = [NSMutableArray array];
+        NSMutableArray<MirrorDeck*> *result = [NSMutableArray array];
         std::vector<Deck> decks = _mirror->getDecks();
         for (int i = 0; i < decks.size(); i++) {
             Deck deck = decks[i];
@@ -287,7 +287,7 @@ using namespace hearthmirror;
         arenaInfo.wins = @(info.wins);
         arenaInfo.currentSlot = @(info.currentSlot);
         arenaInfo.deck = [self buildDeck:info.deck];
-        NSMutableArray *rewards = [NSMutableArray array];
+        NSMutableArray<MirrorRewardData*> *rewards = [NSMutableArray array];
         for (int i = 0; i < info.rewards.size(); i++) {
             RewardData *data = info.rewards[i];
 
@@ -356,14 +356,14 @@ using namespace hearthmirror;
     }
 }
 
--(nonnull NSArray*) getArenaDraftChoices {
+-(nonnull NSArray<MirrorCard*>*) getArenaDraftChoices {
     if (_mirror == NULL) return [NSArray array];
 
     try {
         std::vector<Card> choices = _mirror->getArenaDraftChoices();
         if (choices.size() != 3) return [NSArray array];
 
-        NSMutableArray *cards = [NSMutableArray array];
+        NSMutableArray<MirrorCard*> *cards = [NSMutableArray array];
         for (unsigned int i = 0; i < choices.size(); i++) {
             MirrorCard *mirrorCard = [self buildCard:choices[i]];
             [cards addObject:mirrorCard];
@@ -376,14 +376,14 @@ using namespace hearthmirror;
     }
 }
 
--(nonnull NSArray*) getPackCards {
+-(nonnull NSArray<MirrorCard*>*) getPackCards {
     if (_mirror == NULL) return [NSArray array];
 
     try {
         std::vector<Card> cards = _mirror->getPackCards();
         if (cards.size() != 5) return [NSArray array];
 
-        NSMutableArray *result = [NSMutableArray array];
+        NSMutableArray<MirrorCard*> *result = [NSMutableArray array];
         for (unsigned int i = 0; i < cards.size(); i++) {
             MirrorCard *mirrorCard = [self buildCard:cards[i]];
             [result addObject:mirrorCard];

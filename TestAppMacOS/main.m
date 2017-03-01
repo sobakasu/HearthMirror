@@ -10,12 +10,116 @@
 #import <AppKit/AppKit.h>
 #import <HearthMirror/HearthMirror.h>
 
+#pragma mark - Get BattleTag
+void loadBattleTag(HearthMirror *mirror) {
+    NSString* battletag = [mirror getBattleTag];
+    NSLog(@"BattleTag: %@", battletag);
+}
+
+#pragma mark - Get Account id
+void loadAccountId(HearthMirror *mirror) {
+    MirrorAccountId *accountId = [mirror getAccountId];
+    NSLog(@"AccountId: %@", accountId);
+}
+
+#pragma mark - Get card collection
+void loadCardCollection(HearthMirror *mirror) {
+    NSArray<MirrorCard*>* collection = [mirror getCardCollection];
+    NSLog(@"Collection : %@", collection);
+}
+
+#pragma mark - Get Game server info
+void loadGameServerInfo(HearthMirror *mirror) {
+    MirrorGameServerInfo *serverInfo = [mirror getGameServerInfo];
+    NSLog(@"GameServerInfo: %@", serverInfo);
+}
+
+#pragma mark - Get the game type
+void loadGameType(HearthMirror *mirror) {
+    // GT_UNKNOWN = 0,
+    // GT_VS_AI = 1,
+    // GT_VS_FRIEND = 2,
+    // GT_TUTORIAL = 4,
+    // GT_ARENA = 5,
+    // GT_TEST = 6,
+    // GT_RANKED = 7,
+    // GT_CASUAL = 8,
+    // GT_TAVERNBRAWL = 16,
+    // GT_TB_1P_VS_AI = 17,
+    // GT_TB_2P_COOP = 18,
+    // GT_LAST = 19,
+    NSNumber* gameType = [mirror getGameType];
+    NSLog(@"GameType: %@", gameType);
+}
+
+#pragma mark - Get the format
+void loadFormat(HearthMirror *mirror) {
+    // FT_UNKNOWN = 0,
+    // FT_WILD = 1,
+    // FT_STANDARD = 2,
+    NSNumber* format = [mirror getFormat];
+    NSLog(@"Format: %@", format);
+}
+
+#pragma mark - Get the match info
+void loadMatchInfo(HearthMirror *mirror) {
+    MirrorMatchInfo *matchInfo = [mirror getMatchInfo];
+    if (matchInfo == nil) {
+        NSLog(@"MatchInfo is nil, are you playing ?");
+    } else {
+        NSLog(@"MatchInfo: %@", matchInfo);
+    }
+}
+
+#pragma mark - Get the decks
+void loadDecks(HearthMirror *mirror) {
+    NSArray<MirrorDeck*> *decks = [mirror getDecks];
+    NSLog(@"Decks: %@", decks);
+}
+
+#pragma mark - Get the selected deck
+void loadSelectedDeck(HearthMirror *mirror) {
+    NSNumber *deckId = [mirror getSelectedDeck];
+    NSLog(@"Selected deck: %@", deckId);
+}
+
+#pragma mark - Get info for arena
+void loadArenaInfo(HearthMirror *mirror) {
+    MirrorArenaInfo *arenaInfo = [mirror getArenaDeck];
+    NSLog(@"Arena deck: %@", arenaInfo);
+}
+
+#pragma mark - Get cards from arena drafting
+void loadArenaDraftChoice(HearthMirror *mirror) {
+    NSArray<MirrorCard*> *arenaChoice = [mirror getArenaDraftChoices];
+    NSLog(@"Arena Choice: %@", arenaChoice);
+}
+
+#pragma mark - Get the cards from a pack opening
+void loadPackCards(HearthMirror *mirror) {
+    NSArray<MirrorCard*> *packCards = [mirror getPackCards];
+    NSLog(@"Pack Cards: %@", packCards);
+}
+
+#pragma mark - Get the Brawl info
+void loadBrawlInfo(HearthMirror *mirror) {
+    MirrorBrawlInfo *brawlInfo = [mirror getBrawlInfo];
+    NSLog(@"Brawl Info: %@", brawlInfo);
+}
+
+#pragma mark - Get the edited deck
+void loadEditedDeck(HearthMirror *mirror) {
+    MirrorDeck *editedDeck = [mirror getEditedDeck];
+    NSLog(@"Edited deck: %@", editedDeck);
+}
+
+#pragma mark - Test entry point
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
 
         // get Hearthstone app
         NSArray* apps = [[NSWorkspace sharedWorkspace] runningApplications]; // NSRunningApplication
-        
+
         NSRunningApplication* hsapp = NULL;
         for (NSRunningApplication* app in apps) {
             if ([[app bundleIdentifier] isEqualToString:@"unity.Blizzard Entertainment.Hearthstone"]) {
@@ -23,93 +127,34 @@ int main(int argc, const char * argv[]) {
                 break;
             }
         }
-        
+
         if (hsapp == NULL) {
             printf("Hearthstone is not running!\n");
             return 1;
         }
         
         // get rights to attach
-        if (acquireTaskportRight() != 0)
-        {
+        if (acquireTaskportRight() != 0) {
             printf("acquireTaskportRight() failed!\n");
             return 2;
         }
         
-        HearthMirror* mirror = [[HearthMirror alloc] initWithPID:[hsapp processIdentifier] withBlocking:YES];
-
-        // Get BattleTag
-        NSString* battletag = [mirror getBattleTag];
-        NSLog(@"BattleTag: %@", battletag);
-
-        // Get Account id
-/*        MirrorAccountId *accountId = [mirror getAccountId];
-        NSLog(@"AccountId: %@", accountId);
-
-        // Get card collection
-        NSArray* collection = [mirror getCardCollection];
-        NSLog(@"Collection : %@", collection);
-
-        // Get Game server info
-        MirrorGameServerInfo *serverInfo = [mirror getGameServerInfo];
-        NSLog(@"GameServerInfo: %@", serverInfo);
-
-        // Get the game type
-        // GT_UNKNOWN = 0,
-        // GT_VS_AI = 1,
-        // GT_VS_FRIEND = 2,
-        // GT_TUTORIAL = 4,
-        // GT_ARENA = 5,
-        // GT_TEST = 6,
-        // GT_RANKED = 7,
-        // GT_CASUAL = 8,
-        // GT_TAVERNBRAWL = 16,
-        // GT_TB_1P_VS_AI = 17,
-        // GT_TB_2P_COOP = 18,
-        // GT_LAST = 19,
-        NSNumber* gameType = [mirror getGameType];
-        NSLog(@"GameType: %@", gameType);
-
-        // Get the format
-        // FT_UNKNOWN = 0,
-        // FT_WILD = 1,
-        // FT_STANDARD = 2,
-        NSNumber* format = [mirror getFormat];
-        NSLog(@"Format: %@", format);
-
-        // Get the match info
-        MirrorMatchInfo *matchInfo = [mirror getMatchInfo];
-        if (matchInfo == nil) {
-            NSLog(@"MatchInfo is nil, are you playing ?");
-        } else {
-            NSLog(@"MatchInfo: %@", matchInfo);
-        }
-        
-        // Get the decks
-        NSArray *decks = [mirror getDecks];
-        NSLog(@"Decks: %@", decks);
-
-        // Get the selected deck
-        NSNumber *deckId = [mirror getSelectedDeck];
-        NSLog(@"Selected deck: %@", deckId);
-
-        // Get info for arena
-        MirrorArenaInfo *arenaInfo = [mirror getArenaDeck];
-        NSLog(@"Arena deck: %@", arenaInfo);
-
-        // Get cards from arena drafting
-        NSArray *arenaChoice = [mirror getArenaDraftChoices];
-        NSLog(@"Arena Choice: %@", arenaChoice);
-
-        // Get the cards from a pack opening
-        NSArray *packCards = [mirror getPackCards];
-        NSLog(@"Pack Cards: %@", packCards);
-
-        MirrorBrawlInfo *brawlInfo = [mirror getBrawlInfo];
-        NSLog(@"Brawl Info: %@", brawlInfo);
-*/
-        MirrorDeck *editedDeck = [mirror getEditedDeck];
-        NSLog(@"Edited deck: %@", editedDeck);
+        HearthMirror* mirror = [[HearthMirror alloc] initWithPID:[hsapp processIdentifier]
+                                                    withBlocking:YES];
+        loadBattleTag(mirror);
+        loadAccountId(mirror);
+        loadCardCollection(mirror);
+        loadGameServerInfo(mirror);
+        loadGameType(mirror);
+        loadFormat(mirror);
+        loadMatchInfo(mirror);
+        loadDecks(mirror);
+        loadSelectedDeck(mirror);
+        loadArenaInfo(mirror);
+        loadArenaDraftChoice(mirror);
+        loadPackCards(mirror);
+        loadBrawlInfo(mirror);
+        loadEditedDeck(mirror);
     }
     return 0;
 }

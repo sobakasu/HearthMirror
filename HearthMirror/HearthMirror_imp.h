@@ -73,7 +73,7 @@
     @property NSNumber *_Nonnull seasonId;
     @property NSNumber *_Nonnull cardBackId;
     @property NSNumber *_Nonnull heroPremium;
-    @property NSArray *_Nonnull cards;
+    @property NSArray<MirrorCard*> *_Nonnull cards;
 @end
 
 @interface MirrorRewardData: NSObject
@@ -115,17 +115,17 @@
     @property NSNumber *_Nonnull losses;
     @property NSNumber *_Nonnull wins;
     @property NSNumber *_Nonnull currentSlot;
-    @property NSArray *_Nonnull rewards;
+    @property NSArray<MirrorRewardData*> *_Nonnull rewards;
 @end
 
 EXPORT @interface HearthMirror : NSObject
 
--(nonnull instancetype) initWithPID:(pid_t)pid withBlocking:(BOOL)blocking;
+-(nonnull instancetype) initWithPID:(pid_t)pid withBlocking:(BOOL)blocking NS_SWIFT_NAME(init(pid:blocking:));
 
 /** Returns the BattleTag as a single string in the following format: name#number. */
 -(nullable NSString*) getBattleTag;
 
--(nonnull NSArray*) getCardCollection;
+-(nonnull NSArray<MirrorCard*>*) getCardCollection;
 
 -(nullable MirrorGameServerInfo*) getGameServerInfo;
 
@@ -139,7 +139,7 @@ EXPORT @interface HearthMirror : NSObject
 
 -(nullable MirrorAccountId*) getAccountId;
 
--(nonnull NSArray*) getDecks;
+-(nonnull NSArray<MirrorDeck*>*) getDecks;
 
 -(nullable NSNumber*) getSelectedDeck;
 
@@ -147,9 +147,9 @@ EXPORT @interface HearthMirror : NSObject
 
 -(nullable MirrorArenaInfo*) getArenaDeck;
 
--(nonnull NSArray*) getArenaDraftChoices;
+-(nonnull NSArray<MirrorCard*>*) getArenaDraftChoices;
 
--(nonnull NSArray*) getPackCards;
+-(nonnull NSArray<MirrorCard*>*) getPackCards;
 
 -(nullable MirrorBrawlInfo *) getBrawlInfo;
 
