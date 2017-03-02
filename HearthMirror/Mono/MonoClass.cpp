@@ -142,7 +142,12 @@ namespace hearthmirror {
         ret.arrsize = 0;
         for (MonoClassField* mcf : fields) {
             if (mcf->getName() == key) {
-                ret = mcf->getStaticValue();
+                try {
+                    ret = mcf->getStaticValue();
+                } catch (std::exception ex) {
+                    // could not read
+                    //printf("failed to read");
+                }
             }
             delete mcf;
         }

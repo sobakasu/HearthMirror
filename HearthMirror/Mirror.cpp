@@ -13,6 +13,7 @@
 #include "Helpers/offsets.h"
 
 #include "Mono/MonoObject.hpp"
+#include "Mono/MonoStruct.hpp"
 #include <numeric>
 #include <algorithm>
 
@@ -425,6 +426,7 @@ namespace hearthmirror {
             MonoObject *_mission = mission.value.obj.o;
             result.maxWins = ((*_mission)["maxWins"]).value.i32;
             result.maxLosses = ((*_mission)["maxLosses"]).value.i32;
+            DeleteMonoValue(mission);
         }
 
         MonoValue netCacheValues = getObject({"NetCache","s_instance","m_netCache","valueSlots"});
@@ -451,6 +453,7 @@ namespace hearthmirror {
 
         MonoObject *_record = record.value.obj.o;
         if (_record == NULL) {
+            DeleteMonoValue(record);
             DeleteMonoValue(netCacheValues);
             throw std::domain_error("Can't get record");
         }
@@ -462,6 +465,7 @@ namespace hearthmirror {
             if (!((*_record)["HasSession"]).value.b) {
                 DeleteMonoValue(netCacheValues);
                 DeleteMonoValue(brawlManager);
+                DeleteMonoValue(record);
                 return result;
             }
 
@@ -475,6 +479,7 @@ namespace hearthmirror {
             result.losses = result.gamesPlayed - result.wins;
         }
 
+        DeleteMonoValue(record);
         DeleteMonoValue(netCacheValues);
         DeleteMonoValue(brawlManager);
         return result;
@@ -498,13 +503,23 @@ namespace hearthmirror {
             MonoValue deck = decks[i];
             if (IsMonoValueEmpty(tag) || IsMonoValueEmpty(deck)) continue;
 
-            MonoObject *_tag = tag.value.obj.o;
-
-            if (((*_tag)["value__"]).value.i32 == 0) {
-                return getDeck(deck.value.obj.o);
+            MonoStruct *_tag = tag.value.obj.s;
+            try {
+                int v = ((*_tag)["value__"]).value.i32;
+                if (v == 0) {
+                    Deck ddeck = getDeck(deck.value.obj.o);
+                    DeleteMonoValue(tags);
+                    DeleteMonoValue(decks);
+                    DeleteMonoValue(taggedDecks);
+                    return ddeck;
+                }
+            } catch (std::exception& ex) {
+                continue;
             }
         }
 
+        DeleteMonoValue(tags);
+        DeleteMonoValue(decks);
         DeleteMonoValue(taggedDecks);
         throw std::domain_error("No edited deck ?");
     }

@@ -30,6 +30,7 @@ namespace hearthmirror {
         MonoClass* monoClass;
         
         std::map<std::string, MonoValue> getFields();
+        
         MonoValue operator[](const std::string& key);
         
     private:

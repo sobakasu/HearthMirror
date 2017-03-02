@@ -37,19 +37,38 @@ namespace hearthmirror {
     }
     
     MonoType* MonoClassField::getType() {
-        return new MonoType(_task, ReadUInt32(_task, _pField + kMonoClassFieldType));
+        try {
+            return new MonoType(_task, ReadUInt32(_task, _pField + kMonoClassFieldType));
+        } catch (std::exception& ex) {
+            return NULL;
+        }
     }
     
     MonoClass* MonoClassField::getParent() {
-        return new MonoClass(_task, ReadUInt32(_task, _pField + kMonoClassFieldParent));
+        try {
+            return new MonoClass(_task, ReadUInt32(_task, _pField + kMonoClassFieldParent));
+        } catch (std::exception& ex) {
+            return NULL;
+        }
     }
     
     MonoValue MonoClassField::getStaticValue() {
         
-        MonoType* type = getType();
         MonoValue ret;
+        MonoType* type = getType();
+        if (type == NULL) {
+            ret.arrsize = 0;
+            return ret;
+        }
+        
         if (type->isStatic()) {
-            ret =  getValue(NULL);
+            try {
+                ret = getValue(NULL);
+            } catch (std::exception& ex) {
+                delete type;
+                ret.arrsize = 0;
+                return ret;
+            }
         } else {
             ret.arrsize = 0;
         }
@@ -91,10 +110,31 @@ namespace hearthmirror {
         if(type->isStatic()) {
             
             MonoClass* parent = getParent();
+            if (parent == NULL) {
+                delete type;
+                throw std::runtime_error("Parent is null");
+            }
+            int vtable = -1;
+            try {
+                vtable = parent->getVTable();
+            } catch (std::exception& ex) {
+                delete parent;
+                delete type;
+                throw;
+            }
+            delete parent;
+            
+            if (vtable == -1) {
+                delete type;
+                throw std::runtime_error("Parent's vtable is 0");
+            }
+            
+
             uint32_t data = ReadUInt32(_task, parent->getVTable() + kMonoVTableData);
+            
             if(isRef) {
                 uint32_t po = ReadUInt32(_task, data + offset);
-                delete parent;
+                
                 delete type;
                 if (po == 0) {
                     return MonoValue(0);
@@ -105,7 +145,6 @@ namespace hearthmirror {
                     return mv;
                 }
             }
-            delete parent;
             
             if(typeType == MonoTypeEnum::ValueType) {
                 
