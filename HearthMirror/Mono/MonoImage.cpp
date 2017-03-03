@@ -25,7 +25,8 @@ namespace hearthmirror {
     }
     
     bool MonoImage::hasClasses() {
-        return this->_classes.size() > 0;
+        size_t size = this->_classes.size();
+        return size > 0;
     }
 
     MonoClass* MonoImage::get(const std::string& key) {

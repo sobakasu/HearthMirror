@@ -142,7 +142,7 @@ int main(int argc, const char * argv[]) {
         HearthMirror* mirror = [[HearthMirror alloc] initWithPID:[hsapp processIdentifier]
                                                     withBlocking:YES];
         loadBattleTag(mirror);
-        loadAccountId(mirror);
+        /*loadAccountId(mirror);
         loadCardCollection(mirror);
         loadGameServerInfo(mirror);
         loadGameType(mirror);
@@ -154,7 +154,7 @@ int main(int argc, const char * argv[]) {
         loadArenaDraftChoice(mirror);
         loadPackCards(mirror);
         loadBrawlInfo(mirror);
-        loadEditedDeck(mirror);
+        loadEditedDeck(mirror);*/
     }
     return 0;
 }
