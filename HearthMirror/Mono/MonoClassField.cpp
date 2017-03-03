@@ -122,6 +122,7 @@ namespace hearthmirror {
                 delete type;
                 throw;
             }
+            
             delete parent;
             
             if (vtable == -1) {
@@ -129,8 +130,7 @@ namespace hearthmirror {
                 throw std::runtime_error("Parent's vtable is 0");
             }
             
-
-            uint32_t data = ReadUInt32(_task, parent->getVTable() + kMonoVTableData);
+            uint32_t data = ReadUInt32(_task, vtable + kMonoVTableData);
             
             if(isRef) {
                 uint32_t po = ReadUInt32(_task, data + offset);
