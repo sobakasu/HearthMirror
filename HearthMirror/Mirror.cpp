@@ -326,6 +326,9 @@ namespace hearthmirror {
                 for (unsigned int i=0; i< netCacheValues.arrsize; i++) {
                     MonoValue netCache = netCacheValues[i];
                     MonoObject* net = netCache.value.obj.o;
+                    if (net == NULL) {
+                        continue;
+                    }
                     MonoClass* instclass = net->getClass();
                     std::string icname = instclass->getName();
                     delete instclass;
