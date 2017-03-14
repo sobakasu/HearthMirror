@@ -175,6 +175,10 @@ namespace hearthmirror {
             }
         }
         
+        if (o == NULL) {
+            throw std::runtime_error("passed object is not value type and is NULL");
+        }
+        
         if(isRef) {
             
             uint32_t po = ReadUInt32(_task, o->pObject + offset);

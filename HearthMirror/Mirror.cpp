@@ -342,16 +342,20 @@ namespace hearthmirror {
                 }
                 if (!IsMonoValueEmpty(netCacheMedalInfo)) {
                     MonoObject *net = netCacheMedalInfo.value.obj.o;
-
-                    MonoValue vm = (*net)["<Standard>k__BackingField"];
-                    MonoObject* stars = vm.value.obj.o;
-                    sStars = ((*stars)["<Stars>k__BackingField"]).value.i32;
-                    DeleteMonoValue(vm);
-
-                    vm = (*net)["<Wild>k__BackingField"];
-                    stars = vm.value.obj.o;
-                    wStars = ((*stars)["<Stars>k__BackingField"]).value.i32;
-                    DeleteMonoValue(vm);
+                    if (net != NULL) {
+                        MonoValue vm = (*net)["<Standard>k__BackingField"];
+                        if (!IsMonoValueEmpty(vm)) {
+                            MonoObject* stars = vm.value.obj.o;
+                            sStars = ((*stars)["<Stars>k__BackingField"]).value.i32;
+                            DeleteMonoValue(vm);
+                        }
+                        vm = (*net)["<Wild>k__BackingField"];
+                        if (!IsMonoValueEmpty(vm)) {
+                            MonoObject* stars = vm.value.obj.o;
+                            wStars = ((*stars)["<Stars>k__BackingField"]).value.i32;
+                            DeleteMonoValue(vm);
+                        }
+                    }
                 }
 
                 result.localPlayer.name = name;

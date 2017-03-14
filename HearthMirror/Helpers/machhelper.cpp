@@ -121,8 +121,9 @@ uint32_t findLibBaseAddress32(mach_port_t task, const char* libname, task_dyld_i
         if (strstr(path, libname) != NULL) {
             vm_deallocate(mach_task_self(), readMem, sizeMax);
             free(pImageInfos);
+            uint32_t loadAddress = info[i].imageLoadAddress;
             free(pInfoArray);
-            return info[i].imageLoadAddress;
+            return loadAddress;
         }
         vm_deallocate(mach_task_self(), readMem, sizeMax);
     }
