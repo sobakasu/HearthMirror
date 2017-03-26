@@ -41,7 +41,12 @@ using namespace hearthmirror;
     self = [super init];
     if (self)
     {
-        _mirror = new Mirror(pid,blocking);
+        try {
+            _mirror = new Mirror(pid,blocking);
+        }  catch (const std::exception &e) {
+            NSLog(@"Error: %s", e.what());
+            return nil;
+        }
     }
     return self;
 }
