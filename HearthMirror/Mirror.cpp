@@ -54,27 +54,40 @@ namespace hearthmirror {
             
             // we need to find the address of "mono_root_domain"
             proc_address mono_grd_addr = getMonoRootDomainAddr(_task,baseaddress);
-            if (mono_grd_addr == 0) return 5; // ASSERT
-#ifdef __APPLE__
-            uint32_t rootDomain = ReadUInt32(_task, baseaddress+mono_grd_addr);
-#else
-            uint32_t rootDomain = ReadUInt32(_task, mono_grd_addr);
-#endif
-            // iterate GSList *domain_assemblies;
-            uint32_t next = ReadUInt32(_task, rootDomain+kMonoDomainDomainAssemblies); // GList*
-            uint32_t pImage = 0;
+            if (mono_grd_addr == 0) return 5;
             
-            while(next != 0) {
-                uint32_t data = ReadUInt32(_task, (proc_address)next);
-                next = ReadUInt32(_task, (proc_address)next + 4);
+            uint32_t rootDomain;
+            
+            try {
+#ifdef __APPLE__
+                rootDomain = ReadUInt32(_task, baseaddress+mono_grd_addr);
+#else
+                rootDomain = ReadUInt32(_task, mono_grd_addr);
+#endif
+            } catch (std::runtime_error& err) {
+                return 6;
+            }
+            if (rootDomain == 0) return 7;
+            
+            uint32_t pImage = 0;
+            try {
+                // iterate GSList *domain_assemblies;
+                uint32_t next = ReadUInt32(_task, rootDomain+kMonoDomainDomainAssemblies); // GList*
                 
-                char* name = ReadCString(_task, ReadUInt32(_task, (proc_address)data + kMonoAssemblyName));
-                if(strcmp(name, "Assembly-CSharp") == 0) {
+                while(next != 0) {
+                    uint32_t data = ReadUInt32(_task, (proc_address)next);
+                    next = ReadUInt32(_task, (proc_address)next + 4);
+                    
+                    char* name = ReadCString(_task, ReadUInt32(_task, (proc_address)data + kMonoAssemblyName));
+                    if(strcmp(name, "Assembly-CSharp") == 0) {
+                        free(name);
+                        pImage = ReadUInt32(_task, (proc_address)data + kMonoAssemblyImage);
+                        break;
+                    }
                     free(name);
-                    pImage = ReadUInt32(_task, (proc_address)data + kMonoAssemblyImage);
-                    break;
                 }
-                free(name);
+            } catch (std::runtime_error& err) {
+                return 8;
             }
             
             // we have a pointer now to the right assembly image
