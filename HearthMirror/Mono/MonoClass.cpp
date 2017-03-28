@@ -100,15 +100,15 @@ namespace hearthmirror {
         return new MonoType(_task, _pClass + kMonoClassByvalArg);
     }
     
-    uint32_t MonoClass::getNumFields() {
-        return ReadUInt32(_task, _pClass + kMonoClassFieldCount);
+    int32_t MonoClass::getNumFields() {
+        return ReadInt32(_task, _pClass + kMonoClassFieldCount);
     }
 
     std::vector<MonoClassField*> MonoClass::getFields() {
 
-        uint32_t nFields = getNumFields();
+        int32_t nFields = getNumFields();
         
-        uint32_t nFieldsParent = 0;
+        int32_t nFieldsParent = 0;
         MonoClass* parent = getParent();
         if (parent) {
             nFieldsParent = parent->getNumFields();
@@ -127,6 +127,7 @@ namespace hearthmirror {
                 fs[nFields + i] = pfs[i];
             }
             // apparently returned fields from the parent might be more than the field reporting it
+            // if parents are stacked this will cause memory corruption
             for (int i = nFieldsParent; i< pfs.size(); i++) {
                     delete pfs[i];
             }
