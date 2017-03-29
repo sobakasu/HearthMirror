@@ -106,34 +106,32 @@ namespace hearthmirror {
 
     std::vector<MonoClassField*> MonoClass::getFields() {
 
+		std::vector<MonoClassField*> result;
+		
         int32_t nFields = getNumFields();
-        
-        int32_t nFieldsParent = 0;
+		uint32_t pFields = ReadUInt32(_task, _pClass + kMonoClassFields);
+		if (nFields < 1 || pFields == 0) {
+			return result;
+		}
+		
+		// add own fields first
+		result.resize(nFields);
+		
+		for(uint32_t i = 0; i < nFields; i++) {
+			result[i] = new MonoClassField(_task, pFields + (uint32_t) i*kMonoClassFieldSizeof);
+		}
+		
+		// add parent fields (if available)
         MonoClass* parent = getParent();
         if (parent) {
-            nFieldsParent = parent->getNumFields();
+			
+			std::vector<MonoClassField*> parent_fields = parent->getFields();
+			result.insert(result.end(), parent_fields.begin(), parent_fields.end());
+			
+			delete parent;
         }
-        
-        uint32_t pFields = ReadUInt32(_task, _pClass + kMonoClassFields);
-        std::vector<MonoClassField*> fs(nFields + nFieldsParent);
-        
-        for(uint32_t i = 0; i < nFields; i++) {
-            fs[i] = new MonoClassField(_task, pFields + (uint32_t) i*kMonoClassFieldSizeof);
-        }
-        if (parent) {
-            std::vector<MonoClassField*> pfs = parent->getFields();
-            
-            for(uint32_t i = 0; i < nFieldsParent; i++) {
-                fs[nFields + i] = pfs[i];
-            }
-            // apparently returned fields from the parent might be more than the field reporting it
-            // if parents are stacked this will cause memory corruption
-            for (int i = nFieldsParent; i< pfs.size(); i++) {
-                    delete pfs[i];
-            }
-            delete parent;
-        }
-        return fs;
+
+        return result;
     }
     
     MonoValue MonoClass::operator[](const std::string& key) {
