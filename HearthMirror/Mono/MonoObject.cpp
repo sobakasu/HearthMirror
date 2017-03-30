@@ -32,10 +32,16 @@ namespace hearthmirror {
         
         for (MonoClassField* f : fields) {
             MonoType* type = f->getType();
-            if (!type->isStatic()) {
-                res[f->getName()] = f->getValue(this);
-            }
-            delete type;
+			if (type) {
+				if (!type->isStatic()) {
+					auto name = f->getName();
+					if (name.compare("") != 0) {
+						res[name] = f->getValue(this);
+					}
+				}
+				delete type;
+			}
+			
             delete f;
         }
 
