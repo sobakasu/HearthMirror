@@ -408,5 +408,20 @@ namespace HearthMirror
 			}
 			return brawlInfo;
 		}
+
+		public static bool IsLogEnabled(string name) => TryGetInternal(() => IsLogEnabledInternal(name));
+
+		private static bool IsLogEnabledInternal(string name)
+		{
+			var logs = Mirror.Root["Log"]?["s_instance"]?["m_logInfos"]?["valueSlots"];
+			if(logs == null)
+				return false;
+			for(var i = 0; i < logs.Length; i++)
+			{
+				if(logs[i]?["m_name"] == name)
+					return true;
+			}
+			return false;
+		}
 	}
 }
