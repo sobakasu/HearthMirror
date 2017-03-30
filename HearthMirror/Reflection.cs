@@ -273,6 +273,8 @@ namespace HearthMirror
 
 		public static bool IsGameOver() => TryGetInternal(() => Mirror.Root["GameState"]?["s_instance"]?["m_gameOver"]) ?? false;
 
+		public static bool WasRestartRequested() => TryGetInternal(() => Mirror.Root["GameState"]?["s_instance"]?["m_restartRequested"]) ?? false;
+
 		public static bool IsInMainMenu() => (int)(TryGetInternal(() => Mirror.Root["Box"]?["s_instance"]?["m_state"]) ?? -1) == (int)BoxState.HUB_WITH_DRAWER;
 
 		public static UI_WINDOW GetShownUiWindowId() => (UI_WINDOW)(TryGetInternal(() => Mirror.Root["ShownUIMgr"]?["s_instance"]?["m_shownUI"]) ?? UI_WINDOW.NONE);
