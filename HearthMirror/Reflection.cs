@@ -80,6 +80,8 @@ namespace HearthMirror
 		private static GameServerInfo InternalGetServerInfo()
 		{
 			var serverInfo = Mirror.Root["Network"]["s_instance"]["m_lastGameServerInfo"];
+			if(serverInfo == null)
+				return null;
 			return new GameServerInfo
 			{
 				Address = serverInfo["<Address>k__BackingField"],
@@ -107,6 +109,8 @@ namespace HearthMirror
 		{
 			var matchInfo = new MatchInfo();
 			var gameState = Mirror.Root["GameState"]["s_instance"];
+			if(gameState == null)
+				return null;
 			var playerIds = gameState["m_playerMap"]["keySlots"];
 			var players = gameState["m_playerMap"]["valueSlots"];
 			var netCacheValues = Mirror.Root["NetCache"]["s_instance"]["m_netCache"]["valueSlots"];
