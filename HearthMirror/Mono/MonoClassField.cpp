@@ -288,7 +288,7 @@ namespace hearthmirror {
                 uint32_t pArrClass = ReadUInt32(_task, vt);
                 MonoClass* arrClass = new MonoClass(_task, pArrClass);
                 MonoClass* elClass = new MonoClass(_task, ReadUInt32(_task, pArrClass));
-                //bool avt = arrClass->isValueType();
+                
                 uint32_t count = ReadInt32(_task, addr + 12);
                 uint32_t start = (uint32_t)addr + 16;
                 result.arrsize = count;
@@ -350,7 +350,9 @@ namespace hearthmirror {
                 return result;
             }
             default:
-                printf("Error: %d not implemented\n",type);
+                // This will trigger for System.Nullable too often
+                // printf("Error: %d not implemented\n",type);
+                break;
         }
         result.arrsize = 0;
         return result;
