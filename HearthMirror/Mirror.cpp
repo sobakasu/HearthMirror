@@ -103,39 +103,41 @@ namespace hearthmirror {
         return 0;
     }
 
+	static MonoValue nullMonoValue(0);
+	
     MonoValue Mirror::getObject(MonoValue from, const HMObjectPath& path) {
         MonoValue mv = from;
-        if (IsMonoValueEmpty(mv) || path.size() < 1) return NULL;
+        if (IsMonoValueEmpty(mv) || path.size() < 1) return nullMonoValue;
 
         for (unsigned int i = 0; i< path.size(); i++) {
             MonoObject* mo = mv.value.obj.o;
             mv = (*mo)[path[i]];
             if (IsMonoValueEmpty(mv)) {
                 delete mo;
-                return NULL;
+                return nullMonoValue;
             }
 
             if (i>0) delete mo; // retain the original "from" object
         }
         return mv;
     }
-    
+	
     /** Helper function to find MonoObject at the given path. */
     MonoValue Mirror::getObject(const HMObjectPath& path) {
-        if (path.size() < 2) return NULL;
+        if (path.size() < 2) return nullMonoValue;
         
         MonoClass* baseclass = _monoImage->get(path[0]); // no need to free
-        if (!baseclass) return NULL;
+        if (!baseclass) return nullMonoValue;
         
         MonoValue mv = (*baseclass)[path[1]];
-        if (IsMonoValueEmpty(mv)) return NULL;
+        if (IsMonoValueEmpty(mv)) return nullMonoValue;
 
         for (unsigned int i = 2; i< path.size(); i++) {
             MonoObject* mo = mv.value.obj.o;
             mv = (*mo)[path[i]];
             if (IsMonoValueEmpty(mv)) {
                 delete mo;
-                return NULL;
+                return nullMonoValue;
             }
             
             delete mo;
@@ -453,7 +455,7 @@ namespace hearthmirror {
         if (IsMonoValueEmpty(netCacheValues) || !IsMonoValueArray(netCacheValues)) {
             throw std::domain_error("Net cache can't be found");
         }
-        MonoValue record;
+        MonoValue record(0);
         for (unsigned int i=0; i< netCacheValues.arrsize; i++) {
             MonoValue netCache = netCacheValues[i];
             if (IsMonoValueEmpty(netCache)) continue;

@@ -49,9 +49,9 @@ namespace hearthmirror {
     }
     
     MonoValue MonoObject::operator[](const std::string& key) {
-        std::map<std::string, MonoValue> fields =  getFields();
-        MonoValue res;
-        res.arrsize = 0;
+        std::map<std::string, MonoValue> fields = getFields();
+        MonoValue res(0);
+		
         for (auto it = fields.begin(); it != fields.end(); it++) {
             if (it->first == key) {
                 res = it->second;

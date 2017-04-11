@@ -83,8 +83,9 @@ namespace hearthmirror {
         uint32_t arrsize = 1;
         
         _MonoValue& operator[](unsigned int idx) {return value.arr[idx];}
-        _MonoValue(int asize = 1) :arrsize(asize) {
+        _MonoValue(int asize = 1) : arrsize(asize) {
             value.obj.o = NULL;
+			type = End;
         }
     } MonoValue;
     
