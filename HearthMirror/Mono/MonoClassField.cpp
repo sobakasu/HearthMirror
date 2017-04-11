@@ -54,10 +54,9 @@ namespace hearthmirror {
     
     MonoValue MonoClassField::getStaticValue() {
         
-        MonoValue ret;
+        MonoValue ret(0);
         MonoType* type = getType();
         if (type == NULL) {
-            ret.arrsize = 0;
             return ret;
         }
         
@@ -66,12 +65,10 @@ namespace hearthmirror {
                 ret = getValue(NULL);
             } catch (std::exception& ex) {
                 delete type;
-                ret.arrsize = 0;
                 return ret;
             }
-        } else {
-            ret.arrsize = 0;
         }
+		
         delete type;
         return ret;
     }
@@ -219,8 +216,7 @@ namespace hearthmirror {
         
         delete type;
         if (typeType == MonoTypeEnum::GenericInst) {
-            MonoValue mv;
-            mv.arrsize = 0;
+            MonoValue mv(0);
             return mv;
         } else {
             return ReadValue(typeType, o->pObject + offset);
