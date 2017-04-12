@@ -158,7 +158,10 @@ namespace HearthMirror
 
 				var brawlGameTypes = new[] {16, 17, 18};
 				if(brawlGameTypes.Contains(matchInfo.GameType))
-					matchInfo.BrawlSeasonId = Mirror.Root["TavernBrawlManager"]["s_instance"]?["m_currentMission"]?["seasonId"] ?? 0;
+				{
+					var mission = GetCurrentBrawlMission();
+					matchInfo.BrawlSeasonId = mission?["tavernBrawlSpec"]?["<SeasonId>k__BackingField"];
+				}
 			}
 			if(netCacheValues != null)
 			{
@@ -171,6 +174,20 @@ namespace HearthMirror
 				}
 			}
 			return matchInfo;
+		}
+
+		private static dynamic GetCurrentBrawlMission()
+		{
+			var missions = Mirror.Root["TavernBrawlManager"]["s_instance"]?["m_missions"];
+			if(missions == null) 
+				return null;
+			foreach(var mission in missions)
+			{
+				if(mission?.Class.Name != "TavernBrawlMission") 
+					continue;
+				return mission;
+			}
+			return null;
 		}
 
 		public static ArenaInfo GetArenaDeck() => TryGetInternal(GetArenaDeckInternal);
