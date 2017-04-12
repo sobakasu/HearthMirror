@@ -410,22 +410,26 @@ namespace HearthMirror
 
 		private static BrawlInfo GetBrawlInfoInternal()
 		{
-			var brawlManager = Mirror.Root?["TavernBrawlManager"]?["s_instance"];
-			if(brawlManager == null)
+			var mission = GetCurrentBrawlMission();
+			if(mission == null)
 				return null;
 
-			var brawlInfo = new BrawlInfo();
-			var mission = brawlManager["m_currentMission"];
-			brawlInfo.MaxWins = mission?["maxWins"];
-			brawlInfo.MaxLosses = mission?["maxLosses"];
+			var brawlInfo = new BrawlInfo
+			{
+				MaxWins = mission["tavernBrawlSpec"]?["_MaxWins"],
+				MaxLosses = mission["tavernBrawlSpec"]?["_MaxLosses"]
+			};
+
+			var records = Mirror.Root["TavernBrawlManager"]["s_instance"]?["m_playerRecords"];
+			if(records == null)
+				return null;
 
 			dynamic record = null;
-			var netCacheValues = Mirror.Root["NetCache"]["s_instance"]["m_netCache"]["valueSlots"];
-			foreach(var netCache in netCacheValues)
+			foreach(var r in records)
 			{
-				if(netCache?.Class.Name != "NetCacheTavernBrawlRecord")
+				if(r?.Class.Name != "TavernBrawlPlayerRecord")
 					continue;
-				record = netCache["<Record>k__BackingField"];
+				record = r;
 			}
 			if(record == null)
 				return null;
