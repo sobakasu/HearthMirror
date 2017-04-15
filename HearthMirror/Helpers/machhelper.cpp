@@ -335,9 +335,9 @@ double ToDouble(Byte* buffer, int start=0) {
 uint64_t ReadUInt64(HANDLE task, mach_vm_address_t address) {
     if (address == 0) throw std::runtime_error("Pointer is NULL");
     
-    vm_offset_t readMem;
+    vm_offset_t readMem = NULL;
     vm_size_t size = 8;
-    mach_msg_type_number_t data_read;
+    mach_msg_type_number_t data_read = 0;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
     if (err != KERN_SUCCESS) {
         throw std::runtime_error("Could not read memory region");
@@ -352,9 +352,9 @@ uint64_t ReadUInt64(HANDLE task, mach_vm_address_t address) {
 int64_t ReadInt64(HANDLE task, mach_vm_address_t address) {
     if (address == 0) throw std::runtime_error("Pointer is NULL");
     
-    vm_offset_t readMem;
+    vm_offset_t readMem = NULL;
     vm_size_t size = 8;
-    mach_msg_type_number_t data_read;
+    mach_msg_type_number_t data_read = 0;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
     if (err != KERN_SUCCESS) {
         throw std::runtime_error("Could not read memory region");
@@ -369,43 +369,43 @@ int64_t ReadInt64(HANDLE task, mach_vm_address_t address) {
 uint32_t ReadUInt32(HANDLE task, mach_vm_address_t address) {
     if (address == 0) throw std::runtime_error("Pointer is NULL");
     
-    vm_offset_t readMem;
+    vm_offset_t readMem = NULL;
     vm_size_t size = 4;
-    mach_msg_type_number_t data_read;
+    mach_msg_type_number_t data_read = 0;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
     if (err != KERN_SUCCESS) {
         throw std::runtime_error("Could not read memory region");
     }
     
     uint32_t v = 0;
-    memcpy((char *)&v, (Byte*)readMem, sizeof(uint32_t));
-    mach_vm_deallocate(mach_task_self(), readMem, size);
+    memcpy((UInt8*)&v, (UInt8*)readMem, data_read);
+    mach_vm_deallocate(mach_task_self(), readMem, data_read);
     return v;
 }
 
 int32_t ReadInt32(HANDLE task, mach_vm_address_t address) {
     if (address == 0) throw std::runtime_error("Pointer is NULL");
     
-    vm_offset_t readMem;
+    vm_offset_t readMem = NULL;
     vm_size_t size = 4;
-    mach_msg_type_number_t data_read;
+    mach_msg_type_number_t data_read = 0;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
     if (err != KERN_SUCCESS) {
         throw std::runtime_error("Could not read memory region");
     }
     
     int32_t v = 0;
-    memcpy((char *)&v, (Byte*)readMem, sizeof(int32_t));
-    mach_vm_deallocate(mach_task_self(), readMem, size);
+    memcpy((void *)&v, (void*)readMem, data_read);
+    mach_vm_deallocate(mach_task_self(), readMem, data_read);
     return v;
 }
 
 bool ReadBool(HANDLE task, mach_vm_address_t address) {
     if (address == 0) throw std::runtime_error("Pointer is NULL");
     
-    vm_offset_t readMem;
+    vm_offset_t readMem = NULL;
     vm_size_t size = 1;
-    mach_msg_type_number_t data_read;
+    mach_msg_type_number_t data_read = 0;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
     if (err != KERN_SUCCESS) {
         throw std::runtime_error("Could not read memory region");
@@ -413,16 +413,16 @@ bool ReadBool(HANDLE task, mach_vm_address_t address) {
     
     Byte* buffer = (Byte*)readMem;
     bool result = (bool)buffer[0];
-    mach_vm_deallocate(mach_task_self(), readMem, size);
+    mach_vm_deallocate(mach_task_self(), readMem, data_read);
     return result;
 }
 
 uint8_t ReadByte(HANDLE task, mach_vm_address_t address) {
     if (address == 0) throw std::runtime_error("Pointer is NULL");
     
-    vm_offset_t readMem;
+    vm_offset_t readMem = NULL;
     vm_size_t size = 1;
-    mach_msg_type_number_t data_read;
+    mach_msg_type_number_t data_read = 0;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
     if (err != KERN_SUCCESS) {
         throw std::runtime_error("Could not read memory region");
@@ -430,16 +430,16 @@ uint8_t ReadByte(HANDLE task, mach_vm_address_t address) {
     
     Byte* buffer = (Byte*)readMem;
     uint8_t result = (Byte)buffer[0];
-    mach_vm_deallocate(mach_task_self(), readMem, size);
+    mach_vm_deallocate(mach_task_self(), readMem, data_read);
     return result;
 }
 
 int8_t ReadSByte(HANDLE task, mach_vm_address_t address) {
     if (address == 0) throw std::runtime_error("Pointer is NULL");
     
-    vm_offset_t readMem;
+    vm_offset_t readMem = NULL;
     vm_size_t size = 1;
-    mach_msg_type_number_t data_read;
+    mach_msg_type_number_t data_read = 0;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
     if (err != KERN_SUCCESS) {
         throw std::runtime_error("Could not read memory region");
@@ -447,16 +447,16 @@ int8_t ReadSByte(HANDLE task, mach_vm_address_t address) {
     
     SignedByte* buffer = (SignedByte*)readMem;
     int8_t result = (SignedByte)buffer[0];
-    mach_vm_deallocate(mach_task_self(), readMem, size);
+    mach_vm_deallocate(mach_task_self(), readMem, data_read);
     return result;
 }
 
 int16_t ReadShort(HANDLE task, mach_vm_address_t address) {
     if (address == 0) throw std::runtime_error("Pointer is NULL");
     
-    vm_offset_t readMem;
+    vm_offset_t readMem = NULL;
     vm_size_t size = 2;
-    mach_msg_type_number_t data_read;
+    mach_msg_type_number_t data_read = 0;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
     if (err != KERN_SUCCESS) {
         throw std::runtime_error("Could not read memory region");
@@ -464,33 +464,33 @@ int16_t ReadShort(HANDLE task, mach_vm_address_t address) {
     
     int16_t v = 0;
     memcpy((char *)&v, (Byte*)readMem, sizeof(int16_t));
-    mach_vm_deallocate(mach_task_self(), readMem, size);
+    mach_vm_deallocate(mach_task_self(), readMem, data_read);
     return v;
 }
 
 uint16_t ReadUShort(HANDLE task, mach_vm_address_t address) {
     if (address == 0) throw std::runtime_error("Pointer is NULL");
     
-    vm_offset_t readMem;
+    vm_offset_t readMem = NULL;
     vm_size_t size = 2;
-    mach_msg_type_number_t data_read;
+    mach_msg_type_number_t data_read = 0;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
     if (err != KERN_SUCCESS) {
         throw std::runtime_error("Could not read memory region");
     }
     
     uint16_t v = 0;
-    memcpy((char *)&v, (Byte*)readMem, sizeof(uint16_t));
-    mach_vm_deallocate(mach_task_self(), readMem, size);
+    memcpy((void *)&v, (void*)readMem, data_read);
+    mach_vm_deallocate(mach_task_self(), readMem, data_read);
     return v;
 }
 
 float ReadFloat(HANDLE task, mach_vm_address_t address) {
     if (address == 0) throw std::runtime_error("Pointer is NULL");
     
-    vm_offset_t readMem;
+    vm_offset_t readMem = NULL;
     vm_size_t size = 4;
-    mach_msg_type_number_t data_read;
+    mach_msg_type_number_t data_read = 0;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
     if (err != KERN_SUCCESS) {
         throw std::runtime_error("Could not read memory region");
@@ -498,16 +498,16 @@ float ReadFloat(HANDLE task, mach_vm_address_t address) {
     
     Byte* buffer = (Byte*)readMem;
     float result = ToFloat((Byte*)buffer);
-    mach_vm_deallocate(mach_task_self(), readMem, size);
+    mach_vm_deallocate(mach_task_self(), readMem, data_read);
     return result;
 }
 
 double ReadDouble(HANDLE task, mach_vm_address_t address) {
     if (address == 0) throw std::runtime_error("Pointer is NULL");
     
-    vm_offset_t readMem;
+    vm_offset_t readMem = NULL;
     vm_size_t size = 8;
-    mach_msg_type_number_t data_read;
+    mach_msg_type_number_t data_read = 0;
     kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
     if (err != KERN_SUCCESS) {
         throw std::runtime_error("Could not read memory region");
@@ -515,21 +515,22 @@ double ReadDouble(HANDLE task, mach_vm_address_t address) {
     
     Byte* buffer = (Byte*)readMem;
     double result = ToDouble((Byte*)buffer);
-    mach_vm_deallocate(mach_task_self(), readMem, size);
+    mach_vm_deallocate(mach_task_self(), readMem, data_read);
     return result;
 }
 
 bool ReadBytes(HANDLE task, proc_address buf, uint32_t size, mach_vm_address_t address) {
     if (address == 0) throw std::runtime_error("Pointer is NULL");
     
-    vm_offset_t readMem;
-    kern_return_t err = mach_vm_read(task,address,size,&readMem,&size);
+    vm_offset_t readMem = NULL;
+    mach_msg_type_number_t data_read = 0;
+    kern_return_t err = mach_vm_read(task,address,size,&readMem,&data_read);
     if (err != KERN_SUCCESS) {
         throw std::runtime_error("Could not read memory region");
     }
     
-    memcpy((void*)buf, (void*)readMem, size);
-    mach_vm_deallocate(mach_task_self(), readMem, size);
+    memcpy((void*)buf, (void*)readMem, data_read);
+    mach_vm_deallocate(mach_task_self(), readMem, data_read);
     return true;
 }
 

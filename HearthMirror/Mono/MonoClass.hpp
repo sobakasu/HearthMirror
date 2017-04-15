@@ -39,7 +39,7 @@ namespace hearthmirror {
         MonoClass* getParent();
         MonoType* byValArg();
         
-        int32_t getNumFields();
+        uint32_t getNumFields();
         std::vector<MonoClassField*> getFields();
         
         MonoValue operator[](const std::string& key);

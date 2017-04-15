@@ -31,8 +31,8 @@
 #define kMonoClassParent 0x1c
 #define kMonoClassByvalArg 0x7c
 #define kMonoClassFields 0x6c
-
 #define kMonoClassFieldCount 0x5c
+
 #define kMonoClassFieldSizeof 0x10
 #define kMonoClassFieldType 0x0
 #define kMonoClassFieldName 0x4

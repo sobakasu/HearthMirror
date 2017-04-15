@@ -101,8 +101,8 @@ namespace hearthmirror {
     }
 	
 	/** Number of own fields */
-    int32_t MonoClass::getNumFields() {
-        return ReadInt32(_task, _pClass + kMonoClassFieldCount);
+    uint32_t MonoClass::getNumFields() {
+        return ReadUInt32(_task, _pClass + kMonoClassFieldCount);
     }
 
     std::vector<MonoClassField*> MonoClass::getFields() {
@@ -110,9 +110,9 @@ namespace hearthmirror {
 		std::vector<MonoClassField*> result;
 		
 		// Add own fields first
-        int32_t nFields = getNumFields();
+        uint32_t nFields = getNumFields();
 		uint32_t pFields = ReadUInt32(_task, _pClass + kMonoClassFields);
-		if (nFields >= 0 && pFields != 0) {
+		if (pFields != 0) {
 			
 			// add own fields first
 			result.resize(nFields);
