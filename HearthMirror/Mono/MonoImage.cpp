@@ -44,8 +44,7 @@ namespace hearthmirror {
         _classes.clear();
         
         uint32_t ht = _pImage + kMonoImageClassCache;
-        uint32_t size = ReadInt32(_task, ht + kMonoInternalHashTableSize);
-        //uint32_t entries = ReadInt32(_task, ht + kMonoInternalHashTableNum_entries);
+        uint32_t size = ReadUInt32(_task, ht + kMonoInternalHashTableSize);
         uint32_t table = ReadUInt32(_task, ht + kMonoInternalHashTableTable);
 
         for(uint32_t i = 0; i < size; i++) {
@@ -53,8 +52,9 @@ namespace hearthmirror {
             while (pClass != 0) {
                 MonoClass* klass = new MonoClass(_task, pClass);
                 std::string cfname = klass->getFullName();
-                _classes[cfname] = klass;
-
+				if (cfname != "") {
+					_classes[cfname] = klass;
+				}
                 pClass = ReadUInt32(_task, pClass + kMonoClassNextClassCache);
             }
         }

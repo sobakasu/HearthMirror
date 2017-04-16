@@ -25,7 +25,7 @@ namespace hearthmirror {
     std::string MonoClass::getName() {
         uint32_t addr = ReadUInt32(_task, _pClass + kMonoClassName);
         if (addr == 0) {
-            std::string result;
+            std::string result("");
             return result;
         }
         char* pName = ReadCString(_task, addr);
@@ -66,6 +66,8 @@ namespace hearthmirror {
             delete nestedIn;
             nestedIn = nestedIn_t;
         }
+		if (name == "") return "";
+		
         return ns.size() == 0 ? name : ns + "." + name;
     }
     
