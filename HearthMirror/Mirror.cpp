@@ -155,6 +155,15 @@ namespace hearthmirror {
         return value;
     }
 
+    int Mirror::getInt(MonoValue from, const HMObjectPath& path) {
+        MonoValue mv = getObject(from, path);
+        if (IsMonoValueEmpty(mv)) return 0;
+        int value = mv.value.i32;
+
+        DeleteMonoValue(mv);
+        return value;
+    }
+
     /** Helper to get a long */
     long Mirror::getLong(const HMObjectPath& path) {
         MonoValue mv = getObject(path);
@@ -165,9 +174,27 @@ namespace hearthmirror {
         return value;
     }
 
+    long Mirror::getLong(MonoValue from, const HMObjectPath& path) {
+        MonoValue mv = getObject(from, path);
+        if (IsMonoValueEmpty(mv)) return 0;
+        long value = mv.value.i64;
+
+        DeleteMonoValue(mv);
+        return value;
+    }
+
     /** Helper to get a bool */
     bool Mirror::getBool(const HMObjectPath& path) {
         MonoValue mv = getObject(path);
+        if (IsMonoValueEmpty(mv)) return false;
+        bool value = mv.value.b;
+
+        DeleteMonoValue(mv);
+        return value;
+    }
+
+    bool Mirror::getBool(MonoValue from, const HMObjectPath& path) {
+        MonoValue mv = getObject(from, path);
         if (IsMonoValueEmpty(mv)) return false;
         bool value = mv.value.b;
 
@@ -251,167 +278,175 @@ namespace hearthmirror {
     InternalMatchInfo Mirror::getMatchInfo() {
         if (!_monoImage) throw std::domain_error("Mono image can't be found");
 
-        MonoValue playerIds = getObject({"GameState","s_instance","m_playerMap","keySlots"});
-        MonoValue players = getObject({"GameState","s_instance","m_playerMap","valueSlots"});
-        MonoValue netCacheValues = getObject({"NetCache","s_instance","m_netCache","valueSlots"});        
-        
-        if (IsMonoValueEmpty(playerIds) || !IsMonoValueArray(playerIds)
-            || IsMonoValueEmpty(players) || !IsMonoValueArray(players)
-            || IsMonoValueEmpty(netCacheValues) || !IsMonoValueArray(netCacheValues)) {
-            DeleteMonoValue(playerIds);
-            DeleteMonoValue(players);
-            DeleteMonoValue(netCacheValues);
-            throw std::domain_error("Game state and/or net cache can't be found");
-        }
+        InternalMatchInfo matchInfo;
 
-        InternalMatchInfo result;
+        MonoValue gameState = getObject({"GameState","s_instance"});
+        MonoValue netCacheValues = getObject({"NetCache","s_instance","m_netCache","valueSlots"});
+        if (!IsMonoValueEmpty(gameState)) {
+            MonoValue playerIds = getObject(gameState, {"m_playerMap","keySlots"});
+            MonoValue players = getObject(gameState, {"m_playerMap","valueSlots"});
 
-        for (unsigned int i=0; i< playerIds.arrsize; i++) {
-            MonoValue mv = players[i];
-            if (IsMonoValueEmpty(mv)) continue;
-            MonoObject* inst = mv.value.obj.o;
+            if (!IsMonoValueEmpty(players) && !IsMonoValueEmpty(playerIds)
+                && IsMonoValueArray(players) && IsMonoValueArray(playerIds)) {
 
-            MonoClass* instclass = inst->getClass();
-            std::string icname = instclass->getName();
-            delete instclass;
+                for (unsigned int i=0; i< playerIds.arrsize; i++) {
+                    MonoValue mv = players[i];
+                    if (IsMonoValueEmpty(mv)) continue;
+                    MonoObject* inst = mv.value.obj.o;
 
-            if (icname != "Player") {
-                DeleteMonoValue(mv);
-                continue;
-            }
-
-            MonoValue _medalInfo = (*inst)["m_medalInfo"];
-            MonoObject *medalInfo = _medalInfo.value.obj.o;
-
-            int sRank = 0;
-            int sLegendRank = 0;
-            int wRank = 0;
-            int wLegendRank = 0;
-            
-            // spectated games have no medalinfo
-            if (medalInfo != NULL) {
-                
-                MonoValue _sMedalInfo = (*medalInfo)["m_currMedalInfo"];
-                if (!IsMonoValueEmpty(_sMedalInfo)) {
-                    MonoObject *sMedalInfo = _sMedalInfo.value.obj.o;
-                    MonoValue rank = (*sMedalInfo)["rank"];
-                    if (!IsMonoValueEmpty(rank)) {
-                        sRank = rank.value.i32;
-                        DeleteMonoValue(rank);
-                    }
-                    MonoValue legendRank = (*sMedalInfo)["legendIndex"];
-                    if (!IsMonoValueEmpty(legendRank)) {
-                        sLegendRank = legendRank.value.i32;
-                        DeleteMonoValue(legendRank);
-                    }
-                    
-                    DeleteMonoValue(_sMedalInfo);
-                }
-                
-                MonoValue _wMedalInfo = (*medalInfo)["m_currWildMedalInfo"];
-                if (!IsMonoValueEmpty(_wMedalInfo)) {
-                    MonoObject *wMedalInfo = _wMedalInfo.value.obj.o;
-                    MonoValue rank = (*wMedalInfo)["rank"];
-                    if (!IsMonoValueEmpty(rank)) {
-                        wRank = rank.value.i32;
-                        DeleteMonoValue(rank);
-                    }
-                    MonoValue legendRank = (*wMedalInfo)["legendIndex"];
-                    if (!IsMonoValueEmpty(legendRank)) {
-                        wLegendRank = legendRank.value.i32;
-                        DeleteMonoValue(legendRank);
-                    }
-                    
-                    DeleteMonoValue(_wMedalInfo);
-                }
-            }
-            
-            std::u16string name = ((*inst)["m_name"]).str;
-            if (name.empty()) throw std::domain_error("Found a player with an empty name");
-
-            int cardBack = ((*inst)["m_cardBackId"]).value.i32;
-            int id = playerIds[i].value.i32;
-
-            int side = ((*inst)["m_side"]).value.i32;
-            if (side == 1) {
-                int sStars = 0;
-                int wStars = 0;
-
-                MonoValue netCacheMedalInfo;
-                for (unsigned int i=0; i< netCacheValues.arrsize; i++) {
-                    MonoValue netCache = netCacheValues[i];
-                    MonoObject* net = netCache.value.obj.o;
-                    if (net == NULL) {
-                        continue;
-                    }
-                    MonoClass* instclass = net->getClass();
+                    MonoClass* instclass = inst->getClass();
                     std::string icname = instclass->getName();
                     delete instclass;
 
-                    if (icname != "NetCacheMedalInfo") {
+                    if (icname != "Player") {
+                        DeleteMonoValue(mv);
                         continue;
                     }
 
-                    netCacheMedalInfo = netCache;
-                    break;
-                }
-                if (!IsMonoValueEmpty(netCacheMedalInfo)) {
-                    MonoObject *net = netCacheMedalInfo.value.obj.o;
-                    if (net != NULL) {
-                        MonoValue vm = (*net)["<Standard>k__BackingField"];
-                        if (!IsMonoValueEmpty(vm)) {
-                            MonoObject* stars = vm.value.obj.o;
-                            sStars = ((*stars)["<Stars>k__BackingField"]).value.i32;
-                            DeleteMonoValue(vm);
+                    MonoValue _medalInfo = (*inst)["m_medalInfo"];
+                    MonoObject *medalInfo = _medalInfo.value.obj.o;
+
+                    int sRank = 0;
+                    int sLegendRank = 0;
+                    int wRank = 0;
+                    int wLegendRank = 0;
+
+                    // spectated games have no medalinfo
+                    if (medalInfo != NULL) {
+
+                        MonoValue _sMedalInfo = (*medalInfo)["m_currMedalInfo"];
+                        if (!IsMonoValueEmpty(_sMedalInfo)) {
+                            MonoObject *sMedalInfo = _sMedalInfo.value.obj.o;
+                            MonoValue rank = (*sMedalInfo)["rank"];
+                            if (!IsMonoValueEmpty(rank)) {
+                                sRank = rank.value.i32;
+                                DeleteMonoValue(rank);
+                            }
+                            MonoValue legendRank = (*sMedalInfo)["legendIndex"];
+                            if (!IsMonoValueEmpty(legendRank)) {
+                                sLegendRank = legendRank.value.i32;
+                                DeleteMonoValue(legendRank);
+                            }
+
+                            DeleteMonoValue(_sMedalInfo);
                         }
-                        vm = (*net)["<Wild>k__BackingField"];
-                        if (!IsMonoValueEmpty(vm)) {
-                            MonoObject* stars = vm.value.obj.o;
-                            wStars = ((*stars)["<Stars>k__BackingField"]).value.i32;
-                            DeleteMonoValue(vm);
+
+                        MonoValue _wMedalInfo = (*medalInfo)["m_currWildMedalInfo"];
+                        if (!IsMonoValueEmpty(_wMedalInfo)) {
+                            MonoObject *wMedalInfo = _wMedalInfo.value.obj.o;
+                            MonoValue rank = (*wMedalInfo)["rank"];
+                            if (!IsMonoValueEmpty(rank)) {
+                                wRank = rank.value.i32;
+                                DeleteMonoValue(rank);
+                            }
+                            MonoValue legendRank = (*wMedalInfo)["legendIndex"];
+                            if (!IsMonoValueEmpty(legendRank)) {
+                                wLegendRank = legendRank.value.i32;
+                                DeleteMonoValue(legendRank);
+                            }
+
+                            DeleteMonoValue(_wMedalInfo);
                         }
                     }
+
+                    std::u16string name = ((*inst)["m_name"]).str;
+                    if (name.empty()) throw std::domain_error("Found a player with an empty name");
+
+                    int cardBack = ((*inst)["m_cardBackId"]).value.i32;
+                    int id = playerIds[i].value.i32;
+
+                    int side = ((*inst)["m_side"]).value.i32;
+                    if (side == 1) {
+                        int sStars = 0;
+                        int wStars = 0;
+
+                        MonoValue netCacheMedalInfo;
+                        for (unsigned int i=0; i< netCacheValues.arrsize; i++) {
+                            MonoValue netCache = netCacheValues[i];
+                            MonoObject* net = netCache.value.obj.o;
+                            if (net == NULL) {
+                                continue;
+                            }
+                            MonoClass* instclass = net->getClass();
+                            std::string icname = instclass->getName();
+                            delete instclass;
+
+                            if (icname != "NetCacheMedalInfo") {
+                                continue;
+                            }
+
+                            netCacheMedalInfo = netCache;
+                            break;
+                        }
+                        if (!IsMonoValueEmpty(netCacheMedalInfo)) {
+                            MonoObject *net = netCacheMedalInfo.value.obj.o;
+                            if (net != NULL) {
+                                MonoValue vm = (*net)["<Standard>k__BackingField"];
+                                if (!IsMonoValueEmpty(vm)) {
+                                    MonoObject* stars = vm.value.obj.o;
+                                    sStars = ((*stars)["<Stars>k__BackingField"]).value.i32;
+                                    DeleteMonoValue(vm);
+                                }
+                                vm = (*net)["<Wild>k__BackingField"];
+                                if (!IsMonoValueEmpty(vm)) {
+                                    MonoObject* stars = vm.value.obj.o;
+                                    wStars = ((*stars)["<Stars>k__BackingField"]).value.i32;
+                                    DeleteMonoValue(vm);
+                                }
+                            }
+                        }
+
+                        matchInfo.localPlayer.name = name;
+                        matchInfo.localPlayer.id = id;
+                        matchInfo.localPlayer.standardRank = sRank;
+                        matchInfo.localPlayer.standardLegendRank = sLegendRank;
+                        matchInfo.localPlayer.standardStars = sStars;
+                        matchInfo.localPlayer.wildRank = wRank;
+                        matchInfo.localPlayer.wildLegendRank = wLegendRank;
+                        matchInfo.localPlayer.wildStars = wStars;
+                        matchInfo.localPlayer.cardBackId = cardBack;
+                    } else {
+                        matchInfo.opposingPlayer.name = name;
+                        matchInfo.opposingPlayer.id = id;
+                        matchInfo.opposingPlayer.standardRank = sRank;
+                        matchInfo.opposingPlayer.standardLegendRank = sLegendRank;
+                        matchInfo.opposingPlayer.standardStars = 0;
+                        matchInfo.opposingPlayer.wildRank = wRank;
+                        matchInfo.opposingPlayer.wildLegendRank = wLegendRank;
+                        matchInfo.opposingPlayer.wildStars = 0;
+                        matchInfo.opposingPlayer.cardBackId = cardBack;
+                    }
+                    
+                    DeleteMonoValue(_medalInfo);
                 }
 
-                result.localPlayer.name = name;
-                result.localPlayer.id = id;
-                result.localPlayer.standardRank = sRank;
-                result.localPlayer.standardLegendRank = sLegendRank;
-                result.localPlayer.standardStars = sStars;
-                result.localPlayer.wildRank = wRank;
-                result.localPlayer.wildLegendRank = wLegendRank;
-                result.localPlayer.wildStars = wStars;
-                result.localPlayer.cardBackId = cardBack;
-            } else {
-                result.opposingPlayer.name = name;
-                result.opposingPlayer.id = id;
-                result.opposingPlayer.standardRank = sRank;
-                result.opposingPlayer.standardLegendRank = sLegendRank;
-                result.opposingPlayer.standardStars = 0;
-                result.opposingPlayer.wildRank = wRank;
-                result.opposingPlayer.wildLegendRank = wLegendRank;
-                result.opposingPlayer.wildStars = 0;
-                result.opposingPlayer.cardBackId = cardBack;
+                DeleteMonoValue(playerIds);
+                DeleteMonoValue(players);
+            }
+            DeleteMonoValue(gameState);
+        }
+
+        MonoValue _gameMgr = getObject({"GameMgr","s_instance"});
+        if (!IsMonoValueEmpty(_gameMgr)) {
+            MonoObject *gameMgr = _gameMgr.value.obj.o;
+            if (gameMgr != NULL) {
+                matchInfo.missionId = getInt(_gameMgr, {"m_missionId"});
+                matchInfo.gameType = getInt(_gameMgr, {"m_gameType"});
+                matchInfo.formatType = getInt(_gameMgr, {"m_formatType"});
+
+                int brawlGameTypes[] = {16, 17, 18};
+                size_t size = sizeof(brawlGameTypes) / sizeof(int);
+                int *end = brawlGameTypes + size;
+                int *found = std::find(brawlGameTypes, end, 0);
+                if (found != end) {
+                    MonoValue mission = getCurrentBrawlMission();
+                    matchInfo.brawlSeasonId = getInt(mission, {"tavernBrawlSpec","<SeasonId>k__BackingField"});
+                    DeleteMonoValue(mission);
+                }
             }
 
-            DeleteMonoValue(_medalInfo);
+            DeleteMonoValue(_gameMgr);
         }
-
-        MonoValue _brawlSeasonId = getObject({"TavernBrawlManager","s_instance","m_currentMission", "seasonId"});
-        int brawlSeasonId = 0;
-        if (!IsMonoValueEmpty(_brawlSeasonId)) {
-            brawlSeasonId = _brawlSeasonId.value.i32;
-        }
-        result.brawlSeasonId = brawlSeasonId;
-        DeleteMonoValue(_brawlSeasonId);
-
-        MonoValue _missionId = getObject({"GameMgr","s_instance","m_missionId"});
-        int missionId = 0;
-        if (!IsMonoValueEmpty(_missionId)) {
-            missionId = _missionId.value.i32;
-        }
-        result.missionId = missionId;
-        DeleteMonoValue(_missionId);
 
         for (unsigned int i=0; i< netCacheValues.arrsize; i++) {
             MonoValue netCache = netCacheValues[i];
@@ -425,58 +460,83 @@ namespace hearthmirror {
                 continue;
             }
 
-            result.rankedSeasonId = ((*net)["<Season>k__BackingField"]).value.i32;
+            matchInfo.rankedSeasonId = ((*net)["<Season>k__BackingField"]).value.i32;
             break;
         }
 
-        DeleteMonoValue(playerIds);
-        DeleteMonoValue(players);
         DeleteMonoValue(netCacheValues);
 
-        return result;
+        return matchInfo;
+    }
+
+    MonoValue Mirror::getCurrentBrawlMission() {
+        if (!_monoImage) throw std::domain_error("Mono image can't be found");
+
+        MonoValue missions = getObject({"TavernBrawlManager","s_instance","m_missions"});
+        if (IsMonoValueEmpty(missions) || !IsMonoValueArray(missions)) { return NULL; }
+        MonoValue record(0);
+        for (unsigned int i=0; i< missions.arrsize; i++) {
+            MonoValue mission = missions[i];
+            if (IsMonoValueEmpty(mission)) continue;
+            MonoObject* _mission = mission.value.obj.o;
+            MonoClass* instclass = _mission->getClass();
+            std::string icname = instclass->getName();
+            delete instclass;
+
+            if (icname != "TavernBrawlMission") {
+                continue;
+            }
+
+            return mission;
+        }
+
+        return nullMonoValue;
     }
 
     BrawlInfo Mirror::getBrawlInfo() {
         if (!_monoImage) throw std::domain_error("Mono image can't be found");
 
-        MonoValue brawlManager = getObject({"TavernBrawlManager","s_instance"});
-        if (IsMonoValueEmpty(brawlManager)) throw std::domain_error("Brawl manager can't be found");
+        MonoValue mission = getCurrentBrawlMission();
+        if (IsMonoValueEmpty(mission)) throw std::domain_error("Current brawl not found");
 
         BrawlInfo result;
-        MonoValue mission = getObject(brawlManager, {"m_currentMission"});
-        if (!IsMonoValueEmpty(mission)) {
-            MonoObject *_mission = mission.value.obj.o;
-            result.maxWins = ((*_mission)["maxWins"]).value.i32;
-            result.maxLosses = ((*_mission)["maxLosses"]).value.i32;
+        MonoObject *_mission = mission.value.obj.o;
+        if (_mission == NULL) {
             DeleteMonoValue(mission);
+            throw std::domain_error("Current brawl not found");
         }
+        result.maxWins = ((*_mission)["_MaxWins"]).value.i32;
+        result.maxLosses = ((*_mission)["_MaxLosses"]).value.i32;
 
-        MonoValue netCacheValues = getObject({"NetCache","s_instance","m_netCache","valueSlots"});
-        if (IsMonoValueEmpty(netCacheValues) || !IsMonoValueArray(netCacheValues)) {
-            throw std::domain_error("Net cache can't be found");
-        }
+        MonoValue records = getObject({"TavernBrawlManager","s_instance", "m_playerRecords"});
+        if (IsMonoValueEmpty(records) || !IsMonoValueArray(records))
+            throw std::domain_error("Brawl manager can't be found");
+
         MonoValue record(0);
-        for (unsigned int i=0; i< netCacheValues.arrsize; i++) {
-            MonoValue netCache = netCacheValues[i];
-            if (IsMonoValueEmpty(netCache)) continue;
-            MonoObject* net = netCache.value.obj.o;
-            MonoClass* instclass = net->getClass();
+        for (unsigned int i=0; i< records.arrsize; i++) {
+            MonoValue r = records[i];
+            if (IsMonoValueEmpty(r)) continue;
+            MonoObject* _record = r.value.obj.o;
+            MonoClass* instclass = _record->getClass();
             std::string icname = instclass->getName();
             delete instclass;
 
-            if (icname != "NetCacheTavernBrawlRecord") {
+            if (icname != "TavernBrawlPlayerRecord") {
                 continue;
             }
 
-            record = getObject(netCache, {"<Record>k__BackingField"});
+            record = r;
             break;
         }
         if (IsMonoValueEmpty(record)) throw std::domain_error("Can't get record");
 
+        result.gamesPlayed = getInt(record, {"_GamesPlayed"});
+        result.winStreak = getInt(record, {"_WinStreak"});
+
         MonoObject *_record = record.value.obj.o;
         if (_record == NULL) {
             DeleteMonoValue(record);
-            DeleteMonoValue(netCacheValues);
+            DeleteMonoValue(records);
             throw std::domain_error("Can't get record");
         }
 
@@ -485,25 +545,23 @@ namespace hearthmirror {
         result.isSessionBased = result.maxWins > 0 || result.maxLosses > 0;
         if (result.isSessionBased) {
             if (!((*_record)["HasSession"]).value.b) {
-                DeleteMonoValue(netCacheValues);
-                DeleteMonoValue(brawlManager);
+                DeleteMonoValue(mission);
+                DeleteMonoValue(records);
                 DeleteMonoValue(record);
                 return result;
             }
 
             MonoValue session = getObject(record, {"_Session"});
-            MonoObject *_session = session.value.obj.o;
-            result.wins = ((*_session)["<Wins>k__BackingField"]).value.i32;
-            result.losses = ((*_session)["<Losses>k__BackingField"]).value.i32;
+            result.wins = getInt(session, {"<Wins>k__BackingField"});
+            result.losses = getInt(session, {"<Losses>k__BackingField"});
             DeleteMonoValue(session);
         } else {
-            result.wins = ((*_record)["<GamesWon>k__BackingField"]).value.i32;
+            result.wins = getInt(record, {"<GamesWon>k__BackingField"});
             result.losses = result.gamesPlayed - result.wins;
         }
 
-        DeleteMonoValue(record);
-        DeleteMonoValue(netCacheValues);
-        DeleteMonoValue(brawlManager);
+        DeleteMonoValue(mission);
+        DeleteMonoValue(records);
         return result;
     }
 

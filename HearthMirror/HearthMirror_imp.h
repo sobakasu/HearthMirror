@@ -51,6 +51,9 @@
     @property NSNumber *_Nonnull brawlSeasonId;
     @property NSNumber *_Nonnull missionId;
     @property NSNumber *_Nonnull rankedSeasonId;
+    @property NSNumber *_Nonnull gameType;
+    @property NSNumber *_Nonnull formatType;
+    @property BOOL spectator;
 @end
 
 @interface MirrorAccountId: NSObject

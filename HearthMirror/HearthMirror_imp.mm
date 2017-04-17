@@ -138,43 +138,44 @@ using namespace hearthmirror;
 
         InternalMatchInfo _matchInfo = _mirror->getMatchInfo();
 
-        MirrorPlayer *localPlayer = [MirrorPlayer new];
-        if (_matchInfo.localPlayer.name.empty()) return nil;
-        localPlayer.name = [NSString stringWithu16string:_matchInfo.localPlayer.name];
-        if (localPlayer.name == nil) return nil;
-        localPlayer.playerId = @(_matchInfo.localPlayer.id);
-        localPlayer.standardRank = @(_matchInfo.localPlayer.standardRank);
-        localPlayer.standardLegendRank = @(_matchInfo.localPlayer.standardLegendRank);
-        localPlayer.standardStars = @(_matchInfo.localPlayer.standardStars);
-        localPlayer.wildRank = @(_matchInfo.localPlayer.wildRank);
-        localPlayer.wildLegendRank = @(_matchInfo.localPlayer.wildLegendRank);
-        localPlayer.wildStars = @(_matchInfo.localPlayer.wildStars);
-        localPlayer.cardBackId = @(_matchInfo.localPlayer.cardBackId);
+        MirrorPlayer *localPlayer = [self getPlayerFromPlayer:_matchInfo.localPlayer];
+        if (localPlayer == nil) return nil;
         result.localPlayer = localPlayer;
 
-        MirrorPlayer *opposingPlayer = [MirrorPlayer new];
-        if (_matchInfo.opposingPlayer.name.empty()) return nil;
-        opposingPlayer.name = [NSString stringWithu16string:_matchInfo.opposingPlayer.name];
-        if (opposingPlayer.name == nil) return nil;
-        opposingPlayer.playerId = @(_matchInfo.opposingPlayer.id);
-        opposingPlayer.standardRank = @(_matchInfo.opposingPlayer.standardRank);
-        opposingPlayer.standardLegendRank = @(_matchInfo.opposingPlayer.standardLegendRank);
-        opposingPlayer.standardStars = @(_matchInfo.opposingPlayer.standardStars);
-        opposingPlayer.wildRank = @(_matchInfo.opposingPlayer.wildRank);
-        opposingPlayer.wildLegendRank = @(_matchInfo.opposingPlayer.wildLegendRank);
-        opposingPlayer.wildStars = @(_matchInfo.opposingPlayer.wildStars);
-        opposingPlayer.cardBackId = @(_matchInfo.opposingPlayer.cardBackId);
+        MirrorPlayer *opposingPlayer = [self getPlayerFromPlayer:_matchInfo.opposingPlayer];
+        if (opposingPlayer == nil) return nil;
         result.opposingPlayer = opposingPlayer;
 
         result.brawlSeasonId = @(_matchInfo.brawlSeasonId);
         result.missionId = @(_matchInfo.missionId);
         result.rankedSeasonId = @(_matchInfo.rankedSeasonId);
+        result.gameType = @(_matchInfo.gameType);
+        result.formatType = @(_matchInfo.formatType);
+        result.spectator = _matchInfo.spectator;
         
         return result;
     } catch (const std::exception &e) {
         NSLog(@"Error: %s", e.what());
         return nil;
     }
+}
+
+-(nullable MirrorPlayer *) getPlayerFromPlayer:(InternalPlayer) player {
+    if (player.name.empty()) return nil;
+
+    MirrorPlayer *localPlayer = [MirrorPlayer new];
+    localPlayer.name = [NSString stringWithu16string:player.name];
+    if (localPlayer.name == nil) return nil;
+    localPlayer.playerId = @(player.id);
+    localPlayer.standardRank = @(player.standardRank);
+    localPlayer.standardLegendRank = @(player.standardLegendRank);
+    localPlayer.standardStars = @(player.standardStars);
+    localPlayer.wildRank = @(player.wildRank);
+    localPlayer.wildLegendRank = @(player.wildLegendRank);
+    localPlayer.wildStars = @(player.wildStars);
+    localPlayer.cardBackId = @(player.cardBackId);
+
+    return localPlayer;
 }
 
 -(nullable MirrorAccountId *) getAccountId {
@@ -443,7 +444,7 @@ using namespace hearthmirror;
 
 @implementation MirrorMatchInfo
 - (NSString *)description {
-    return [NSString stringWithFormat:@"localPlayer: %@, opposingPlayer: %@, brawlSeasonId: %@, missionId: %@, rankedSeasonId: %@", self.localPlayer, self.opposingPlayer, self.brawlSeasonId, self.missionId, self.rankedSeasonId];
+    return [NSString stringWithFormat:@"localPlayer: [%@], opposingPlayer: [%@], brawlSeasonId: %@, missionId: %@, rankedSeasonId: %@, gameType: %@, formatType: %@, spectator: %@", self.localPlayer, self.opposingPlayer, self.brawlSeasonId, self.missionId, self.rankedSeasonId, self.gameType, self.formatType, @(self.spectator)];
 }
 @end
 
