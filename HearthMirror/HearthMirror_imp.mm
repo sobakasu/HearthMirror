@@ -44,7 +44,7 @@ using namespace hearthmirror;
         try {
             _mirror = new Mirror(pid,blocking);
         }  catch (const std::exception &e) {
-            NSLog(@"Error: %s", e.what());
+            NSLog(@"Error while initializing Mirror: %s", e.what());
             return nil;
         }
     }
@@ -59,7 +59,7 @@ using namespace hearthmirror;
         NSString* battlename = [NSString stringWithu16string:tag.name];
         return [NSString stringWithFormat:@"%@#%d",battlename,tag.number];
     } catch (const std::exception &e) {
-        NSLog(@"Error: %s", e.what());
+        NSLog(@"Error while getting Battle Tag: %s", e.what());
         return nil;
     }
 }
@@ -79,7 +79,7 @@ using namespace hearthmirror;
 
         return [NSArray arrayWithArray:result];
     } catch (const std::exception &e) {
-        NSLog(@"Error: %s", e.what());
+        NSLog(@"Error while reading card collection: %s", e.what());
         return [NSArray array];
     }
 }
@@ -103,7 +103,7 @@ using namespace hearthmirror;
 
         return result;
     } catch (const std::exception &e) {
-        NSLog(@"Error: %s", e.what());
+        NSLog(@"Error while getting game server info: %s", e.what());
         return nil;
     }
 }
@@ -114,7 +114,7 @@ using namespace hearthmirror;
     try {
         return @(_mirror->getGameType());
     } catch (const std::exception &e) {
-        NSLog(@"Error: %s", e.what());
+        NSLog(@"Error while getting game type: %s", e.what());
         return nil;
     }
 }
@@ -125,7 +125,7 @@ using namespace hearthmirror;
     try {
         return @(_mirror->getFormat());
     } catch (const std::exception &e) {
-        NSLog(@"Error: %s", e.what());
+        NSLog(@"Error while reading game format: %s", e.what());
         return nil;
     }
 }
@@ -155,7 +155,7 @@ using namespace hearthmirror;
         
         return result;
     } catch (const std::exception &e) {
-        NSLog(@"Error: %s", e.what());
+        NSLog(@"Error while readin match info: %s", e.what());
         return nil;
     }
 }
@@ -189,7 +189,7 @@ using namespace hearthmirror;
 
         return result;
     } catch (const std::exception &e) {
-        NSLog(@"Error: %s", e.what());
+        NSLog(@"Error while reading account Id: %s", e.what());
         return nil;
     }
 }
@@ -239,7 +239,7 @@ using namespace hearthmirror;
 
         return [NSArray arrayWithArray:result];
     } catch (const std::exception &e) {
-        NSLog(@"Error: %s", e.what());
+        NSLog(@"Error while reading decks: %s", e.what());
         return [NSArray array];
     }
 }
@@ -251,7 +251,7 @@ using namespace hearthmirror;
         Deck deck = _mirror->getEditedDeck();
         return [self buildDeck:deck];
     } catch (const std::exception &e) {
-        NSLog(@"Error: %s", e.what());
+        NSLog(@"Error while reading the edited deck: %s", e.what());
         return nil;
     }
 }
@@ -262,7 +262,7 @@ using namespace hearthmirror;
     try {
         return _mirror->isSpectating();
     } catch (const std::exception &e) {
-        NSLog(@"Error: %s", e.what());
+        NSLog(@"Error while reading spectate info: %s", e.what());
         return NO;
     }
 }
@@ -276,7 +276,7 @@ using namespace hearthmirror;
 
         return @(deckId);
     } catch (const std::exception &e) {
-        NSLog(@"Error: %s", e.what());
+        NSLog(@"Error while reading selected deck: %s", e.what());
         return nil;
     }
 }
@@ -357,7 +357,7 @@ using namespace hearthmirror;
         
         return arenaInfo;
     } catch (const std::exception &e) {
-        NSLog(@"Error: %s", e.what());
+        NSLog(@"Error while reading arena info: %s", e.what());
         return nil;
     }
 }
@@ -377,7 +377,7 @@ using namespace hearthmirror;
 
         return [NSArray arrayWithArray:cards];
     } catch (const std::exception &e) {
-        NSLog(@"Error: %s", e.what());
+        NSLog(@"Error while reading arena draft choices: %s", e.what());
         return [NSArray array];
     }
 }
@@ -397,7 +397,7 @@ using namespace hearthmirror;
 
         return [NSArray arrayWithArray:result];
     } catch (const std::exception &e) {
-        NSLog(@"Error: %s", e.what());
+        NSLog(@"Error while reading pack cards: %s", e.what());
         return [NSArray array];
     }
 }
@@ -417,7 +417,7 @@ using namespace hearthmirror;
         result.winStreak = @(info.winStreak);
         return result;
     } catch (const std::exception &e) {
-        NSLog(@"Error: %s", e.what());
+        NSLog(@"Error while reading braw info: %s", e.what());
     }
 
     return nil;

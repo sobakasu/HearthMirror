@@ -92,15 +92,18 @@ namespace hearthmirror {
             
             // we have a pointer now to the right assembly image
             try {
-                _monoImage = new MonoImage(_task,pImage); // apply life cycle
+                _monoImage = new MonoImage(_task, pImage); // apply life cycle
                 if (_monoImage->hasClasses()) break;
+                
                 delete _monoImage;
+                _monoImage = NULL;
             } catch (std::runtime_error& err) {
                 delete _monoImage;
+                _monoImage = NULL;
             }
         } while (isBlocking);
         
-        return 0;
+        return _monoImage == NULL ? 10 : 0;
     }
 
 	static MonoValue nullMonoValue(0);
