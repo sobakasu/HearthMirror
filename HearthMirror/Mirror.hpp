@@ -330,13 +330,13 @@ namespace hearthmirror {
         MonoImage* _monoImage = NULL;
         
         MonoValue getObject(const HMObjectPath& path);
-        MonoValue getObject(MonoValue from, const HMObjectPath& path);
+        MonoValue getObject(const MonoValue& from, const HMObjectPath& path);
         int getInt(const HMObjectPath& path);
-        int getInt(MonoValue from, const HMObjectPath& path);
-        bool getBool(const HMObjectPath& path);
-        bool getBool(MonoValue from, const HMObjectPath& path);
+        int getInt(const MonoValue& from, const HMObjectPath& path);
+        bool getBool(const HMObjectPath& path, bool defaultValue = false);
+        bool getBool(const MonoValue& from, const HMObjectPath& path, bool defaultValue = false);
         long getLong(const HMObjectPath& path);
-        long getLong(MonoValue from, const HMObjectPath& path);
+        long getLong(const MonoValue& from, const HMObjectPath& path);
 
         Deck getDeck(MonoObject* inst);
         std::vector<RewardData*> parseRewards(MonoValue items);

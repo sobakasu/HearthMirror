@@ -105,15 +105,17 @@ namespace hearthmirror {
 
 	static MonoValue nullMonoValue(0);
 	
-    MonoValue Mirror::getObject(MonoValue from, const HMObjectPath& path) {
-        MonoValue mv = from;
-        if (IsMonoValueEmpty(mv) || path.size() < 1) return nullMonoValue;
+    MonoValue Mirror::getObject(const MonoValue& from, const HMObjectPath& path) {
+		
+        if (IsMonoValueEmpty(from) || path.size() < 1) return nullMonoValue;
 
+		MonoValue mv = from; // local copy
+		
         for (unsigned int i = 0; i< path.size(); i++) {
             MonoObject* mo = mv.value.obj.o;
             mv = (*mo)[path[i]];
             if (IsMonoValueEmpty(mv)) {
-                delete mo;
+                if (i>0) delete mo;
                 return nullMonoValue;
             }
 
@@ -155,7 +157,7 @@ namespace hearthmirror {
         return value;
     }
 
-    int Mirror::getInt(MonoValue from, const HMObjectPath& path) {
+    int Mirror::getInt(const MonoValue& from, const HMObjectPath& path) {
         MonoValue mv = getObject(from, path);
         if (IsMonoValueEmpty(mv)) return 0;
         int value = mv.value.i32;
@@ -174,7 +176,7 @@ namespace hearthmirror {
         return value;
     }
 
-    long Mirror::getLong(MonoValue from, const HMObjectPath& path) {
+    long Mirror::getLong(const MonoValue& from, const HMObjectPath& path) {
         MonoValue mv = getObject(from, path);
         if (IsMonoValueEmpty(mv)) return 0;
         long value = mv.value.i64;
@@ -184,18 +186,18 @@ namespace hearthmirror {
     }
 
     /** Helper to get a bool */
-    bool Mirror::getBool(const HMObjectPath& path) {
+    bool Mirror::getBool(const HMObjectPath& path, bool defaultValue) {
         MonoValue mv = getObject(path);
-        if (IsMonoValueEmpty(mv)) return false;
+        if (IsMonoValueEmpty(mv)) return defaultValue;
         bool value = mv.value.b;
 
         DeleteMonoValue(mv);
         return value;
     }
 
-    bool Mirror::getBool(MonoValue from, const HMObjectPath& path) {
+    bool Mirror::getBool(const MonoValue& from, const HMObjectPath& path, bool defaultValue) {
         MonoValue mv = getObject(from, path);
-        if (IsMonoValueEmpty(mv)) return false;
+        if (IsMonoValueEmpty(mv)) return defaultValue;
         bool value = mv.value.b;
 
         DeleteMonoValue(mv);
