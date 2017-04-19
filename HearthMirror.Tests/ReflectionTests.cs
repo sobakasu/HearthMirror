@@ -151,6 +151,12 @@ namespace HearthMirror.Tests
 		}
 
 		[TestMethod]
+		public void Debug()
+		{
+			Reflection.DebugHelper();
+		}
+
+		[TestMethod]
 		public void Output_AccountId()
 		{
 			var id = Reflection.GetAccountId();

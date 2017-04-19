@@ -466,5 +466,18 @@ namespace HearthMirror
 			}
 			return false;
 		}
+
+#if(DEBUG)
+		public static void DebugHelper()
+		{
+			var data = new[]
+			{
+				"NetCache", "GameState", "Log", "TavernBrawlManager", "TavernBrawlDisplay", "BnetPresenceMgr", "DraftManager",
+				"PackOpening", "CollectionManagerDisplay", "GameMgr", "Network", "DraftManager", "DraftDisplay"
+			}.Select(x => Mirror.Root[x]?["s_instance"]).ToList();
+
+			System.Diagnostics.Debugger.Break();
+		}
+#endif
 	}
 }

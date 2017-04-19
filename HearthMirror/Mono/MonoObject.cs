@@ -22,5 +22,11 @@ namespace HearthMirror.Mono
 			=> Class.Fields.Where(x => !x.Type.IsStatic).Select(x => new KeyValuePair<string, object>(x.Name, x.GetValue(this)));
 
 		public dynamic this[string key] => Fields.FirstOrDefault(x => x.Key == key).Value;
+
+#if(DEBUG)
+		public KeyValuePair<string, object>[] DebugFields => Fields.ToArray();
+
+		public override string ToString() => Class.FullName;
+#endif
 	}
 }

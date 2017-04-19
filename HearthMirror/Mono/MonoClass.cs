@@ -88,5 +88,9 @@ namespace HearthMirror.Mono
 		}
 
 		public dynamic this[string key] => Fields.FirstOrDefault(x => x.Name == key)?.StaticValue;
+
+#if(DEBUG)
+		public override string ToString() => FullName;
+#endif
 	}
 }
