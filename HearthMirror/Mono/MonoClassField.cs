@@ -80,7 +80,12 @@ namespace HearthMirror.Mono
 					return ReadValue(new MonoClass(_view, _view.ReadUint(type.Data)).ByvalArg.Type, o.PObject + offset);
 				return new MonoStruct(_view, sClass, (uint) (o.PObject + offset));
 			}
-			return typeType == MonoTypeEnum.GenericInst ? null : ReadValue(typeType, o.PObject + offset);
+			if(typeType == MonoTypeEnum.GenericInst)
+			{
+				var sClass = new MonoClass(_view, _view.ReadUint(type.Data));
+				return new MonoStruct(_view, sClass, (uint) (o.PObject + offset));
+			}
+			return ReadValue(typeType, o.PObject + offset);
 		}
 
 		private object ReadValue(MonoTypeEnum type, long addr)
@@ -128,6 +133,8 @@ namespace HearthMirror.Mono
 						if(elClass.IsValueType)
 						{
 							if(elClass.ByvalArg.Type == MonoTypeEnum.ValueType)
+								result[i] = new MonoStruct(_view, elClass, (uint) ea);
+							else if(elClass.ByvalArg.Type == MonoTypeEnum.GenericInst)
 								result[i] = new MonoStruct(_view, elClass, (uint) ea);
 							else
 								result[i] = ReadValue(elClass.ByvalArg.Type, ea);
