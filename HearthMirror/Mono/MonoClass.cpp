@@ -119,6 +119,10 @@ namespace hearthmirror {
 		
 		// Add own fields first
         uint32_t nFields = getNumFields();
+        if (nFields > 1000) {
+            // this is an ugly hack to prevent leak
+            return result;
+        }
 		uint32_t pFields = ReadUInt32(_task, _pClass + kMonoClassFields);
 		if (pFields != 0) {
 			

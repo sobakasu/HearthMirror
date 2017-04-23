@@ -294,7 +294,7 @@ namespace hearthmirror {
             if (!IsMonoValueEmpty(players) && !IsMonoValueEmpty(playerIds)
                 && IsMonoValueArray(players) && IsMonoValueArray(playerIds)) {
 
-                for (unsigned int i=0; i< playerIds.arrsize; i++) {
+                for (unsigned int i=0; i < playerIds.arrsize; i++) {
                     MonoValue mv = players[i];
                     if (IsMonoValueEmpty(mv)) continue;
                     MonoObject* inst = mv.value.obj.o;

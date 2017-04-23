@@ -63,9 +63,9 @@ namespace hearthmirror {
         if (type->isStatic()) {
             try {
                 ret = getValue(NULL);
-            } catch (std::exception& ex) {
+            } catch (std::runtime_error& ex) {
                 delete type;
-                return ret;
+                return MonoValue(0);
             }
         }
 		
@@ -77,6 +77,9 @@ namespace hearthmirror {
         
         int32_t offset = getOffset();
         MonoType* type = getType();
+        if (type == NULL) {
+            return MonoValue(0);
+        }
         MonoTypeEnum typeType = type->getType();
 
         bool isRef;
@@ -109,7 +112,7 @@ namespace hearthmirror {
             MonoClass* parent = getParent();
             if (parent == NULL) {
                 delete type;
-                throw std::runtime_error("Parent is null");
+                return MonoValue(0);
             }
             int vtable = -1;
             try {
@@ -117,14 +120,14 @@ namespace hearthmirror {
             } catch (std::exception& ex) {
                 delete parent;
                 delete type;
-                throw;
+                return MonoValue(0);
             }
             
             delete parent;
             
             if (vtable == -1) {
                 delete type;
-                throw std::runtime_error("Parent's vtable is 0");
+                return MonoValue(0);
             }
             
             uint32_t data = ReadUInt32(_task, vtable + kMonoVTableData);
@@ -138,7 +141,7 @@ namespace hearthmirror {
                 } else {
                     MonoValue mv;
                     mv.type = typeType;
-                    mv.value.obj.o=  new MonoObject(_task, po);
+                    mv.value.obj.o = new MonoObject(_task, po);
                     return mv;
                 }
             }
@@ -149,9 +152,11 @@ namespace hearthmirror {
                 if(sClass->isEnum()) {
                     MonoClass* c = new MonoClass(_task, ReadUInt32(_task,type->getData() ));
                     MonoType* bva = c->byValArg();
+                    delete c;
+                    
                     MonoValue mv = ReadValue(bva->getType(), data + offset);
                     delete bva;
-                    delete c;
+                    
                     delete type;
                     delete sClass;
                     return mv;
@@ -173,7 +178,8 @@ namespace hearthmirror {
         }
         
         if (o == NULL) {
-            throw std::runtime_error("passed object is not value type and is NULL");
+            //throw std::runtime_error("passed object is not value type and is NULL");
+            return MonoValue(0);
         }
         
         if(isRef) {
@@ -192,13 +198,15 @@ namespace hearthmirror {
         
         if(typeType == MonoTypeEnum::ValueType) {
             
-            MonoClass*  sClass = new MonoClass(_task, type->getData());
+            MonoClass* sClass = new MonoClass(_task, type->getData());
             if(sClass->isEnum()) {
                 MonoClass* c = new MonoClass(_task, ReadUInt32(_task,type->getData() ));
                 MonoType* bva = c->byValArg();
+                delete c;
+                
                 MonoValue res = ReadValue(bva->getType(), o->pObject + offset);
                 delete bva;
-                delete c;
+                
                 delete type;
                 delete sClass;
                 
@@ -284,7 +292,7 @@ namespace hearthmirror {
                 uint32_t pArrClass = ReadUInt32(_task, vt);
                 MonoClass* arrClass = new MonoClass(_task, pArrClass);
                 MonoClass* elClass = new MonoClass(_task, ReadUInt32(_task, pArrClass));
-                
+       
                 uint32_t count = ReadInt32(_task, addr + 12);
                 uint32_t start = (uint32_t)addr + 16;
                 result.arrsize = count;
@@ -292,7 +300,7 @@ namespace hearthmirror {
                     result.value.arr = new MonoValue[count];
                     for (uint32_t i = 0; i < count; i++) {
                         
-                        uint32_t ea = start + i* arrClass->size();
+                        uint32_t ea = start + (i * arrClass->size());
                         if(elClass->isValueType()) {
                             MonoType* mt = elClass->byValArg();
                             if(mt->getType() == MonoTypeEnum::ValueType) {
@@ -310,8 +318,7 @@ namespace hearthmirror {
                             uint32_t po = ReadUInt32(_task, ea);
                             MonoValue mv;
                             if (po == 0) {
-                                mv.arrsize = 0;
-                                result[i] = mv;
+                                result[i] = MonoValue(0);
                             } else {
                                 mv.type = GenericInst;
                                 mv.value.obj.o = new MonoObject(_task, po);

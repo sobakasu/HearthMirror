@@ -35,7 +35,7 @@ namespace hearthmirror {
 			if (type) {
 				if (!type->isStatic()) {
 					auto name = f->getName();
-					if (name.compare("") != 0) {
+					if (!name.empty()) {
 						res[name] = f->getValue(this);
 					}
 				}

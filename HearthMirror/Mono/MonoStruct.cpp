@@ -30,12 +30,15 @@ namespace hearthmirror {
         
         for (MonoClassField* f : fields) {
             MonoType* type = f->getType();
-            if (!type->isStatic()) {
-                MonoObject* o = new MonoObject(_task, pStruct - 8);
-                res[f->getName()] = f->getValue(o);
-                delete o;
+            if (type) {
+                std::string fname = f->getName();
+                if (!type->isStatic() && (!fname.empty()) ) {
+                    MonoObject* o = new MonoObject(_task, pStruct - 8);
+                    res[fname] = f->getValue(o);
+                    delete o;
+                }
+                delete type;
             }
-            delete type;
             delete f;
         }
         
