@@ -46,7 +46,12 @@ namespace hearthmirror {
     
     MonoClass* MonoClassField::getParent() {
         try {
-            return new MonoClass(_task, ReadUInt32(_task, _pField + kMonoClassFieldParent));
+            auto parent = new MonoClass(_task, ReadUInt32(_task, _pField + kMonoClassFieldParent));
+            if (parent->getName().empty()) {
+                delete parent;
+                return NULL;
+            }
+            return parent;
         } catch (std::exception& ex) {
             return NULL;
         }
@@ -142,6 +147,15 @@ namespace hearthmirror {
                     MonoValue mv;
                     mv.type = typeType;
                     mv.value.obj.o = new MonoObject(_task, po);
+                    
+                    auto mclass = mv.value.obj.o->getClass();
+                    if (mclass->getName().empty()) {
+                        delete mclass;
+                        delete mv.value.obj.o;
+                        return MonoValue(0);
+                    }
+                    delete mclass;
+                    
                     return mv;
                 }
             }
