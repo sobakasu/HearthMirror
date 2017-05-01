@@ -34,7 +34,7 @@
 		BCC5274A1E1176C400F8DE94 /* MonoType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC527161E113D3600F8DE94 /* MonoType.cpp */; };
 		BCC5274B1E1176C400F8DE94 /* Mirror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC527271E11499900F8DE94 /* Mirror.cpp */; };
 		BCC5274E1E11772400F8DE94 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCC5274D1E11772400F8DE94 /* Security.framework */; };
-		BCC527501E11782500F8DE94 /* Mirror.hpp in Headers */ = {isa = PBXBuildFile; fileRef = BCC527281E11499900F8DE94 /* Mirror.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
+		BCC527501E11782500F8DE94 /* Mirror.hpp in Headers */ = {isa = PBXBuildFile; fileRef = BCC527281E11499900F8DE94 /* Mirror.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		BCC527511E11791300F8DE94 /* HearthMirror_imp.h in Headers */ = {isa = PBXBuildFile; fileRef = BCC5273B1E11768500F8DE94 /* HearthMirror_imp.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BCC527581E117DDE00F8DE94 /* security.c in Sources */ = {isa = PBXBuildFile; fileRef = BCC527561E117DDE00F8DE94 /* security.c */; };
 		BCC527591E117DDE00F8DE94 /* security.h in Headers */ = {isa = PBXBuildFile; fileRef = BCC527571E117DDE00F8DE94 /* security.h */; settings = {ATTRIBUTES = (Public, ); }; };

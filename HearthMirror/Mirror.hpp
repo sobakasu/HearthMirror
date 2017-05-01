@@ -11,7 +11,6 @@
 
 #include <locale>
 #include <vector>
-#include "Mono/MonoImage.hpp"
 
 #ifdef __APPLE__
 #define HEARTHMIRROR_API __attribute__((visibility("default")))
@@ -206,12 +205,13 @@ typedef struct _SetFilterItem {
 } SetFilterItem;
 
 namespace hearthmirror {
+    
+    typedef struct _mirrorData MirrorData;
 
 	class HEARTHMIRROR_API Mirror {
         
     public:
         
-        Mirror();
         Mirror(int pid, bool isBlocking = true);
         ~Mirror();
         
@@ -326,21 +326,7 @@ namespace hearthmirror {
         int getLastOpenedBoosterId();
 
     private:
-		HANDLE _task;
-        MonoImage* _monoImage = NULL;
-        
-        MonoValue getObject(const HMObjectPath& path);
-        MonoValue getObject(const MonoValue& from, const HMObjectPath& path);
-        int getInt(const HMObjectPath& path);
-        int getInt(const MonoValue& from, const HMObjectPath& path);
-        bool getBool(const HMObjectPath& path, bool defaultValue = false);
-        bool getBool(const MonoValue& from, const HMObjectPath& path, bool defaultValue = false);
-        long getLong(const HMObjectPath& path);
-        long getLong(const MonoValue& from, const HMObjectPath& path);
-
-        Deck getDeck(MonoObject* inst);
-        std::vector<RewardData*> parseRewards(MonoValue items);
-        MonoValue getCurrentBrawlMission();
+        MirrorData* m_mirrorData = NULL;
     };
     
 }

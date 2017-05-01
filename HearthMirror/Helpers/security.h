@@ -13,8 +13,17 @@
 
 #ifdef __APPLE__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
 /** Requests access to attach to another process. Required for HearthMirror to function properly. */
 int EXPORT acquireTaskportRight();
-#endif
+
+#ifdef __cplusplus
+}
+#endif // extern "C"
+
+#endif // __APPLE__
 
 #endif /* security_h */
