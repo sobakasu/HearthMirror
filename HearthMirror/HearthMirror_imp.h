@@ -61,6 +61,14 @@
     @property NSNumber *_Nonnull hi;
 @end
 
+@interface MirrorHeroLevel: NSObject
+    @property NSNumber *_Nonnull heroClass;
+    @property NSNumber *_Nonnull level;
+    @property NSNumber *_Nonnull maxLevel;
+    @property NSNumber *_Nonnull xp;
+    @property NSNumber *_Nonnull maxXp;
+@end
+
 @interface MirrorCard: NSObject
     @property NSString *_Nonnull cardId;
     @property NSNumber *_Nonnull count;
@@ -129,6 +137,8 @@ EXPORT @interface HearthMirror : NSObject
 -(nullable NSString*) getBattleTag;
 
 -(nonnull NSArray<MirrorCard*>*) getCardCollection;
+
+-(nonnull NSArray<MirrorHeroLevel*>*) getHeroLevels;
 
 -(nullable MirrorGameServerInfo*) getGameServerInfo;
 

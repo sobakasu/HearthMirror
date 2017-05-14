@@ -20,6 +20,8 @@
 
 namespace hearthmirror {
     
+    typedef std::vector<std::string> HMObjectPath;
+    
     struct _mirrorData {
         HANDLE task;
         MonoImage* monoImage = NULL;
@@ -929,10 +931,10 @@ namespace hearthmirror {
                         continue;
                     }
                     int count = countmv.value.i32;
+                    DeleteMonoValue(countmv);
                     
                     MonoValue defmv = (*stack)["<Def>k__BackingField"];
                     if (IsMonoValueEmpty(defmv)) {
-                        DeleteMonoValue(countmv);
                         continue;
                     }
                     MonoObject* def = defmv.value.obj.o;
@@ -940,7 +942,6 @@ namespace hearthmirror {
                     MonoValue namemv = (*def)["<Name>k__BackingField"];
                     MonoValue premiummv = (*def)["<Premium>k__BackingField"];
 					if (IsMonoValueEmpty(namemv) || IsMonoValueEmpty(premiummv)) {
-                        DeleteMonoValue(countmv);
                         DeleteMonoValue(defmv);
                         continue;
                     }
@@ -949,10 +950,87 @@ namespace hearthmirror {
                     bool premium = premiummv.value.b;
                     result.push_back(Card(name,count,premium));
                     
-                    DeleteMonoValue(countmv);
                     DeleteMonoValue(defmv);
                     DeleteMonoValue(namemv);
                     DeleteMonoValue(premiummv);
+                }
+                DeleteMonoValue(sizemv);
+                DeleteMonoValue(itemsmv);
+                DeleteMonoValue(stacksmv);
+                
+            }
+        }
+        
+        // free all memory
+        DeleteMonoValue(valueSlots);
+        
+        return result;
+    }
+    
+    std::vector<HeroLevel> Mirror::getHeroLevels() {
+        if (!m_mirrorData->monoImage) throw std::domain_error("Mono image can't be found");
+        
+        MonoValue valueSlots = GETOBJECT({"NetCache","s_instance","m_netCache","valueSlots"});
+        if (IsMonoValueEmpty(valueSlots) || !IsMonoValueArray(valueSlots)) {
+            throw std::domain_error("Net cache can't be found");
+        }
+        
+        std::vector<HeroLevel> result;
+        
+        for (unsigned int i=0; i< valueSlots.arrsize; i++) {
+            MonoValue mv = valueSlots[i];
+            if (IsMonoValueEmpty(mv)) continue;
+            MonoObject* inst = mv.value.obj.o;
+            MonoClass* instclass = inst->getClass();
+            std::string icname = instclass->getName();
+            delete instclass;
+            if (icname == "NetCacheHeroLevels") {
+                MonoValue stacksmv = (*inst)["<Levels>k__BackingField"];
+                if (IsMonoValueEmpty(stacksmv)) break;
+                
+                MonoObject* stacks = stacksmv.value.obj.o;
+                MonoValue itemsmv = (*stacks)["_items"];
+                MonoValue sizemv = (*stacks)["_size"];
+                if (IsMonoValueEmpty(itemsmv) || IsMonoValueEmpty(sizemv)) break;
+                int size = sizemv.value.i32;
+                for (int i=0; i< size; i++) { // or itemsmv.arrsize?
+                    MonoValue stackmv = itemsmv.value.arr[i];
+                    if (IsMonoValueEmpty(stackmv)) continue;
+                    MonoObject* stack = stackmv.value.obj.o;
+                    
+                    MonoValue classmv = (*stack)["<Class>k__BackingField"];
+                    if (IsMonoValueEmpty(classmv)) {
+                        continue;
+                    }
+                    int heroclass = classmv.value.i32;
+                    DeleteMonoValue(classmv);
+                    
+                    MonoValue clevelmv = (*stack)["<CurrentLevel>k__BackingField"];
+                    if (IsMonoValueEmpty(clevelmv)) {
+                        continue;
+                    }
+                    MonoObject* currentLvl = clevelmv.value.obj.o;
+                    
+                    MonoValue levelmv = (*currentLvl)["<Level>k__BackingField"];
+                    MonoValue maxLevelmv = (*currentLvl)["<MaxLevel>k__BackingField"];
+                    MonoValue xpmv = (*currentLvl)["<XP>k__BackingField"];
+                    MonoValue maxXpmv = (*currentLvl)["<MaxXP>k__BackingField"];
+                    if (IsMonoValueEmpty(levelmv) || IsMonoValueEmpty(maxLevelmv)
+                        || IsMonoValueEmpty(xpmv) || IsMonoValueEmpty(maxXpmv)) {
+                        DeleteMonoValue(clevelmv);
+                        continue;
+                    }
+                    
+                    HeroLevel heroLevel;
+                    heroLevel.heroClass = heroclass;
+                    heroLevel.level = levelmv.value.i32;
+                    heroLevel.maxLevel = maxLevelmv.value.i32;
+                    heroLevel.xp = xpmv.value.i64;
+                    heroLevel.maxXp = maxXpmv.value.i64;
+                    
+                    result.push_back(heroLevel);
+                    
+                    DeleteMonoValue(clevelmv);
                 }
                 DeleteMonoValue(sizemv);
                 DeleteMonoValue(itemsmv);

@@ -507,10 +507,13 @@
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/HearthMirror/Info.plist";
+				LD_DYLIB_INSTALL_NAME = "@executable_path/../Frameworks/$(EXECUTABLE_PATH)";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_CFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = /include;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ifehervari.hearthmirror;
 				PRODUCT_NAME = HearthMirror;
+				PUBLIC_HEADERS_FOLDER_PATH = /include;
 			};
 			name = Debug;
 		};
@@ -526,10 +529,13 @@
 				GCC_ENABLE_CPP_RTTI = YES;
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/HearthMirror/Info.plist";
+				LD_DYLIB_INSTALL_NAME = "@executable_path/../Frameworks/$(EXECUTABLE_PATH)";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_CFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = /include;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ifehervari.hearthmirror;
 				PRODUCT_NAME = HearthMirror;
+				PUBLIC_HEADERS_FOLDER_PATH = /include;
 			};
 			name = Release;
 		};

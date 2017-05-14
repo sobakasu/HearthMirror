@@ -28,6 +28,12 @@ void loadCardCollection(HearthMirror *mirror) {
     NSLog(@"Collection : %@", collection);
 }
 
+#pragma mark - Get hero levels
+void loadHeroLevels(HearthMirror *mirror) {
+    NSArray<MirrorHeroLevel*>* collection = [mirror getHeroLevels];
+    NSLog(@"Collection : %@", collection);
+}
+
 #pragma mark - Get Game server info
 void loadGameServerInfo(HearthMirror *mirror) {
     MirrorGameServerInfo *serverInfo = [mirror getGameServerInfo];
@@ -155,6 +161,7 @@ int main(int argc, const char * argv[]) {
         //loadPackCards(mirror);
         //loadBrawlInfo(mirror);
         //loadEditedDeck(mirror);
+        loadHeroLevels(mirror);
     }
     return 0;
 }

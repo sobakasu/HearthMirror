@@ -84,6 +84,26 @@ using namespace hearthmirror;
     }
 }
 
+-(nonnull NSArray<MirrorHeroLevel*>*) getHeroLevels {
+    if (_mirror == NULL) return [NSArray array];
+    
+    try {
+        NSMutableArray<MirrorHeroLevel*>  *result = [NSMutableArray array];
+        std::vector<HeroLevel> herolevels = _mirror->getHeroLevels();
+        for (int i = 0; i < herolevels.size(); i++) {
+            HeroLevel hlevel = herolevels[i];
+            
+            MirrorHeroLevel *mirrorHeroLevel = [self buildHeroLevel:hlevel];
+            [result addObject:mirrorHeroLevel];
+        }
+        
+        return [NSArray arrayWithArray:result];
+    } catch (const std::exception &e) {
+        NSLog(@"Error while reading hero levels: %s", e.what());
+        return [NSArray array];
+    }
+}
+
 -(nullable MirrorGameServerInfo*) getGameServerInfo {
     if (_mirror == NULL) return nil;
 
@@ -222,6 +242,17 @@ using namespace hearthmirror;
     mirrorCard.count = @(card.count);
     mirrorCard.premium = card.premium;
     return mirrorCard;
+}
+
+-(MirrorHeroLevel *)buildHeroLevel:(HeroLevel)herolevel {
+    MirrorHeroLevel *mirrorHeroLevel = [MirrorHeroLevel new];
+    mirrorHeroLevel.heroClass = @(herolevel.heroClass);
+    mirrorHeroLevel.level = @(herolevel.level);
+    mirrorHeroLevel.maxLevel = @(herolevel.maxLevel);
+    mirrorHeroLevel.xp = @(herolevel.xp);
+    mirrorHeroLevel.maxXp = @(herolevel.maxXp);
+    
+    return mirrorHeroLevel;
 }
 
 -(nonnull NSArray<MirrorDeck*>*) getDecks {
@@ -457,6 +488,12 @@ using namespace hearthmirror;
 @implementation MirrorCard
 - (NSString *)description {
     return [NSString stringWithFormat:@"cardId: %@, count: %@, premium: %@", self.cardId, self.count, @(self.premium)];
+}
+@end
+
+@implementation MirrorHeroLevel
+- (NSString *)description {
+    return [NSString stringWithFormat:@"class: %@, level: %@, maxLevel: %@, xp: %@, maxXp: %@", self.heroClass, self.level, self.maxLevel, self.xp, self.maxXp];
 }
 @end
 

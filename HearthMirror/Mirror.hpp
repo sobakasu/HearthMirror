@@ -18,8 +18,8 @@
 #define HEARTHMIRROR_API __declspec(dllexport)
 #endif
 
-typedef std::vector<std::string> HMObjectPath;
-
+namespace hearthmirror {
+    
 // Return types
 // ------------
 
@@ -203,12 +203,18 @@ typedef struct _SetFilterItem {
     bool isAllStandard;
     bool isWild;
 } SetFilterItem;
-
-namespace hearthmirror {
     
-    typedef struct _mirrorData MirrorData;
+typedef struct _HeroLevel {
+    int heroClass = -1;
+    int level = 0;
+    int maxLevel = 0;
+    long xp = 0;
+    long maxXp = 0;
+} HeroLevel;
+    
+typedef struct _mirrorData MirrorData;
 
-	class HEARTHMIRROR_API Mirror {
+class HEARTHMIRROR_API Mirror {
         
     public:
         
@@ -224,6 +230,8 @@ namespace hearthmirror {
         
         /** Returns the collection of the user. */
         std::vector<Card> getCardCollection();
+    
+        std::vector<HeroLevel> getHeroLevels();
 
         /** Returns the information about server */
         InternalGameServerInfo getGameServerInfo();
@@ -327,7 +335,7 @@ namespace hearthmirror {
 
     private:
         MirrorData* m_mirrorData = NULL;
-    };
+};
     
 }
 
