@@ -243,8 +243,12 @@ namespace HearthMirror
 			{
 				var card = cards[i];
 				string cardId = card["m_cardId"];
-				var counts = card["m_count"]["_items"];
-				int count = counts[0] + counts[1];
+
+				var count = 0;
+				var counts = card["m_count"];
+				for(var j = 0; j < counts["_size"]; j++)
+					count += (int)counts["_items"][j];
+
 				var existingCard = deck.Cards.FirstOrDefault(x => x.Id == cardId);
 				if(existingCard != null)
 					existingCard.Count++;
