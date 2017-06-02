@@ -225,19 +225,19 @@ namespace hearthmirror {
     }
     #define GETBOOL(...) getBool(__VA_ARGS__, m_mirrorData->monoImage)
     
-    Deck getDeck(MonoObject* inst) {
+    Deck getDeck(MonoObject* deckObj) {
         Deck deck;
         
-        deck.id = ((*inst)["ID"]).value.i64;
-        deck.name = ((*inst)["m_name"]).str;
-        deck.hero = ((*inst)["HeroCardID"]).str;
-        deck.isWild = ((*inst)["m_isWild"]).value.b;
-        deck.type = ((*inst)["Type"]).value.i32;
-        deck.seasonId = ((*inst)["SeasonId"]).value.i32;
-        deck.cardBackId = ((*inst)["CardBackID"]).value.i32;
-        deck.heroPremium = ((*inst)["HeroPremium"]).value.i32;
+        deck.id = ((*deckObj)["ID"]).value.i64;
+        deck.name = ((*deckObj)["m_name"]).str;
+        deck.hero = ((*deckObj)["HeroCardID"]).str;
+        deck.isWild = ((*deckObj)["m_isWild"]).value.b;
+        deck.type = ((*deckObj)["Type"]).value.i32;
+        deck.seasonId = ((*deckObj)["SeasonId"]).value.i32;
+        deck.cardBackId = ((*deckObj)["CardBackID"]).value.i32;
+        deck.heroPremium = ((*deckObj)["HeroPremium"]).value.i32;
         
-        MonoValue _cardList = (*inst)["m_slots"];
+        MonoValue _cardList = (*deckObj)["m_slots"];
         if (IsMonoValueEmpty(_cardList)) return deck;
         
         MonoObject *cardList = _cardList.value.obj.o;
@@ -255,7 +255,13 @@ namespace hearthmirror {
             MonoObject *card = cards[i].value.obj.o;
             
             std::u16string name = ((*card)["m_cardId"]).str;
-            int count = ((*card)["m_count"]).value.i32;
+            MonoValue counts = ((*card)["m_count"]);
+            if (IsMonoValueEmpty(counts)) {
+                continue;
+            }
+            MonoObject *items_str = counts.value.obj.o;
+            MonoValue items = ((*items_str)["_items"]);
+            int count = items[0].value.i32 + items[1].value.i32;
             
             auto iterator = find_if(deck.cards.begin(), deck.cards.end(),
                                     [&name](const Card& obj) { return obj.id == name; });
