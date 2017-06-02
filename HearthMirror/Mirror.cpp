@@ -261,6 +261,9 @@ namespace hearthmirror {
             }
             MonoObject *items_str = counts.value.obj.o;
             MonoValue items = ((*items_str)["_items"]);
+			if (IsMonoValueEmpty(items)) {
+				continue;
+			}
             int count = items[0].value.i32 + items[1].value.i32;
             
             auto iterator = find_if(deck.cards.begin(), deck.cards.end(),
