@@ -264,7 +264,7 @@ namespace hearthmirror {
 			if (IsMonoValueEmpty(items)) {
 				continue;
 			}
-            int count = items[0].value.i32 + items[1].value.i32;
+            int count = std::min(items[0].value.i32,30) + std::min(items[1].value.i32,30);
             
             auto iterator = find_if(deck.cards.begin(), deck.cards.end(),
                                     [&name](const Card& obj) { return obj.id == name; });
