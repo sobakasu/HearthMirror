@@ -302,6 +302,9 @@ namespace hearthmirror {
             }
             case MonoTypeEnum::Szarray: {
                 addr = ReadUInt32(_task, addr); // deref object
+                if (addr == 0) {
+                    return MonoValue(0);
+                }
                 uint32_t vt = ReadUInt32(_task, addr);
                 uint32_t pArrClass = ReadUInt32(_task, vt);
                 MonoClass* arrClass = new MonoClass(_task, pArrClass);

@@ -22,8 +22,10 @@ namespace hearthmirror {
         ~MonoImage();
         
         MonoClass* get(const std::string& key);
-        
+        const std::map<std::string,MonoClass*> getClasses() {return _classes;};
         bool hasClasses();
+        
+        static int getMonoImage(int pid, bool isBlocking, HANDLE* handle, MonoImage** monoimage);
         
     private:
 		HANDLE _task;
@@ -31,6 +33,8 @@ namespace hearthmirror {
         std::map<std::string,MonoClass*> _classes;
         void LoadClasses();
     };
+    
+    
 }
 
 

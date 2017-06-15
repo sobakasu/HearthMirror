@@ -7,6 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BC15280E1EF18FD600150479 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BC15280D1EF18FD600150479 /* AppDelegate.m */; };
+		BC1528111EF18FD600150479 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BC1528101EF18FD600150479 /* main.m */; };
+		BC1528141EF18FD600150479 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BC1528131EF18FD600150479 /* ViewController.mm */; };
+		BC1528161EF18FD600150479 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BC1528151EF18FD600150479 /* Assets.xcassets */; };
+		BC1528191EF18FD600150479 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BC1528171EF18FD600150479 /* Main.storyboard */; };
+		BC15281E1EF198BE00150479 /* machhelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC5271F1E11405500F8DE94 /* machhelper.cpp */; };
+		BC15281F1EF198C500150479 /* security.c in Sources */ = {isa = PBXBuildFile; fileRef = BCC527561E117DDE00F8DE94 /* security.c */; };
+		BC1528201EF198CE00150479 /* MonoImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC527101E113D2000F8DE94 /* MonoImage.cpp */; };
+		BC1528211EF198D200150479 /* MonoClass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC5270C1E113D0000F8DE94 /* MonoClass.cpp */; };
+		BC1528221EF198D500150479 /* MonoClassField.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC5270E1E113D1500F8DE94 /* MonoClassField.cpp */; };
+		BC1528231EF198DC00150479 /* MonoObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC527121E113D2C00F8DE94 /* MonoObject.cpp */; };
+		BC1528241EF198DF00150479 /* MonoStruct.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC527141E113D3500F8DE94 /* MonoStruct.cpp */; };
+		BC1528251EF198E200150479 /* MonoType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC527161E113D3600F8DE94 /* MonoType.cpp */; };
+		BC1528261EF198E600150479 /* Mirror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCC527271E11499900F8DE94 /* Mirror.cpp */; };
 		BCB5AF721E196F0600244DDB /* HearthMirror.h in Headers */ = {isa = PBXBuildFile; fileRef = BCB5AF701E196F0600244DDB /* HearthMirror.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BCB5AF761E196F5300244DDB /* security.h in Headers */ = {isa = PBXBuildFile; fileRef = BCC527571E117DDE00F8DE94 /* security.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BCB5AF771E196F6200244DDB /* HearthMirror_imp.h in Headers */ = {isa = PBXBuildFile; fileRef = BCC5273B1E11768500F8DE94 /* HearthMirror_imp.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -63,6 +77,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BC15280A1EF18FD600150479 /* MirrorBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MirrorBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC15280C1EF18FD600150479 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		BC15280D1EF18FD600150479 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		BC1528101EF18FD600150479 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		BC1528121EF18FD600150479 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		BC1528131EF18FD600150479 /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
+		BC1528151EF18FD600150479 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BC1528181EF18FD600150479 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		BC15281A1EF18FD600150479 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BCB5AF6E1E196F0600244DDB /* HearthMirror.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HearthMirror.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCB5AF701E196F0600244DDB /* HearthMirror.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HearthMirror.h; sourceTree = "<group>"; };
 		BCB5AF711E196F0600244DDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -97,6 +120,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		BC1528071EF18FD600150479 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BCB5AF6A1E196F0600244DDB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -124,6 +154,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BC15280B1EF18FD600150479 /* MirrorBrowser */ = {
+			isa = PBXGroup;
+			children = (
+				BC15280C1EF18FD600150479 /* AppDelegate.h */,
+				BC15280D1EF18FD600150479 /* AppDelegate.m */,
+				BC1528121EF18FD600150479 /* ViewController.h */,
+				BC1528131EF18FD600150479 /* ViewController.mm */,
+				BC1528151EF18FD600150479 /* Assets.xcassets */,
+				BC1528171EF18FD600150479 /* Main.storyboard */,
+				BC15281A1EF18FD600150479 /* Info.plist */,
+				BC15280F1EF18FD600150479 /* Supporting Files */,
+			);
+			path = MirrorBrowser;
+			sourceTree = "<group>";
+		};
+		BC15280F1EF18FD600150479 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				BC1528101EF18FD600150479 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		BCB5AF6F1E196F0600244DDB /* HearthMirrorFW */ = {
 			isa = PBXGroup;
 			children = (
@@ -188,6 +241,7 @@
 				BCC5272F1E11760F00F8DE94 /* TestAppMacOS */,
 				BCC5273A1E11768500F8DE94 /* HearthMirror */,
 				BCB5AF6F1E196F0600244DDB /* HearthMirrorFW */,
+				BC15280B1EF18FD600150479 /* MirrorBrowser */,
 				BCCEAB091DF46C5200CC936C /* Products */,
 				BCCEAB191DF4C5C400CC936C /* Frameworks */,
 			);
@@ -199,6 +253,7 @@
 				BCC5272E1E11760F00F8DE94 /* TestAppMacOS */,
 				BCC527391E11768400F8DE94 /* libHearthMirror.dylib */,
 				BCB5AF6E1E196F0600244DDB /* HearthMirror.framework */,
+				BC15280A1EF18FD600150479 /* MirrorBrowser.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -252,6 +307,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		BC1528091EF18FD600150479 /* MirrorBrowser */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BC15281D1EF18FD600150479 /* Build configuration list for PBXNativeTarget "MirrorBrowser" */;
+			buildPhases = (
+				BC1528061EF18FD600150479 /* Sources */,
+				BC1528071EF18FD600150479 /* Frameworks */,
+				BC1528081EF18FD600150479 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MirrorBrowser;
+			productName = MirrorBrowser;
+			productReference = BC15280A1EF18FD600150479 /* MirrorBrowser.app */;
+			productType = "com.apple.product-type.application";
+		};
 		BCB5AF6D1E196F0600244DDB /* HearthMirrorFW */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = BCB5AF751E196F0600244DDB /* Build configuration list for PBXNativeTarget "HearthMirrorFW" */;
@@ -314,6 +386,11 @@
 				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = com.ifehervari;
 				TargetAttributes = {
+					BC1528091EF18FD600150479 = {
+						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = LCPPMESTJX;
+						ProvisioningStyle = Automatic;
+					};
 					BCB5AF6D1E196F0600244DDB = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = LCPPMESTJX;
@@ -347,11 +424,21 @@
 				BCC5272D1E11760F00F8DE94 /* TestAppMacOS */,
 				BCC527381E11768400F8DE94 /* HearthMirrorLib */,
 				BCB5AF6D1E196F0600244DDB /* HearthMirrorFW */,
+				BC1528091EF18FD600150479 /* MirrorBrowser */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		BC1528081EF18FD600150479 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BC1528161EF18FD600150479 /* Assets.xcassets in Resources */,
+				BC1528191EF18FD600150479 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BCB5AF6C1E196F0600244DDB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -362,6 +449,25 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		BC1528061EF18FD600150479 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BC1528141EF18FD600150479 /* ViewController.mm in Sources */,
+				BC1528111EF18FD600150479 /* main.m in Sources */,
+				BC15280E1EF18FD600150479 /* AppDelegate.m in Sources */,
+				BC15281E1EF198BE00150479 /* machhelper.cpp in Sources */,
+				BC15281F1EF198C500150479 /* security.c in Sources */,
+				BC1528201EF198CE00150479 /* MonoImage.cpp in Sources */,
+				BC1528211EF198D200150479 /* MonoClass.cpp in Sources */,
+				BC1528221EF198D500150479 /* MonoClassField.cpp in Sources */,
+				BC1528231EF198DC00150479 /* MonoObject.cpp in Sources */,
+				BC1528241EF198DF00150479 /* MonoStruct.cpp in Sources */,
+				BC1528251EF198E200150479 /* MonoType.cpp in Sources */,
+				BC1528261EF198E600150479 /* Mirror.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BCB5AF691E196F0600244DDB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -414,7 +520,50 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		BC1528171EF18FD600150479 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BC1528181EF18FD600150479 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
+		BC15281B1EF18FD600150479 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = MirrorBrowser/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ifehervari.MirrorBrowser;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+			};
+			name = Debug;
+		};
+		BC15281C1EF18FD600150479 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = MirrorBrowser/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ifehervari.MirrorBrowser;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+			};
+			name = Release;
+		};
 		BCB5AF731E196F0600244DDB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -631,6 +780,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		BC15281D1EF18FD600150479 /* Build configuration list for PBXNativeTarget "MirrorBrowser" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BC15281B1EF18FD600150479 /* Debug */,
+				BC15281C1EF18FD600150479 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		BCB5AF751E196F0600244DDB /* Build configuration list for PBXNativeTarget "HearthMirrorFW" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
