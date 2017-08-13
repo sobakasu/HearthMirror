@@ -128,7 +128,8 @@ namespace HearthMirror
 					var wLegendRank = wMedalInfo?["legendIndex"] ?? 0;
 					var cardBack = players[i]["m_cardBackId"];
 					var id = playerIds[i];
-					if((Side)players[i]["m_side"] == Side.FRIENDLY)
+					var side = (Side)players[i]["m_side"];
+					if(side == Side.FRIENDLY)
 					{
 						dynamic netCacheMedalInfo = null;
 						if(netCacheValues != null)
@@ -145,7 +146,7 @@ namespace HearthMirror
 						var wStars = netCacheMedalInfo?["<Wild>k__BackingField"]["<Stars>k__BackingField"];
 						matchInfo.LocalPlayer = new MatchInfo.Player(id, name, sRank, sLegendRank, sStars, wRank, wLegendRank, wStars, cardBack);
 					}
-					else
+					else if (side == Side.OPPOSING)
 						matchInfo.OpposingPlayer = new MatchInfo.Player(id, name, sRank, sLegendRank, 0, wRank, wLegendRank, 0, cardBack);
 				}
 			}
