@@ -129,6 +129,8 @@ namespace HearthMirror
 					var cardBack = players[i]["m_cardBackId"];
 					var id = playerIds[i];
 					var side = (Side)players[i]["m_side"];
+					var account = players[i]["m_gameAccountId"];
+					var accountId = new AccountId {Hi = account?["m_hi"] ?? 0, Lo = account?["m_lo"] ?? 0};
 					if(side == Side.FRIENDLY)
 					{
 						dynamic netCacheMedalInfo = null;
@@ -144,10 +146,10 @@ namespace HearthMirror
 						}
 						var sStars = netCacheMedalInfo?["<Standard>k__BackingField"]["<Stars>k__BackingField"];
 						var wStars = netCacheMedalInfo?["<Wild>k__BackingField"]["<Stars>k__BackingField"];
-						matchInfo.LocalPlayer = new MatchInfo.Player(id, name, sRank, sLegendRank, sStars, wRank, wLegendRank, wStars, cardBack);
+						matchInfo.LocalPlayer = new MatchInfo.Player(id, name, sRank, sLegendRank, sStars, wRank, wLegendRank, wStars, cardBack, accountId);
 					}
 					else if (side == Side.OPPOSING)
-						matchInfo.OpposingPlayer = new MatchInfo.Player(id, name, sRank, sLegendRank, 0, wRank, wLegendRank, 0, cardBack);
+						matchInfo.OpposingPlayer = new MatchInfo.Player(id, name, sRank, sLegendRank, 0, wRank, wLegendRank, 0, cardBack, accountId);
 				}
 			}
 			var gameMgr = Mirror.Root["GameMgr"]["s_instance"];
