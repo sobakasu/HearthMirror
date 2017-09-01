@@ -104,6 +104,49 @@ namespace HearthMirror
 
 		public static long GetSelectedDeckInMenu() => TryGetInternal(() => (long)(Mirror.Root["DeckPickerTrayDisplay"]["s_instance"]?["m_selectedCustomDeckBox"]?["m_deckID"] ?? 0));
 
+		public static MedalInfo GetMedalInfo() => TryGetInternal(GetMedalInfoInternal);
+		private static MedalInfo GetMedalInfoInternal()
+		{
+			var netCacheValues = Mirror.Root["NetCache"]["s_instance"]?["m_netCache"]?["valueSlots"];
+			if(netCacheValues == null)
+				return null;
+			dynamic netCacheMedalInfo = null;
+			foreach(var netCache in netCacheValues)
+			{
+				if(netCache?.Class.Name != "NetCacheMedalInfo")
+					continue;
+				netCacheMedalInfo = netCache;
+				break;
+			}
+			if(netCacheMedalInfo == null)
+				return null;
+			var standard = netCacheMedalInfo["<Standard>k__BackingField"];
+			var wild = netCacheMedalInfo["<Wild>k__BackingField"];
+			MedalInfoData GetMedalInfoData(dynamic source)
+			{
+				if(source == null)
+					return null;
+				return new MedalInfoData
+				{
+					BestStarLevel = source["_BestStarLevel"],
+					CanLoseLevel = source["<CanLoseLevel>k__BackingField"],
+					CanLoseStars = source["_CanLoseStars"],
+					LegendRank = source["_LegendRank"],
+					LevelEnd = source["<LevelEnd>k__BackingField"],
+					LevelStart = source["<LevelStart>k__BackingField"],
+					SeasonWins = source["<SeasonWins>k__BackingField"],
+					StarLevel = source["<StarLevel>k__BackingField"],
+					Stars = source["<Stars>k__BackingField"],
+					Streak = source["<Streak>k__BackingField"]
+				};
+			}
+			return new MedalInfo
+			{
+				Standard = GetMedalInfoData(standard),
+				Wild = GetMedalInfoData(wild),
+			};
+		}
+
 		public static MatchInfo GetMatchInfo() => TryGetInternal(GetMatchInfoInternal);
 		private static MatchInfo GetMatchInfoInternal()
 		{

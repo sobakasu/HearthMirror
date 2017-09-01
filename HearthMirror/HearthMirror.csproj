@@ -71,6 +71,8 @@
     <Compile Include="Objects\MatchInfo.cs" />
     <Compile Include="Objects\Card.cs" />
     <Compile Include="Objects\Deck.cs" />
+    <Compile Include="Objects\MedalInfo.cs" />
+    <Compile Include="Objects\MedalInfoData.cs" />
     <Compile Include="Objects\SetFilterItem.cs" />
     <Compile Include="Reflection.cs" />
     <Compile Include="Mirror.cs" />
