@@ -11,7 +11,7 @@
 
 #ifdef __APPLE__
 
-#define kMonoDomainDomainAssemblies 0x84
+#define kMonoDomainDomainAssemblies 0x88
 #define kMonoAssemblyName 0x8
 #define kMonoAssemblyImage 0x40
 
@@ -54,7 +54,7 @@
 #define kImageExportDirectoryAddressOfFunctions 0x1c
 #define kImageExportDirectoryAddressOfNames 0x20
 #define kMonoDomainSizeof 0x144
-#define kMonoDomainDomainAssemblies 0x6c
+#define kMonoDomainDomainAssemblies 0x70
 #define kMonoAssemblyName 0x8
 #define kMonoAssemblyImage 0x40
 
