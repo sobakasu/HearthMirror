@@ -10,7 +10,7 @@
 		public static uint ImageExportDirectory_AddressOfFunctions = 0x1c;
 		public static uint ImageExportDirectory_AddressOfNames = 0x20;
 		public static uint MonoDomain_sizeof = 0x144;
-		public static uint MonoDomain_domain_assemblies = 0x6c;
+		public static uint MonoDomain_domain_assemblies = 0x70;
 		public static uint MonoAssembly_sizeof = 0x54;
 		public static uint MonoAssembly_name = 0x8;
 		public static uint MonoAssembly_image = 0x40;
