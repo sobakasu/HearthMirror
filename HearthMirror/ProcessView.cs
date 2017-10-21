@@ -51,7 +51,8 @@ namespace HearthMirror
 			Valid = ReadBytes(_module, 0, _module.Length, _moduleBase) && LoadPeHeader();
 		}
 
-		private MODULEINFO getModuleInfo(Process proc, String moduleName)
+#if WIN64
+        private MODULEINFO getModuleInfo(Process proc, String moduleName)
 		{
 			// Setting up the variable for the second argument for EnumProcessModules
 			IntPtr[] hMods = new IntPtr[1024];
@@ -85,8 +86,9 @@ namespace HearthMirror
 			gch.Free();
 			return modinfo;
 		}
+#endif
 
-		public bool Valid { get; private set; }
+        public bool Valid { get; private set; }
 
 		internal void ClearCache() => _cache.Clear();
 

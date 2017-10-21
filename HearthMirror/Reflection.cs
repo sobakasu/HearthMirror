@@ -189,10 +189,10 @@ namespace HearthMirror
 						}
 						var sStars = netCacheMedalInfo?["<Standard>k__BackingField"]["<Stars>k__BackingField"];
 						var wStars = netCacheMedalInfo?["<Wild>k__BackingField"]["<Stars>k__BackingField"];
-						matchInfo.LocalPlayer = new MatchInfo.Player(id, name, sRank, sLegendRank, sStars, wRank, wLegendRank, wStars, cardBack, accountId);
+						matchInfo.LocalPlayer = new Player(id, name, sRank, sLegendRank, sStars, wRank, wLegendRank, wStars, cardBack, accountId);
 					}
 					else if (side == Side.OPPOSING)
-						matchInfo.OpposingPlayer = new MatchInfo.Player(id, name, sRank, sLegendRank, 0, wRank, wLegendRank, 0, cardBack, accountId);
+						matchInfo.OpposingPlayer = new Player(id, name, sRank, sLegendRank, 0, wRank, wLegendRank, 0, cardBack, accountId);
 				}
 			}
 			var gameMgr = Mirror.Root["GameMgr"]["s_instance"];

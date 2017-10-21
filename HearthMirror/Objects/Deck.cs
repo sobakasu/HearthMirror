@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace HearthMirror.Objects
 {
@@ -13,5 +13,10 @@ namespace HearthMirror.Objects
 		public int CardBackId { get; set; }
 		public int HeroPremium { get; set; }
 		public List<Card> Cards { get; set; } = new List<Card>();
+
+        public CardList GetCardList()
+        {
+            return CardList.FromList(Cards);
+        }
 	}
 }
