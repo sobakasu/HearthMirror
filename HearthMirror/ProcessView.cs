@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -8,6 +8,25 @@ namespace HearthMirror
 {
 	internal class ProcessView
 	{
+
+#if WIN64
+		[DllImport("psapi.dll", CallingConvention = CallingConvention.StdCall, SetLastError = true)]
+		public static extern int EnumProcessModulesEx(IntPtr hProcess, [Out] IntPtr lphModule, uint cb, out uint lpcbNeeded, uint dwFilterFlag);
+		[DllImport("psapi.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+		static extern uint GetModuleFileNameEx(IntPtr hProcess, IntPtr hModule, [Out] StringBuilder lpBaseName, uint nSize);
+		[DllImport("psapi.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+		static extern uint GetModuleBaseName(IntPtr hProcess, IntPtr hModule, [Out] StringBuilder lpBaseName, uint nSize);
+		[DllImport("psapi.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+		static extern bool GetModuleInformation(IntPtr hProcess, IntPtr hModule, out MODULEINFO lpmodinfo, uint cb);
+		[StructLayout(LayoutKind.Sequential)]
+		public struct MODULEINFO
+		{
+			public IntPtr lpBaseOfDll;
+			public uint SizeOfImage;
+			public IntPtr EntryPoint;
+		}
+#endif
+		
 		private const int PageSize = 4096;
 		private const int PageCount = 1024;
 		private readonly Cache _cache = new Cache(PageCount);
@@ -19,12 +38,52 @@ namespace HearthMirror
 		public ProcessView(Process proc)
 		{
 			_procHandle = proc.Handle;
+
+#if WIN64
+			MODULEINFO modinfo = getModuleInfo(proc, "mono.dll");
+			_moduleBase = (long) modinfo.lpBaseOfDll;
+			_module = new byte[modinfo.SizeOfImage];
+#else
 			var module = proc.Modules.OfType<ProcessModule>().FirstOrDefault(x => x.ModuleName == "mono.dll");
-			if(module == null)
-				return;
 			_moduleBase = module.BaseAddress.ToInt64();
 			_module = new byte[module.ModuleMemorySize];
+#endif
 			Valid = ReadBytes(_module, 0, _module.Length, _moduleBase) && LoadPeHeader();
+		}
+
+		private MODULEINFO getModuleInfo(Process proc, String moduleName)
+		{
+			// Setting up the variable for the second argument for EnumProcessModules
+			IntPtr[] hMods = new IntPtr[1024];
+
+			GCHandle gch = GCHandle.Alloc(hMods, GCHandleType.Pinned); // Don't forget to free this later
+			IntPtr pModules = gch.AddrOfPinnedObject();
+			MODULEINFO modinfo = new MODULEINFO();
+			modinfo.SizeOfImage = 0;
+
+			// Setting up the rest of the parameters for EnumProcessModules
+			uint uiSize = (uint)(Marshal.SizeOf(typeof(IntPtr)) * (hMods.Length));
+			uint cbNeeded = 0;
+
+			if (EnumProcessModulesEx(proc.Handle, pModules, uiSize, out cbNeeded, 0x01) == 1)  // 0x01 = LIST_MODULES_32BIT
+			{
+				Int32 uiTotalNumberofModules = (Int32)(cbNeeded / (Marshal.SizeOf(typeof(IntPtr))));
+				StringBuilder strbld = new StringBuilder(1024);
+
+				for (int i = 0; i < (int)uiTotalNumberofModules; i++)
+				{
+					GetModuleBaseName(proc.Handle, hMods[i], strbld, (uint)(strbld.Capacity));
+					if (strbld.ToString().Equals(moduleName))
+					{
+						GetModuleInformation(proc.Handle, hMods[i], out modinfo, (uint) Marshal.SizeOf(modinfo));
+						break;
+					}
+				}
+			}
+
+			// Must free the GCHandle object
+			gch.Free();
+			return modinfo;
 		}
 
 		public bool Valid { get; private set; }

@@ -9,20 +9,33 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HearthMirror.Tests", "Heart
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1694A2F8-645A-4263-A6AB-FC26323FD675}.Debug|x64.ActiveCfg = Debug|x64
+		{1694A2F8-645A-4263-A6AB-FC26323FD675}.Debug|x64.Build.0 = Debug|x64
 		{1694A2F8-645A-4263-A6AB-FC26323FD675}.Debug|x86.ActiveCfg = Debug|x86
 		{1694A2F8-645A-4263-A6AB-FC26323FD675}.Debug|x86.Build.0 = Debug|x86
+		{1694A2F8-645A-4263-A6AB-FC26323FD675}.Release|x64.ActiveCfg = Release|x64
+		{1694A2F8-645A-4263-A6AB-FC26323FD675}.Release|x64.Build.0 = Release|x64
 		{1694A2F8-645A-4263-A6AB-FC26323FD675}.Release|x86.ActiveCfg = Release|x86
 		{1694A2F8-645A-4263-A6AB-FC26323FD675}.Release|x86.Build.0 = Release|x86
+		{DF830345-6B31-475E-91AD-38ABA18E8F91}.Debug|x64.ActiveCfg = Debug|x64
+		{DF830345-6B31-475E-91AD-38ABA18E8F91}.Debug|x64.Build.0 = Debug|x64
 		{DF830345-6B31-475E-91AD-38ABA18E8F91}.Debug|x86.ActiveCfg = Debug|x86
 		{DF830345-6B31-475E-91AD-38ABA18E8F91}.Debug|x86.Build.0 = Debug|x86
+		{DF830345-6B31-475E-91AD-38ABA18E8F91}.Release|x64.ActiveCfg = Release|x64
+		{DF830345-6B31-475E-91AD-38ABA18E8F91}.Release|x64.Build.0 = Release|x64
 		{DF830345-6B31-475E-91AD-38ABA18E8F91}.Release|x86.ActiveCfg = Release|x86
 		{DF830345-6B31-475E-91AD-38ABA18E8F91}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3F1C8C6C-D3ED-4AB4-A3FC-0F04FAD3CD4D}
 	EndGlobalSection
 EndGlobal
