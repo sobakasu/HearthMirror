@@ -156,15 +156,17 @@ uint64_t findLibBaseAddress64(mach_port_t task, const char* libname, task_dyld_i
     return NULL;
 }
 
-proc_address getLibLoadAddress(mach_port_t task, const char* libname) {
+proc_address getLibLoadAddress(mach_port_t task, const char* libname, bool* is64bit) {
 
     task_dyld_info_data_t dyld_info;
     mach_msg_type_number_t count = TASK_DYLD_INFO_COUNT;
     if (task_info(task, TASK_DYLD_INFO, (task_info_t)&dyld_info, &count) == KERN_SUCCESS)
     {
         if (dyld_info.all_image_info_format == TASK_DYLD_ALL_IMAGE_INFO_32) {
+            *is64bit = false;
             return findLibBaseAddress32(task, libname, dyld_info);
         } else {
+            *is64bit = true;
             return findLibBaseAddress64(task, libname, dyld_info);
         }
     }
@@ -172,11 +174,11 @@ proc_address getLibLoadAddress(mach_port_t task, const char* libname) {
     return NULL;
 }
 
-proc_address getMonoLoadAddress(HANDLE task) {
-    return getLibLoadAddress(task, "libmono.0.dylib");
+proc_address getMonoLoadAddress(HANDLE task, bool* is64bit) {
+    return getLibLoadAddress(task, "libmono.0.dylib", is64bit);
 }
 
-proc_address getMonoRootDomainAddr(HANDLE task, proc_address baseAddress) {
+proc_address getMonoRootDomainAddr(HANDLE task, proc_address baseAddress, bool is64bit) {
     // lookup "mono_root_domain"
     const char *symbol_name = "mono_root_domain";
     
@@ -186,15 +188,36 @@ proc_address getMonoRootDomainAddr(HANDLE task, proc_address baseAddress) {
         return 0;
     }
     
-    mach_vm_size_t size = sizeof(struct mach_header);
-    struct mach_header header = {0};
-    err = mach_vm_read_overwrite(task, baseAddress, size, (mach_vm_address_t)&header, &size);
-    if (err != KERN_SUCCESS) return 0;
+    bool sixtyfourbit;
+    mach_vm_size_t size;
+    uint32_t num_load_cmds;
     
-    bool sixtyfourbit = (header.magic == MH_MAGIC_64);
-    
-    if (header.magic != MH_MAGIC && header.magic != MH_MAGIC_64) {
-        return 0;
+    if (is64bit) {
+        size = sizeof(struct mach_header_64);
+        struct mach_header_64 header = {0};
+        
+        err = mach_vm_read_overwrite(task, baseAddress, size, (mach_vm_address_t)&header, &size);
+        if (err != KERN_SUCCESS) return 0;
+        
+        if (header.magic != MH_MAGIC && header.magic != MH_MAGIC_64) {
+            return 0;
+        }
+        
+        sixtyfourbit = (header.magic == MH_MAGIC_64);
+        num_load_cmds = header.ncmds;
+    } else {
+        size = sizeof(struct mach_header);
+        struct mach_header header = {0};
+        
+        err = mach_vm_read_overwrite(task, baseAddress, size, (mach_vm_address_t)&header, &size);
+        if (err != KERN_SUCCESS) return 0;
+        
+        if (header.magic != MH_MAGIC && header.magic != MH_MAGIC_64) {
+            return 0;
+        }
+        
+        sixtyfourbit = (header.magic == MH_MAGIC_64);
+        num_load_cmds = header.ncmds;
     }
     
     mach_vm_address_t symtab_addr = 0;
@@ -210,7 +233,7 @@ proc_address getMonoRootDomainAddr(HANDLE task, proc_address baseAddress) {
     struct load_command command = {0};
     size = sizeof(command);
     
-    for (uint32_t i = 0; i < header.ncmds; i++) {
+    for (uint32_t i = 0; i < num_load_cmds; i++) {
         err = mach_vm_read_overwrite(task, command_addr, size, (mach_vm_address_t)&command, &size);
         if (err != KERN_SUCCESS) return 0;
         

@@ -30,8 +30,8 @@ uint16_t ReadUShort(HANDLE task, proc_address address);
 float ReadFloat(HANDLE task, proc_address address);
 double ReadDouble(HANDLE task, proc_address address);
 
-proc_address getLibLoadAddress(HANDLE task, const char* libname);
-proc_address getMonoLoadAddress(HANDLE task);
-proc_address getMonoRootDomainAddr(HANDLE task, proc_address baseAddress);
+proc_address getLibLoadAddress(HANDLE task, const char* libname, bool* is64bit);
+proc_address getMonoLoadAddress(HANDLE task, bool* is64bit);
+proc_address getMonoRootDomainAddr(HANDLE task, proc_address baseAddress, bool is64bit);
 
 #endif /* machhelper_h */

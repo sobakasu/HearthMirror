@@ -75,18 +75,23 @@ namespace hearthmirror {
 #endif
         
         do {
-            proc_address baseaddress = getMonoLoadAddress(*handle);
+            bool is64bit;
+            proc_address baseaddress = getMonoLoadAddress(*handle, &is64bit);
             if (baseaddress == 0) return 4;
             
             // we need to find the address of "mono_root_domain"
-            proc_address mono_grd_addr = getMonoRootDomainAddr(*handle,baseaddress);
+            proc_address mono_grd_addr = getMonoRootDomainAddr(*handle, baseaddress, is64bit);
             if (mono_grd_addr == 0) return 5;
             
-            uint32_t rootDomain;
+            proc_address rootDomain;
             
             try {
 #ifdef __APPLE__
-                rootDomain = ReadUInt32(*handle, baseaddress+mono_grd_addr);
+                if (is64bit) {
+                    rootDomain = ReadUInt64(*handle, baseaddress+mono_grd_addr);
+                } else {
+                    rootDomain = ReadUInt32(*handle, baseaddress+mono_grd_addr);
+                }
 #else
                 rootDomain = ReadUInt32(_task, mono_grd_addr);
 #endif
