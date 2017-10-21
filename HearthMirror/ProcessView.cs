@@ -41,18 +41,22 @@ namespace HearthMirror
 
 #if WIN64
 			MODULEINFO modinfo = getModuleInfo(proc, "mono.dll");
+			if (modinfo.SizeOfImage == 0)
+				return;
 			_moduleBase = (long) modinfo.lpBaseOfDll;
 			_module = new byte[modinfo.SizeOfImage];
 #else
 			var module = proc.Modules.OfType<ProcessModule>().FirstOrDefault(x => x.ModuleName == "mono.dll");
 			_moduleBase = module.BaseAddress.ToInt64();
 			_module = new byte[module.ModuleMemorySize];
+			if(module == null)
+			   return;
 #endif
 			Valid = ReadBytes(_module, 0, _module.Length, _moduleBase) && LoadPeHeader();
 		}
 
 #if WIN64
-        private MODULEINFO getModuleInfo(Process proc, String moduleName)
+		private MODULEINFO getModuleInfo(Process proc, String moduleName)
 		{
 			// Setting up the variable for the second argument for EnumProcessModules
 			IntPtr[] hMods = new IntPtr[1024];
@@ -88,7 +92,7 @@ namespace HearthMirror
 		}
 #endif
 
-        public bool Valid { get; private set; }
+		public bool Valid { get; private set; }
 
 		internal void ClearCache() => _cache.Clear();
 
